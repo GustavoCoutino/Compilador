@@ -1,0 +1,6 @@
+programa minimo;
+
+inicio
+{
+}
+fin

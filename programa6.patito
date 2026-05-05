@@ -1,0 +1,10 @@
+programa literales;
+
+inicio
+{
+    escribe("hola, que tal?");
+    escribe("a-b_c = 1 + 2.");
+    escribe("simbolos: !@#$%^&*()");
+    escribe("comillas internas no permitidas, solo: ' y ` ");
+}
+fin

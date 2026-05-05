@@ -10,9 +10,10 @@ import __yyfmt__ "fmt"
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
-//line parser.y:10
+//line parser.y:11
 type yySymType struct {
 	yys      int
 	entero   int
@@ -31,29 +32,30 @@ const VARS = 57353
 const ENTERO = 57354
 const FLOTANTE = 57355
 const NULA = 57356
-const SI = 57357
-const SINO = 57358
-const MIENTRAS = 57359
-const HAZ = 57360
-const ESCRIBE = 57361
-const MAS = 57362
-const MENOS = 57363
-const POR = 57364
-const ENTRE = 57365
-const MAYOR = 57366
-const MENOR = 57367
-const IGUAL = 57368
-const DIFERENTE = 57369
-const ASIGNAVAR = 57370
-const COMA = 57371
-const PCOMA = 57372
-const DOSPUNTOS = 57373
-const LPARENTESIS = 57374
-const RPARENTESIS = 57375
-const LLLAVE = 57376
-const RLLAVE = 57377
-const LCORCHETE = 57378
-const RCORCHETE = 57379
+const RETORNO = 57357
+const SI = 57358
+const SINO = 57359
+const MIENTRAS = 57360
+const HAZ = 57361
+const ESCRIBE = 57362
+const MAS = 57363
+const MENOS = 57364
+const POR = 57365
+const ENTRE = 57366
+const MAYOR = 57367
+const MENOR = 57368
+const IGUAL = 57369
+const DIFERENTE = 57370
+const ASIGNAVAR = 57371
+const COMA = 57372
+const PCOMA = 57373
+const DOSPUNTOS = 57374
+const LPARENTESIS = 57375
+const RPARENTESIS = 57376
+const LLLAVE = 57377
+const RLLAVE = 57378
+const LCORCHETE = 57379
+const RCORCHETE = 57380
 
 var yyToknames = [...]string{
 	"$end",
@@ -70,6 +72,7 @@ var yyToknames = [...]string{
 	"ENTERO",
 	"FLOTANTE",
 	"NULA",
+	"RETORNO",
 	"SI",
 	"SINO",
 	"MIENTRAS",
@@ -101,20 +104,278 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:71
+//line parser.y:73
 
-type Lexer struct{}
+// Lexer es una representacion de un analizador lexico.
+// Lexer contiene el indice del caracter actual de la entrada de caracteres,
+// el indice del caracter leido, la entrada de caracteres, y el caracter
+// actual
+type Lexer struct {
+	input        string
+	position     int
+	readPosition int
+	ch           byte
+}
 
+// Lista de palabras reservadas
+var palabrasReservadas = map[string]int{
+	"programa": PROGRAMA,
+	"inicio":   INICIO,
+	"fin":      FIN,
+	"vars":     VARS,
+	"entero":   ENTERO,
+	"flotante": FLOTANTE,
+	"nula":     NULA,
+	"si":       SI,
+	"sino":     SINO,
+	"mientras": MIENTRAS,
+	"haz":      HAZ,
+	"escribe":  ESCRIBE,
+	"retorno":  RETORNO,
+}
+
+// Lex es invocada por el parser para realizar el
+// analisis lexico de la entrada
 func (l *Lexer) Lex(lval *yySymType) int {
+	return l.Next(lval)
+}
+
+// Next analiza el siguiente token en la entrada de
+// caracteres usando las expresiones regulares y la lista
+// de simbolos terminales de la gramatica
+func (l *Lexer) Next(lval *yySymType) int {
+	l.skipWhitespace()
+	if l.ch == 0 {
+		return 0
+	}
+	switch l.ch {
+	default:
+		if isLetter(l.ch) {
+			token := l.readIdentifier()
+			if tipo, esReservada := palabrasReservadas[token]; esReservada {
+				return tipo
+			}
+			lval.texto = token
+			return ID
+		} else if isDigit(l.ch) {
+			return l.readNumber(lval)
+		} else {
+			l.Error(fmt.Sprintf("Carácter no reconocido: %c", l.ch))
+		}
+	case '+':
+		l.readChar()
+		return MAS
+	case '-':
+		l.readChar()
+		return MENOS
+	case '*':
+		l.readChar()
+		return POR
+	case '/':
+		l.readChar()
+		return ENTRE
+	case '>':
+		l.readChar()
+		return MAYOR
+	case '<':
+		l.readChar()
+		return MENOR
+	case ',':
+		l.readChar()
+		return COMA
+	case ';':
+		l.readChar()
+		return PCOMA
+	case ':':
+		l.readChar()
+		return DOSPUNTOS
+	case '(':
+		l.readChar()
+		return LPARENTESIS
+	case ')':
+		l.readChar()
+		return RPARENTESIS
+	case '{':
+		l.readChar()
+		return LLLAVE
+	case '}':
+		l.readChar()
+		return RLLAVE
+	case '[':
+		l.readChar()
+		return LCORCHETE
+	case ']':
+		l.readChar()
+		return RCORCHETE
+	case '=':
+		l.readChar()
+		if l.ch == '=' {
+			l.readChar()
+			return IGUAL
+		} else {
+			return ASIGNAVAR
+		}
+	case '!':
+		l.readChar()
+		if l.ch == '=' {
+			l.readChar()
+			return DIFERENTE
+		} else {
+			l.Error(fmt.Sprintf("Carácter no reconocido: %c", l.ch))
+		}
+	case '"':
+		position := l.position
+		l.readChar()
+		for isLetter(l.ch) || isDigit(l.ch) || isWhitespace(l.ch) || isOther(l.ch) {
+			l.readChar()
+		}
+		if l.ch == '"' {
+			lval.texto = l.input[position:l.position]
+			l.readChar()
+			return LITERAL
+		}
+		l.Error(fmt.Sprint("Formato de literal incorrecto"))
+	}
 	return 0
 }
 
+// readIdentifier lee el identificador y regresa
+// dicho id
+func (l *Lexer) readIdentifier() string {
+	position := l.position
+	for isLetter(l.ch) || isDigit(l.ch) || l.ch == '_' || l.ch == '-' {
+		l.readChar()
+
+	}
+	return l.input[position:l.position]
+}
+
+// readNumber lee un numero de acuerdo a las expresiones
+// regulares definidas y regresa este numero. Este numero puede ser un entero
+// o un flotante, y este flotante puede estar escrito en
+// notacion cientifica
+func (l *Lexer) readNumber(lval *yySymType) int {
+	position := l.position
+	for isDigit(l.ch) {
+		l.readChar()
+	}
+
+	if l.ch == '.' && isDigit(l.peekChar()) {
+		l.readChar()
+		for isDigit(l.ch) {
+			l.readChar()
+		}
+		if l.ch == 'e' {
+			if l.peekChar() == '+' || l.peekChar() == '-' {
+				l.readChar()
+				l.readChar()
+				if !isDigit(l.ch) {
+					l.Error("Notación científica inválida: se esperaban dígitos después del exponente")
+				}
+				for isDigit(l.ch) {
+					l.readChar()
+				}
+			} else {
+				l.Error("Notación científica inválida: se esperaban un carácter '+' o '-' despues del exponente")
+			}
+		}
+		valor, _ := strconv.ParseFloat(l.input[position:l.position], 64)
+		lval.flotante = valor
+		return CTE_FLOT
+	}
+	valor, _ := strconv.Atoi(l.input[position:l.position])
+	lval.entero = valor
+	return CTE_ENT
+}
+
+// readChar lee el siguiente caracter.
+// Actualiza la posicion actual de la entrada de
+// caracteres, y la posicion del caracter actual leido
+func (l *Lexer) readChar() {
+	if l.readPosition >= len(l.input) {
+		l.ch = 0
+	} else {
+		l.ch = l.input[l.readPosition]
+	}
+	l.position = l.readPosition
+	l.readPosition += 1
+}
+
+// peekChar ve el siguiente caracter sin
+// consumirlo, para distinguir tokens de dos
+// caracteres como '==' o '!=', o detectar
+// el punto decimal de un flotante
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
+// isLetter revisa si el caracter se encuentra entre la
+// a y z (no distingue entre mayusculas y minisculas)
+func isLetter(ch byte) bool {
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z'
+}
+
+// isDigit revisa si el caracter es un numero
+func isDigit(ch byte) bool {
+	return ch >= '0' && ch <= '9'
+}
+
+// isWhitespace revisa si el caracter es un espacio en blanco
+func isWhitespace(ch byte) bool {
+	return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r'
+}
+
+// isOther revisa si el caracter es un símbolo permitido dentro de un literal
+// (puntuación o signos comunes distintos de la comilla doble)
+func isOther(ch byte) bool {
+	switch ch {
+	case '-', '_', '=', '?', '.', ',', ';', ':', '!', '@', '#', '$',
+		'%', '^', '&', '*', '(', ')', '+', '/', '<', '>',
+		'[', ']', '{', '}', '|', '\\', '~', '\'', '`':
+		return true
+	}
+	return false
+}
+
+// skipWhitespace se salta los espacios en blanco y avanza el lexer
+func (l *Lexer) skipWhitespace() {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
+}
+
+// Error es la implementacion del método de error
+// de la interfaz de Lexer para imprimir un error
+// del Lexer propio o del Parser (que tiene la misma interfaz)
 func (l *Lexer) Error(s string) {
 	fmt.Fprintln(os.Stderr, "Error de sintaxis:", s)
 }
 
 func main() {
-	yyParse(&Lexer{})
+	if len(os.Args) < 2 {
+		fmt.Println("Porfavor provee el nombre de un archivo")
+		return
+	}
+	fileName := os.Args[1]
+	data, err := os.ReadFile(fileName)
+	if err != nil {
+		fmt.Println("Error al leer el archivo:", err)
+		return
+	}
+	lexer := &Lexer{input: string(data), position: 0, readPosition: 0}
+	lexer.readChar()
+	ok := yyParse(lexer)
+	if ok == 0 {
+		fmt.Println("El análisis léxico fue exitoso")
+	} else if ok == 1 {
+		fmt.Println("El análisis léxico contiene errores")
+	} else if ok == 2 {
+		fmt.Println("Agotamiento de memoria")
+	}
 }
 
 //line yacctab:1
@@ -126,99 +387,107 @@ var yyExca = [...]int8{
 
 const yyPrivate = 57344
 
-const yyLast = 145
+const yyLast = 171
 
 var yyAct = [...]uint8{
-	15, 22, 62, 75, 74, 61, 5, 92, 60, 55,
-	77, 122, 66, 41, 41, 67, 76, 23, 103, 67,
-	79, 26, 102, 111, 42, 42, 43, 43, 44, 44,
-	101, 64, 65, 100, 98, 64, 65, 57, 51, 54,
-	53, 118, 38, 63, 33, 45, 45, 63, 50, 52,
-	30, 127, 51, 128, 59, 70, 71, 72, 38, 80,
-	58, 20, 126, 124, 115, 81, 78, 91, 49, 38,
-	83, 84, 31, 97, 85, 86, 87, 88, 4, 56,
-	99, 27, 89, 90, 83, 84, 104, 9, 114, 107,
-	108, 106, 109, 110, 12, 120, 28, 17, 18, 16,
-	17, 18, 113, 112, 7, 2, 117, 25, 116, 34,
-	93, 123, 95, 96, 48, 32, 121, 11, 24, 3,
-	69, 68, 125, 73, 119, 94, 82, 40, 39, 129,
-	37, 36, 35, 105, 47, 46, 14, 29, 21, 10,
-	19, 13, 6, 8, 1,
+	13, 21, 69, 29, 5, 83, 64, 63, 84, 66,
+	62, 34, 42, 22, 110, 20, 102, 9, 109, 42,
+	116, 108, 107, 47, 43, 105, 44, 31, 45, 74,
+	47, 43, 38, 44, 54, 45, 55, 58, 55, 57,
+	56, 134, 30, 125, 135, 46, 86, 24, 75, 38,
+	26, 129, 46, 133, 131, 122, 61, 104, 60, 88,
+	53, 51, 38, 76, 79, 80, 81, 4, 106, 42,
+	32, 87, 96, 97, 98, 42, 103, 99, 101, 121,
+	47, 43, 28, 44, 127, 45, 47, 43, 7, 44,
+	2, 45, 130, 70, 85, 72, 73, 52, 112, 113,
+	111, 33, 46, 114, 115, 90, 91, 117, 46, 120,
+	67, 68, 18, 15, 16, 119, 123, 70, 50, 72,
+	73, 124, 65, 128, 23, 20, 3, 38, 10, 132,
+	25, 15, 16, 14, 67, 68, 136, 90, 91, 78,
+	77, 92, 93, 94, 95, 100, 65, 72, 73, 82,
+	126, 71, 89, 59, 41, 40, 39, 37, 36, 35,
+	118, 49, 48, 12, 27, 19, 17, 11, 6, 8,
+	1,
 }
 
 var yyPact = [...]int16{
-	97, -1000, 115, 48, 93, -1000, -1000, 113, 85, -1000,
-	30, -1000, -17, -1000, 114, -1000, -1000, -1000, -1000, 113,
-	88, 52, 86, -1000, 18, -1000, 42, 111, -1000, 9,
-	110, -1000, -1000, -1000, -1000, -1000, -1000, -1000, 38, -1000,
-	-1000, 20, 17, 8, 7, 10, 4, -1000, 29, -1000,
-	15, 15, 15, 15, 11, -27, 10, -14, 88, 35,
-	50, 60, -1000, 15, 106, 106, -1000, 6, 1, 51,
-	-1000, 0, -3, -11, -1000, -1000, -1000, -1000, -1000, 93,
-	-1000, -1000, 15, 15, 15, -1000, -1000, -1000, -1000, 15,
-	15, -10, -1000, -1000, -1000, -1000, -1000, -1000, -1000, 15,
-	-17, 70, 34, 11, -17, 12, 64, 60, 60, -1000,
-	-1000, -1000, -1000, 79, -17, -1000, -1000, -24, 107, 33,
-	-17, 32, 21, 22, -1000, -1000, -1000, -1000, 88, -1000,
+	82, -1000, 122, 36, 77, -1000, -1000, -18, 119, 121,
+	-22, -1000, 120, -1000, -1000, -1000, -1000, 11, -1000, 18,
+	-1000, 72, -1000, 9, -1000, -1000, 101, 40, -1000, 65,
+	114, 30, 93, -1000, -1000, -1000, -1000, -1000, 29, -1000,
+	-1000, -1000, 5, 7, 6, 4, 71, 113, -5, -1000,
+	16, -1000, -1000, -1000, 113, 113, 113, 113, 89, 8,
+	-1000, 28, 116, 49, -1000, 113, -1000, 141, 141, -1000,
+	3, -1000, -1000, -1000, -19, 101, 26, -9, 38, -1000,
+	-12, -13, -16, -1000, -1000, -1000, -1000, -1000, -1000, 113,
+	113, 113, -1000, -1000, -1000, -1000, 113, 113, -14, -1000,
+	-1000, -1000, 77, -1000, -1000, -1000, 113, -22, 60, 24,
+	89, 84, 49, 49, -1000, -1000, -1000, -1000, 13, -1000,
+	67, -22, -1000, -1000, 15, 88, 23, -22, 22, 10,
+	12, -1000, -1000, -1000, -1000, 101, -1000,
 }
 
 var yyPgo = [...]uint8{
-	0, 144, 6, 143, 1, 142, 141, 87, 140, 139,
-	0, 138, 137, 79, 136, 135, 134, 133, 132, 131,
-	130, 12, 128, 127, 9, 3, 8, 126, 5, 2,
-	7, 125, 124, 123, 4, 121, 120,
+	0, 170, 4, 169, 1, 168, 167, 166, 112, 165,
+	0, 164, 3, 11, 163, 162, 161, 160, 159, 158,
+	157, 2, 156, 155, 154, 8, 153, 10, 152, 7,
+	6, 9, 151, 150, 149, 5, 140, 139,
 }
 
 var yyR1 = [...]int8{
-	0, 1, 2, 2, 3, 3, 5, 8, 8, 7,
+	0, 1, 2, 2, 3, 3, 5, 7, 7, 8,
 	9, 11, 11, 10, 10, 4, 12, 12, 6, 14,
 	14, 15, 15, 16, 17, 17, 13, 13, 13, 13,
-	13, 13, 23, 24, 24, 18, 25, 25, 27, 27,
-	27, 27, 26, 26, 26, 28, 28, 28, 29, 29,
-	29, 29, 30, 30, 31, 31, 19, 32, 32, 20,
-	22, 33, 33, 34, 34, 21, 35, 35, 36, 36,
+	13, 13, 13, 24, 23, 26, 26, 18, 25, 25,
+	28, 28, 28, 28, 27, 27, 27, 29, 29, 29,
+	30, 30, 30, 30, 30, 31, 31, 32, 32, 19,
+	33, 33, 20, 22, 34, 34, 35, 35, 21, 36,
+	36, 37, 37,
 }
 
 var yyR2 = [...]int8{
-	0, 8, 1, 0, 2, 0, 3, 2, 0, 4,
+	0, 8, 1, 0, 2, 0, 4, 1, 2, 4,
 	2, 3, 0, 1, 1, 3, 2, 0, 10, 1,
 	1, 1, 0, 4, 5, 0, 1, 1, 1, 2,
-	1, 1, 3, 2, 1, 4, 1, 3, 1, 1,
-	1, 1, 3, 3, 1, 3, 3, 1, 3, 2,
-	2, 1, 1, 1, 1, 1, 7, 2, 0, 7,
-	5, 1, 3, 1, 1, 4, 1, 0, 1, 3,
+	1, 1, 1, 3, 3, 2, 1, 4, 1, 3,
+	1, 1, 1, 1, 3, 3, 1, 3, 3, 1,
+	3, 1, 2, 2, 1, 1, 1, 1, 1, 7,
+	2, 0, 7, 5, 1, 3, 1, 1, 4, 1,
+	0, 1, 3,
 }
 
 var yyChk = [...]int16{
-	-1000, -1, 8, 4, 30, -2, -5, 11, -3, -7,
-	-9, 4, 9, -6, -14, -10, 14, 12, 13, -8,
-	31, -11, -4, 34, 4, -7, -10, 29, 10, -12,
-	32, 30, 4, 35, -13, -18, -19, -20, -21, -22,
-	-23, 4, 15, 17, 19, 36, -15, -16, 4, 30,
-	28, 32, 32, 32, 32, -24, -13, 33, 31, -25,
-	-26, -28, -29, 32, 20, 21, -21, 4, -35, -36,
-	-25, -25, -25, -33, -34, -25, 5, 37, -24, 34,
-	-10, 30, -27, 20, 21, 24, 25, 26, 27, 22,
-	23, -25, -30, 4, -31, 6, 7, -30, 33, 29,
-	33, 33, 33, 29, -2, -17, -26, -28, -28, -29,
-	-29, 33, -25, -4, 18, 30, -34, -4, 29, -32,
-	16, -4, 35, 4, 30, -4, 30, 30, 31, -10,
+	-1000, -1, 8, 4, 31, -2, -5, 11, -3, 35,
+	9, -6, -14, -10, 14, 12, 13, -7, -8, -9,
+	4, -4, 35, 4, 36, -8, 32, -11, 10, -12,
+	33, -10, 30, 36, -13, -18, -19, -20, -21, -22,
+	-23, -24, 4, 16, 18, 20, 37, 15, -15, -16,
+	4, 31, 4, 31, 29, 33, 33, 33, 33, -26,
+	-13, -25, -27, -29, -30, 33, -31, 21, 22, -21,
+	4, -32, 6, 7, 34, 32, -25, -36, -37, -25,
+	-25, -25, -34, -35, -25, 5, 38, -13, 31, -28,
+	21, 22, 25, 26, 27, 28, 23, 24, -25, -31,
+	4, -31, 35, -10, 31, 34, 30, 34, 34, 34,
+	30, -27, -29, -29, -30, -30, 34, -2, -17, -25,
+	-4, 19, 31, -35, -12, 30, -33, 17, -4, 36,
+	4, 31, -4, 31, 31, 32, -10,
 }
 
 var yyDef = [...]int8{
-	0, -2, 0, 0, 3, 5, 2, 0, 0, 8,
-	0, 12, 0, 4, 0, 19, 20, 13, 14, 6,
-	0, 10, 0, 17, 0, 7, 0, 0, 1, 0,
-	22, 9, 11, 15, 16, 26, 27, 28, 0, 30,
-	31, 0, 0, 0, 0, 0, 0, 21, 0, 29,
-	0, 67, 0, 0, 0, 0, 34, 0, 0, 0,
-	36, 44, 47, 0, 0, 0, 51, 0, 0, 66,
-	68, 0, 0, 0, 61, 63, 64, 32, 33, 3,
-	25, 35, 0, 0, 0, 38, 39, 40, 41, 0,
-	0, 0, 49, 52, 53, 54, 55, 50, 65, 0,
-	0, 0, 0, 0, 0, 23, 37, 42, 43, 45,
-	46, 48, 69, 58, 0, 60, 62, 0, 0, 0,
-	0, 0, 0, 0, 56, 57, 59, 18, 0, 24,
+	0, -2, 0, 0, 3, 5, 2, 0, 0, 0,
+	0, 4, 0, 19, 20, 13, 14, 0, 7, 0,
+	12, 0, 17, 0, 6, 8, 0, 10, 1, 0,
+	22, 0, 0, 15, 16, 26, 27, 28, 0, 30,
+	31, 32, 0, 0, 0, 0, 0, 0, 0, 21,
+	0, 9, 11, 29, 0, 70, 0, 0, 0, 0,
+	36, 0, 38, 46, 49, 0, 51, 0, 0, 54,
+	55, 56, 57, 58, 0, 0, 0, 0, 69, 71,
+	0, 0, 0, 64, 66, 67, 34, 35, 33, 0,
+	0, 0, 40, 41, 42, 43, 0, 0, 0, 52,
+	55, 53, 3, 25, 37, 68, 0, 0, 0, 0,
+	0, 39, 44, 45, 47, 48, 50, 17, 23, 72,
+	61, 0, 63, 65, 0, 0, 0, 0, 0, 0,
+	0, 59, 60, 62, 18, 0, 24,
 }
 
 var yyTok1 = [...]int8{
@@ -229,7 +498,7 @@ var yyTok2 = [...]int8{
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
 	12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
 	22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-	32, 33, 34, 35, 36, 37,
+	32, 33, 34, 35, 36, 37, 38,
 }
 
 var yyTok3 = [...]int8{

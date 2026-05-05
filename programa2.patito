@@ -1,0 +1,36 @@
+vars { a, b, c: entero; f, g, h: flotante  ; }
+
+entero calcular(base: entero, altura: entero) {
+    vars { temp, calc: entero ; }
+    calc = base * altura / 2;
+    retorno calc;
+};
+
+inicio
+{
+    x = 5;
+    a = 10;
+    z = 2;
+    f = 10.234e+;
+
+    r = 10.2432423523;
+    escribe("hola");
+    si (4>3) {
+        escribe("adios");
+    };
+
+    si (10 < 20){
+      escribe("primero");  
+    } sino {
+      escribe("segundo");
+    };
+
+    mientras (a > b) haz {
+        escribe("ciclo");
+    };
+
+
+    terminar();
+
+}
+fin
