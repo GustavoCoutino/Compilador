@@ -7,7 +7,7 @@ tidy:
 	@echo 'Formateando archivos de .go ...'
 	go fmt ./...
 
-PROGRAM ?= programa1.patito
+PROGRAM ?= tests/programa1.patito
 
 build:
 	@echo 'Generando parser...'

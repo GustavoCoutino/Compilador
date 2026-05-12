@@ -83,6 +83,8 @@ type Lexer struct{
     ch byte
 }
 
+
+
 // Lista de palabras reservadas
 var palabrasReservadas = map[string]int{
     "programa": PROGRAMA,
