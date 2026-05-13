@@ -12,11 +12,14 @@ import (
     entero  int
     flotante float64
     texto   string
+    tipo Tipo
 }
 
 %token <texto> ID LITERAL
 %token <entero> CTE_ENT
 %token <flotante> CTE_FLOT
+
+%type <tipo> Tipo TipoRetorno
 
 %token PROGRAMA INICIO FIN VARS ENTERO FLOTANTE NULA RETORNO
 %token SI SINO MIENTRAS HAZ ESCRIBE
@@ -32,21 +35,46 @@ import (
 
 %%
 
-Programa : PROGRAMA ID PCOMA VarsOpt FuncsOpt INICIO Cuerpo FIN ;
+Programa : PROGRAMA ID PCOMA VarsOpt FuncsOpt INICIO Cuerpo FIN {
+    {
+        ImprimirTablaVariablesGlobal()
+        ImprimirDirectorioFunciones()
+    }
+} ;
 VarsOpt: Vars | /* vacío */ ;
 FuncsOpt: FuncsOpt Funcs | /* vacío */ ;
 Vars: VARS LLLAVE DeclaracionLista RLLAVE ;
 DeclaracionLista: Declaracion | DeclaracionLista Declaracion ;
-Declaracion: IdsLista DOSPUNTOS Tipo PCOMA ;
-IdsLista: ID IdsListaExtension ;
-IdsListaExtension: IdsListaExtension COMA ID | /* vacío */ ;
-Tipo: ENTERO | FLOTANTE ;
+Declaracion: IdsLista DOSPUNTOS Tipo PCOMA {
+    for _, nombre := range listaIdsActual {
+        DeclararVariable(nombre, $3)
+    }
+    listaIdsActual = nil
+} ;
+IdsLista: ID IdsListaExtension {
+    listaIdsActual = append(listaIdsActual, $1)
+};
+IdsListaExtension: IdsListaExtension COMA ID {
+    {
+        listaIdsActual = append(listaIdsActual, $3)
+    }
+}| /* vacío */ ;
+Tipo: ENTERO { $$ = TipoConstante } | FLOTANTE { $$ = TipoFlotante } ;
 Cuerpo: LLLAVE EstatutosLista RLLAVE ;
 EstatutosLista: EstatutosLista Estatuto | /* vacío */ ;
-Funcs: TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA ;
-TipoRetorno: Tipo | NULA ;
+Funcs: TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS {
+    IniciarFuncion($2, $1, listaParametrosActual)
+    listaParametrosActual = nil
+} LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA {
+    TerminarFuncion()
+} ;
+TipoRetorno: Tipo | NULA { 
+    $$ = TipoNula 
+} ;
 ParametrosOpt: ParametrosLista | /* vacío */ ;
-ParametrosLista: ID DOSPUNTOS Tipo ParametrosListaExtension;
+ParametrosLista: ID DOSPUNTOS Tipo {
+    listaParametrosActual = append(listaParametrosActual, &Variable{Nombre: $1, Tipo: $3})
+} ParametrosListaExtension;
 ParametrosListaExtension: ParametrosListaExtension COMA ID DOSPUNTOS Tipo | /* vacío */ ;
 Estatuto: Asigna | Condicion | Ciclo | Llamada PCOMA | Imprime | EstatutoBloque | Retorno ;
 Retorno: RETORNO Expresion PCOMA ;

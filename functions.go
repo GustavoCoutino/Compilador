@@ -2,10 +2,6 @@ package main
 
 import "fmt"
 
-// Mapa de funciones
-// Llave: nombre
-// Valor: variables, parametros, tipo retorno
-
 type Funcion struct {
 	Nombre string
 	TipoRetorno Tipo
@@ -21,14 +17,14 @@ func NewDirectorioFunciones() *DirectorioFunciones {
 	return &DirectorioFunciones{Funciones: make(map[string]*Funcion)}
 }
 
-func (d *DirectorioFunciones) Agregar(nombre string, tipo Tipo) (*Funcion, error) {
+func (d *DirectorioFunciones) Agregar(nombre string, tipo Tipo, parametros []*Variable) (*Funcion, error) {
     if _, existe := d.Funciones[nombre]; existe {
         return nil, fmt.Errorf("función '%s' ya declarada", nombre)
     }
     f := &Funcion{
         Nombre:      nombre,
         TipoRetorno: tipo,
-        Parametros:  []*Variable{},
+        Parametros:  parametros,
         Variables:   NewTablaVariables(),
     }
     d.Funciones[nombre] = f
