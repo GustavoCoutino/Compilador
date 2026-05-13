@@ -1,20 +1,23 @@
-package main
+package semantics
 
 import (
 	"fmt"
 	"os"
+
+	"gustavocoutino.compilador/internal/symbols"
+	"gustavocoutino.compilador/internal/types"
 )
 
 var (
-	directorioFunciones = NewDirectorioFunciones()
-	tablaVariablesGlobal = NewTablaVariables()
-	funcionActual *Funcion
+	directorioFunciones = symbols.NewDirectorioFunciones()
+	tablaVariablesGlobal = symbols.NewTablaVariables()
+	funcionActual *symbols.Funcion
 	listaIdsActual []string
-	listaParametrosActual []*Variable
+	listaParametrosActual []*symbols.Variable
 )
 
-func DeclararVariable(nombre string, tipo Tipo) {
-    var tabla *TablaVariables
+func DeclararVariable(nombre string, tipo types.Tipo) {
+    var tabla *symbols.TablaVariables
     if funcionActual != nil {
         tabla = funcionActual.Variables
     } else {
@@ -25,7 +28,7 @@ func DeclararVariable(nombre string, tipo Tipo) {
     }
 }
 
-func BuscarVariable(nombre string) (*Variable, bool) {
+func BuscarVariable(nombre string) (*symbols.Variable, bool) {
 	if funcionActual != nil {
 		if variable, ok := funcionActual.Variables.Buscar(nombre); ok {
 			return variable, ok
@@ -34,7 +37,7 @@ func BuscarVariable(nombre string) (*Variable, bool) {
 	return tablaVariablesGlobal.Buscar(nombre)
 }
 
-func IniciarFuncion(nombre string, tipoRetorno Tipo, parametros []*Variable) {
+func IniciarFuncion(nombre string, tipoRetorno types.Tipo, parametros []*symbols.Variable) {
 	f, err := directorioFunciones.Agregar(nombre, tipoRetorno, parametros)
     if err != nil {
         ErrorSemantico(err.Error())
@@ -45,6 +48,26 @@ func IniciarFuncion(nombre string, tipoRetorno Tipo, parametros []*Variable) {
 
 func TerminarFuncion() {
 	funcionActual = nil
+}
+
+func AgregarIdActual(id string) {
+	listaIdsActual = append(listaIdsActual, id)
+}
+
+func DeclararIdsActuales(tipo types.Tipo) {
+	for _, nombre := range listaIdsActual {
+		DeclararVariable(nombre, tipo)
+	}
+	listaIdsActual = nil
+}
+
+func AgregarParametroActual(nombre string, tipo types.Tipo) {
+	listaParametrosActual = append(listaParametrosActual, &symbols.Variable{Nombre: nombre, Tipo: tipo})
+}
+
+func IniciarFuncionConParametros(nombre string, tipoRetorno types.Tipo) {
+	IniciarFuncion(nombre, tipoRetorno, listaParametrosActual)
+	listaParametrosActual = nil
 }
 
 func ImprimirTablaVariablesGlobal() {

@@ -107,25 +107,25 @@ state 12
 state 13
 	TipoRetorno:  Tipo.    (20)
 
-	.  reduce 20 (src line 71)
+	.  reduce 20 (src line 65)
 
 
 state 14
 	TipoRetorno:  NULA.    (21)
 
-	.  reduce 21 (src line 71)
+	.  reduce 21 (src line 65)
 
 
 state 15
 	Tipo:  ENTERO.    (13)
 
-	.  reduce 13 (src line 62)
+	.  reduce 13 (src line 57)
 
 
 state 16
 	Tipo:  FLOTANTE.    (14)
 
-	.  reduce 14 (src line 62)
+	.  reduce 14 (src line 57)
 
 
 state 17
@@ -156,7 +156,7 @@ state 20
 	IdsLista:  ID.IdsListaExtension 
 	IdsListaExtension: .    (12)
 
-	.  reduce 12 (src line 61)
+	.  reduce 12 (src line 56)
 
 	IdsListaExtension  goto 27
 
@@ -171,7 +171,7 @@ state 22
 	Cuerpo:  LLLAVE.EstatutosLista RLLAVE 
 	EstatutosLista: .    (17)
 
-	.  reduce 17 (src line 64)
+	.  reduce 17 (src line 59)
 
 	EstatutosLista  goto 29
 
@@ -208,13 +208,13 @@ state 27
 	IdsListaExtension:  IdsListaExtension.COMA ID 
 
 	COMA  shift 32
-	.  reduce 10 (src line 54)
+	.  reduce 10 (src line 51)
 
 
 state 28
 	Programa:  PROGRAMA ID PCOMA VarsOpt FuncsOpt INICIO Cuerpo FIN.    (1)
 
-	.  reduce 1 (src line 38)
+	.  reduce 1 (src line 40)
 
 
 state 29
@@ -244,7 +244,7 @@ state 30
 	ParametrosOpt: .    (23)
 
 	ID  shift 50
-	.  reduce 23 (src line 74)
+	.  reduce 23 (src line 68)
 
 	ParametrosOpt  goto 48
 	ParametrosLista  goto 49
@@ -266,31 +266,31 @@ state 32
 state 33
 	Cuerpo:  LLLAVE EstatutosLista RLLAVE.    (15)
 
-	.  reduce 15 (src line 63)
+	.  reduce 15 (src line 58)
 
 
 state 34
 	EstatutosLista:  EstatutosLista Estatuto.    (16)
 
-	.  reduce 16 (src line 64)
+	.  reduce 16 (src line 59)
 
 
 state 35
 	Estatuto:  Asigna.    (28)
 
-	.  reduce 28 (src line 79)
+	.  reduce 28 (src line 75)
 
 
 state 36
 	Estatuto:  Condicion.    (29)
 
-	.  reduce 29 (src line 79)
+	.  reduce 29 (src line 75)
 
 
 state 37
 	Estatuto:  Ciclo.    (30)
 
-	.  reduce 30 (src line 79)
+	.  reduce 30 (src line 75)
 
 
 state 38
@@ -303,19 +303,19 @@ state 38
 state 39
 	Estatuto:  Imprime.    (32)
 
-	.  reduce 32 (src line 79)
+	.  reduce 32 (src line 75)
 
 
 state 40
 	Estatuto:  EstatutoBloque.    (33)
 
-	.  reduce 33 (src line 79)
+	.  reduce 33 (src line 75)
 
 
 state 41
 	Estatuto:  Retorno.    (34)
 
-	.  reduce 34 (src line 79)
+	.  reduce 34 (src line 75)
 
 
 state 42
@@ -398,7 +398,7 @@ state 48
 state 49
 	ParametrosOpt:  ParametrosLista.    (22)
 
-	.  reduce 22 (src line 74)
+	.  reduce 22 (src line 68)
 
 
 state 50
@@ -417,13 +417,13 @@ state 51
 state 52
 	IdsListaExtension:  IdsListaExtension COMA ID.    (11)
 
-	.  reduce 11 (src line 57)
+	.  reduce 11 (src line 54)
 
 
 state 53
 	Estatuto:  Llamada PCOMA.    (31)
 
-	.  reduce 31 (src line 79)
+	.  reduce 31 (src line 75)
 
 
 state 54
@@ -455,7 +455,7 @@ state 55
 	MAS  shift 67
 	MENOS  shift 68
 	LPARENTESIS  shift 65
-	.  reduce 72 (src line 98)
+	.  reduce 72 (src line 94)
 
 	Llamada  goto 69
 	Expresion  goto 79
@@ -552,7 +552,7 @@ state 59
 state 60
 	EstatutosBloqueLista:  Estatuto.    (38)
 
-	.  reduce 38 (src line 82)
+	.  reduce 38 (src line 78)
 
 
 state 61
@@ -574,7 +574,7 @@ state 62
 	MENOR  shift 93
 	IGUAL  shift 94
 	DIFERENTE  shift 95
-	.  reduce 40 (src line 84)
+	.  reduce 40 (src line 80)
 
 	Operadores  goto 89
 
@@ -585,13 +585,13 @@ state 63
 
 	POR  shift 96
 	ENTRE  shift 97
-	.  reduce 48 (src line 86)
+	.  reduce 48 (src line 82)
 
 
 state 64
 	Termino:  Factor.    (51)
 
-	.  reduce 51 (src line 87)
+	.  reduce 51 (src line 83)
 
 
 state 65
@@ -616,7 +616,7 @@ state 65
 state 66
 	Factor:  FactorOpt.    (53)
 
-	.  reduce 53 (src line 88)
+	.  reduce 53 (src line 84)
 
 
 state 67
@@ -644,7 +644,7 @@ state 68
 state 69
 	Factor:  Llamada.    (56)
 
-	.  reduce 56 (src line 88)
+	.  reduce 56 (src line 84)
 
 
 state 70
@@ -652,32 +652,32 @@ state 70
 	Llamada:  ID.LPARENTESIS ArgumentosOpt RPARENTESIS 
 
 	LPARENTESIS  shift 55
-	.  reduce 57 (src line 89)
+	.  reduce 57 (src line 85)
 
 
 state 71
 	FactorOpt:  CTE.    (58)
 
-	.  reduce 58 (src line 89)
+	.  reduce 58 (src line 85)
 
 
 state 72
 	CTE:  CTE_ENT.    (59)
 
-	.  reduce 59 (src line 90)
+	.  reduce 59 (src line 86)
 
 
 state 73
 	CTE:  CTE_FLOT.    (60)
 
-	.  reduce 60 (src line 90)
+	.  reduce 60 (src line 86)
 
 
 state 74
 	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS.$$18 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
 	$$18: .    (18)
 
-	.  reduce 18 (src line 65)
+	.  reduce 18 (src line 60)
 
 	$$18  goto 102
 
@@ -709,13 +709,13 @@ state 78
 	ArgumentosLista:  ArgumentosLista.COMA Expresion 
 
 	COMA  shift 106
-	.  reduce 71 (src line 98)
+	.  reduce 71 (src line 94)
 
 
 state 79
 	ArgumentosLista:  Expresion.    (73)
 
-	.  reduce 73 (src line 99)
+	.  reduce 73 (src line 95)
 
 
 state 80
@@ -744,37 +744,37 @@ state 82
 state 83
 	ImprimeLista:  ImprimeEl.    (66)
 
-	.  reduce 66 (src line 95)
+	.  reduce 66 (src line 91)
 
 
 state 84
 	ImprimeEl:  Expresion.    (68)
 
-	.  reduce 68 (src line 96)
+	.  reduce 68 (src line 92)
 
 
 state 85
 	ImprimeEl:  LITERAL.    (69)
 
-	.  reduce 69 (src line 96)
+	.  reduce 69 (src line 92)
 
 
 state 86
 	EstatutoBloque:  LCORCHETE EstatutosBloqueLista RCORCHETE.    (36)
 
-	.  reduce 36 (src line 81)
+	.  reduce 36 (src line 77)
 
 
 state 87
 	EstatutosBloqueLista:  EstatutosBloqueLista Estatuto.    (37)
 
-	.  reduce 37 (src line 82)
+	.  reduce 37 (src line 78)
 
 
 state 88
 	Retorno:  RETORNO Expresion PCOMA.    (35)
 
-	.  reduce 35 (src line 80)
+	.  reduce 35 (src line 76)
 
 
 state 89
@@ -832,25 +832,25 @@ state 91
 state 92
 	Operadores:  MAYOR.    (42)
 
-	.  reduce 42 (src line 85)
+	.  reduce 42 (src line 81)
 
 
 state 93
 	Operadores:  MENOR.    (43)
 
-	.  reduce 43 (src line 85)
+	.  reduce 43 (src line 81)
 
 
 state 94
 	Operadores:  IGUAL.    (44)
 
-	.  reduce 44 (src line 85)
+	.  reduce 44 (src line 81)
 
 
 state 95
 	Operadores:  DIFERENTE.    (45)
 
-	.  reduce 45 (src line 85)
+	.  reduce 45 (src line 81)
 
 
 state 96
@@ -895,19 +895,19 @@ state 98
 state 99
 	Factor:  MAS FactorOpt.    (54)
 
-	.  reduce 54 (src line 88)
+	.  reduce 54 (src line 84)
 
 
 state 100
 	FactorOpt:  ID.    (57)
 
-	.  reduce 57 (src line 89)
+	.  reduce 57 (src line 85)
 
 
 state 101
 	Factor:  MENOS FactorOpt.    (55)
 
-	.  reduce 55 (src line 88)
+	.  reduce 55 (src line 84)
 
 
 state 102
@@ -921,20 +921,20 @@ state 103
 	ParametrosLista:  ID DOSPUNTOS Tipo.$$24 ParametrosListaExtension 
 	$$24: .    (24)
 
-	.  reduce 24 (src line 75)
+	.  reduce 24 (src line 69)
 
 	$$24  goto 118
 
 state 104
 	Asigna:  ID ASIGNAVAR Expresion PCOMA.    (39)
 
-	.  reduce 39 (src line 83)
+	.  reduce 39 (src line 79)
 
 
 state 105
 	Llamada:  ID LPARENTESIS ArgumentosOpt RPARENTESIS.    (70)
 
-	.  reduce 70 (src line 97)
+	.  reduce 70 (src line 93)
 
 
 state 106
@@ -1006,7 +1006,7 @@ state 111
 
 	MAS  shift 90
 	MENOS  shift 91
-	.  reduce 41 (src line 84)
+	.  reduce 41 (src line 80)
 
 
 state 112
@@ -1016,7 +1016,7 @@ state 112
 
 	POR  shift 96
 	ENTRE  shift 97
-	.  reduce 46 (src line 86)
+	.  reduce 46 (src line 82)
 
 
 state 113
@@ -1026,25 +1026,25 @@ state 113
 
 	POR  shift 96
 	ENTRE  shift 97
-	.  reduce 47 (src line 86)
+	.  reduce 47 (src line 82)
 
 
 state 114
 	Termino:  Termino POR Factor.    (49)
 
-	.  reduce 49 (src line 87)
+	.  reduce 49 (src line 83)
 
 
 state 115
 	Termino:  Termino ENTRE Factor.    (50)
 
-	.  reduce 50 (src line 87)
+	.  reduce 50 (src line 83)
 
 
 state 116
 	Factor:  LPARENTESIS Expresion RPARENTESIS.    (52)
 
-	.  reduce 52 (src line 88)
+	.  reduce 52 (src line 84)
 
 
 state 117
@@ -1061,14 +1061,14 @@ state 118
 	ParametrosLista:  ID DOSPUNTOS Tipo $$24.ParametrosListaExtension 
 	ParametrosListaExtension: .    (27)
 
-	.  reduce 27 (src line 78)
+	.  reduce 27 (src line 74)
 
 	ParametrosListaExtension  goto 125
 
 state 119
 	ArgumentosLista:  ArgumentosLista COMA Expresion.    (74)
 
-	.  reduce 74 (src line 99)
+	.  reduce 74 (src line 95)
 
 
 state 120
@@ -1076,7 +1076,7 @@ state 120
 	SinoOpt: .    (63)
 
 	SINO  shift 127
-	.  reduce 63 (src line 92)
+	.  reduce 63 (src line 88)
 
 	SinoOpt  goto 126
 
@@ -1091,20 +1091,20 @@ state 121
 state 122
 	Imprime:  ESCRIBE LPARENTESIS ImprimeLista RPARENTESIS PCOMA.    (65)
 
-	.  reduce 65 (src line 94)
+	.  reduce 65 (src line 90)
 
 
 state 123
 	ImprimeLista:  ImprimeLista COMA ImprimeEl.    (67)
 
-	.  reduce 67 (src line 95)
+	.  reduce 67 (src line 91)
 
 
 state 124
 	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$18 LLLAVE VarsOpt.EstatutosLista RLLAVE PCOMA 
 	EstatutosLista: .    (17)
 
-	.  reduce 17 (src line 64)
+	.  reduce 17 (src line 59)
 
 	EstatutosLista  goto 129
 
@@ -1113,7 +1113,7 @@ state 125
 	ParametrosListaExtension:  ParametrosListaExtension.COMA ID DOSPUNTOS Tipo 
 
 	COMA  shift 130
-	.  reduce 25 (src line 77)
+	.  reduce 25 (src line 71)
 
 
 state 126
@@ -1170,19 +1170,19 @@ state 130
 state 131
 	Condicion:  SI LPARENTESIS Expresion RPARENTESIS Cuerpo SinoOpt PCOMA.    (61)
 
-	.  reduce 61 (src line 91)
+	.  reduce 61 (src line 87)
 
 
 state 132
 	SinoOpt:  SINO Cuerpo.    (62)
 
-	.  reduce 62 (src line 92)
+	.  reduce 62 (src line 88)
 
 
 state 133
 	Ciclo:  MIENTRAS LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA.    (64)
 
-	.  reduce 64 (src line 93)
+	.  reduce 64 (src line 89)
 
 
 state 134
@@ -1202,7 +1202,7 @@ state 135
 state 136
 	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$18 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA.    (19)
 
-	.  reduce 19 (src line 68)
+	.  reduce 19 (src line 62)
 
 
 state 137
@@ -1217,7 +1217,7 @@ state 137
 state 138
 	ParametrosListaExtension:  ParametrosListaExtension COMA ID DOSPUNTOS Tipo.    (26)
 
-	.  reduce 26 (src line 78)
+	.  reduce 26 (src line 72)
 
 
 38 terminals, 40 nonterminals

@@ -5,6 +5,8 @@ import (
     "fmt"
     "os"
     "strconv"
+    "gustavocoutino.compilador/internal/types"
+    "gustavocoutino.compilador/internal/semantics"
 )
 %}
 
@@ -12,7 +14,7 @@ import (
     entero  int
     flotante float64
     texto   string
-    tipo Tipo
+    tipo types.Tipo
 }
 
 %token <texto> ID LITERAL
@@ -36,46 +38,40 @@ import (
 %%
 
 Programa : PROGRAMA ID PCOMA VarsOpt FuncsOpt INICIO Cuerpo FIN {
-    {
-        ImprimirTablaVariablesGlobal()
-        ImprimirDirectorioFunciones()
-    }
+    semantics.ImprimirTablaVariablesGlobal()
+    semantics.ImprimirDirectorioFunciones()
 } ;
 VarsOpt: Vars | /* vacío */ ;
 FuncsOpt: FuncsOpt Funcs | /* vacío */ ;
 Vars: VARS LLLAVE DeclaracionLista RLLAVE ;
 DeclaracionLista: Declaracion | DeclaracionLista Declaracion ;
 Declaracion: IdsLista DOSPUNTOS Tipo PCOMA {
-    for _, nombre := range listaIdsActual {
-        DeclararVariable(nombre, $3)
-    }
-    listaIdsActual = nil
+    semantics.DeclararIdsActuales($3)
 } ;
 IdsLista: ID IdsListaExtension {
-    listaIdsActual = append(listaIdsActual, $1)
+    semantics.AgregarIdActual($1)
 };
 IdsListaExtension: IdsListaExtension COMA ID {
-    {
-        listaIdsActual = append(listaIdsActual, $3)
-    }
+    semantics.AgregarIdActual($3)
 }| /* vacío */ ;
-Tipo: ENTERO { $$ = TipoConstante } | FLOTANTE { $$ = TipoFlotante } ;
+Tipo: ENTERO { $$ = types.TipoConstante } | FLOTANTE { $$ = types.TipoFlotante } ;
 Cuerpo: LLLAVE EstatutosLista RLLAVE ;
 EstatutosLista: EstatutosLista Estatuto | /* vacío */ ;
 Funcs: TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS {
-    IniciarFuncion($2, $1, listaParametrosActual)
-    listaParametrosActual = nil
+    semantics.IniciarFuncionConParametros($2, $1)
 } LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA {
-    TerminarFuncion()
+    semantics.TerminarFuncion()
 } ;
-TipoRetorno: Tipo | NULA { 
-    $$ = TipoNula 
+TipoRetorno: Tipo | NULA {
+    $$ = types.TipoNula
 } ;
 ParametrosOpt: ParametrosLista | /* vacío */ ;
 ParametrosLista: ID DOSPUNTOS Tipo {
-    listaParametrosActual = append(listaParametrosActual, &Variable{Nombre: $1, Tipo: $3})
+    semantics.AgregarParametroActual($1, $3)
 } ParametrosListaExtension;
-ParametrosListaExtension: ParametrosListaExtension COMA ID DOSPUNTOS Tipo | /* vacío */ ;
+ParametrosListaExtension: ParametrosListaExtension COMA ID DOSPUNTOS Tipo {
+    semantics.AgregarParametroActual($3, $5)
+} | /* vacío */ ;
 Estatuto: Asigna | Condicion | Ciclo | Llamada PCOMA | Imprime | EstatutoBloque | Retorno ;
 Retorno: RETORNO Expresion PCOMA ;
 EstatutoBloque: LCORCHETE EstatutosBloqueLista RCORCHETE ; 

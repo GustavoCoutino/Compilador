@@ -1,0 +1,13 @@
+package ops
+
+const (
+	MAS = iota
+	MENOS
+	POR
+	ENTRE
+	MAYOR
+	MENOR
+	IGUAL
+	DIFERENTE
+	ASIGNAVAR
+)

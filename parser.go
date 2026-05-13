@@ -9,17 +9,19 @@ import __yyfmt__ "fmt"
 
 import (
 	"fmt"
+	"gustavocoutino.compilador/internal/semantics"
+	"gustavocoutino.compilador/internal/types"
 	"os"
 	"strconv"
 )
 
-//line parser.y:11
+//line parser.y:13
 type yySymType struct {
 	yys      int
 	entero   int
 	flotante float64
 	texto    string
-	tipo     Tipo
+	tipo     types.Tipo
 }
 
 const ID = 57346
@@ -105,7 +107,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:101
+//line parser.y:97
 
 // Lexer es una representacion de un analizador lexico.
 // Lexer contiene el indice del caracter actual de la entrada de caracteres,
@@ -845,72 +847,70 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-8 : yypt+1]
-//line parser.y:38
+//line parser.y:40
 		{
-			{
-				ImprimirTablaVariablesGlobal()
-				ImprimirDirectorioFunciones()
-			}
+			semantics.ImprimirTablaVariablesGlobal()
+			semantics.ImprimirDirectorioFunciones()
 		}
 	case 9:
 		yyDollar = yyS[yypt-4 : yypt+1]
 //line parser.y:48
 		{
-			for _, nombre := range listaIdsActual {
-				DeclararVariable(nombre, yyDollar[3].tipo)
-			}
-			listaIdsActual = nil
+			semantics.DeclararIdsActuales(yyDollar[3].tipo)
 		}
 	case 10:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:54
+//line parser.y:51
 		{
-			listaIdsActual = append(listaIdsActual, yyDollar[1].texto)
+			semantics.AgregarIdActual(yyDollar[1].texto)
 		}
 	case 11:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:57
+//line parser.y:54
 		{
-			{
-				listaIdsActual = append(listaIdsActual, yyDollar[3].texto)
-			}
+			semantics.AgregarIdActual(yyDollar[3].texto)
 		}
 	case 13:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:62
+//line parser.y:57
 		{
-			yyVAL.tipo = TipoConstante
+			yyVAL.tipo = types.TipoConstante
 		}
 	case 14:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:62
+//line parser.y:57
 		{
-			yyVAL.tipo = TipoFlotante
+			yyVAL.tipo = types.TipoFlotante
 		}
 	case 18:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:65
+//line parser.y:60
 		{
-			IniciarFuncion(yyDollar[2].texto, yyDollar[1].tipo, listaParametrosActual)
-			listaParametrosActual = nil
+			semantics.IniciarFuncionConParametros(yyDollar[2].texto, yyDollar[1].tipo)
 		}
 	case 19:
 		yyDollar = yyS[yypt-11 : yypt+1]
-//line parser.y:68
+//line parser.y:62
 		{
-			TerminarFuncion()
+			semantics.TerminarFuncion()
 		}
 	case 21:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:71
+//line parser.y:65
 		{
-			yyVAL.tipo = TipoNula
+			yyVAL.tipo = types.TipoNula
 		}
 	case 24:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:75
+//line parser.y:69
 		{
-			listaParametrosActual = append(listaParametrosActual, &Variable{Nombre: yyDollar[1].texto, Tipo: yyDollar[3].tipo})
+			semantics.AgregarParametroActual(yyDollar[1].texto, yyDollar[3].tipo)
+		}
+	case 26:
+		yyDollar = yyS[yypt-5 : yypt+1]
+//line parser.y:72
+		{
+			semantics.AgregarParametroActual(yyDollar[3].texto, yyDollar[5].tipo)
 		}
 	}
 	goto yystack /* stack new state and value */

@@ -1,10 +1,14 @@
-package main
+package symbols
 
-import "fmt"
+import (
+	"fmt"
+
+	"gustavocoutino.compilador/internal/types"
+)
 
 type Funcion struct {
 	Nombre string
-	TipoRetorno Tipo
+	TipoRetorno types.Tipo
 	Parametros []*Variable
 	Variables *TablaVariables
 }
@@ -17,7 +21,7 @@ func NewDirectorioFunciones() *DirectorioFunciones {
 	return &DirectorioFunciones{Funciones: make(map[string]*Funcion)}
 }
 
-func (d *DirectorioFunciones) Agregar(nombre string, tipo Tipo, parametros []*Variable) (*Funcion, error) {
+func (d *DirectorioFunciones) Agregar(nombre string, tipo types.Tipo, parametros []*Variable) (*Funcion, error) {
     if _, existe := d.Funciones[nombre]; existe {
         return nil, fmt.Errorf("función '%s' ya declarada", nombre)
     }

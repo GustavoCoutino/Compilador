@@ -1,10 +1,14 @@
-package main
+package symbols
 
-import "fmt"
+import (
+	"fmt"
+
+	"gustavocoutino.compilador/internal/types"
+)
 
 type Variable struct {
 	Nombre string
-	Tipo Tipo
+	Tipo types.Tipo
 	Direccion int
 }
 
@@ -16,7 +20,7 @@ func NewTablaVariables() *TablaVariables {
 	return &TablaVariables{Variables: make(map[string]*Variable)} 
 }
 
-func (t *TablaVariables) Agregar(nombre string, tipo Tipo) error {
+func (t *TablaVariables) Agregar(nombre string, tipo types.Tipo) error {
 	if _, existe := t.Variables[nombre]; existe {
 		return fmt.Errorf("variable '%s' ya declarada", nombre)
 	}
