@@ -14,6 +14,7 @@ var (
 	funcionActual *symbols.Funcion
 	listaIdsActual []string
 	listaParametrosActual []*symbols.Variable
+	errorContador int
 )
 
 func DeclararVariable(nombre string, tipo types.Tipo) {
@@ -71,6 +72,16 @@ func IniciarFuncionConParametros(nombre string, tipoRetorno types.Tipo) {
 	listaParametrosActual = nil
 }
 
+func IniciarPrograma(nombre string) {
+	if err := tablaVariablesGlobal.Agregar(nombre, types.TipoNula); err != nil {
+        ErrorSemantico(err.Error())
+	}
+    if _, err := directorioFunciones.Agregar(nombre, types.TipoNula, nil); err != nil {
+        ErrorSemantico(err.Error())
+    }
+    funcionActual = nil
+}
+
 func ImprimirTablaVariablesGlobal() {
 	for k, v := range tablaVariablesGlobal.Variables {
 		fmt.Println(k)
@@ -83,11 +94,6 @@ func ImprimirDirectorioFunciones() {
 	for _, v := range directorioFunciones.Funciones {
 		fmt.Println(v.Nombre)
 		fmt.Println(v.TipoRetorno)
-		fmt.Println("Parametros:")
-		for _, vv := range v.Parametros {
-			fmt.Println(vv.Nombre)
-			fmt.Println(vv.Tipo)
-		}
 		fmt.Println("Variables")
 		for _, vv := range v.Variables.Variables {
 			fmt.Println(vv.Nombre)
@@ -98,5 +104,10 @@ func ImprimirDirectorioFunciones() {
 }
 
 func ErrorSemantico(msg string) {
+	errorContador++
     fmt.Fprintf(os.Stderr, "Error semántico: %s\n", msg)
+}
+
+func HasError() bool {
+	return errorContador > 0
 }

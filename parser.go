@@ -374,6 +374,9 @@ func main() {
 	ok := yyParse(lexer)
 	if ok == 0 {
 		fmt.Println("El análisis léxico fue exitoso")
+		if semantics.HasError() {
+			fmt.Println("El análisis semántico tiene errores")
+		}
 	} else if ok == 1 {
 		fmt.Println("El análisis léxico contiene errores")
 	} else if ok == 2 {

@@ -250,6 +250,7 @@ func TestDeclararVariableRedeclaracion(t *testing.T) {
 	silenciarStderr(t)
 	tablaVariablesGlobal = symbols.NewTablaVariables()
 	funcionActual = nil
+	errorContador = 0
 
 	DeclararVariable("x", types.TipoConstante)
 	DeclararVariable("x", types.TipoFlotante)
@@ -260,6 +261,9 @@ func TestDeclararVariableRedeclaracion(t *testing.T) {
 	}
 	if v.Tipo != types.TipoConstante {
 		t.Errorf("Tipo = %s; Esperado %s (redeclaración no debe sobrescribir)", v.Tipo, types.TipoConstante)
+	}
+	if errorContador != 1 {
+		t.Errorf("errorContador = %d; Esperado 1 tras redeclaración", errorContador)
 	}
 }
 
@@ -323,17 +327,24 @@ func TestIniciarFuncionDuplicada(t *testing.T) {
 	silenciarStderr(t)
 	directorioFunciones = symbols.NewDirectorioFunciones()
 	funcionActual = nil
+	errorContador = 0
 
 	IniciarFuncion("f", types.TipoNula, nil)
 	primera := funcionActual
 
 	IniciarFuncion("f", types.TipoConstante, nil)
 
-	if funcionActual != primera {
-		t.Errorf("funcionActual cambió tras declaración duplicada")
+	if funcionActual == primera {
+		t.Errorf("funcionActual no fue reseteada tras declaración duplicada")
+	}
+	if funcionActual != nil {
+		t.Errorf("funcionActual = %+v; Esperado nil tras error", funcionActual)
 	}
 	if got := directorioFunciones.Funciones["f"].TipoRetorno; got != types.TipoNula {
 		t.Errorf("TipoRetorno = %s; Esperado %s (redeclaración no debe sobrescribir)", got, types.TipoNula)
+	}
+	if errorContador != 1 {
+		t.Errorf("errorContador = %d; Esperado 1 tras función duplicada", errorContador)
 	}
 }
 
@@ -363,6 +374,7 @@ func TestIniciarFuncionConParametrosLimpiaListaSiempre(t *testing.T) {
 	silenciarStderr(t)
 	directorioFunciones = symbols.NewDirectorioFunciones()
 	funcionActual = nil
+	errorContador = 0
 	directorioFunciones.Agregar("f", types.TipoNula, nil)
 
 	listaParametrosActual = []*symbols.Variable{
@@ -373,5 +385,133 @@ func TestIniciarFuncionConParametrosLimpiaListaSiempre(t *testing.T) {
 
 	if listaParametrosActual != nil {
 		t.Errorf("listaParametrosActual = %v; Esperado nil (debe limpiarse aún si IniciarFuncion falla)", listaParametrosActual)
+	}
+	if errorContador != 1 {
+		t.Errorf("errorContador = %d; Esperado 1 tras función duplicada", errorContador)
+	}
+}
+
+func TestIniciarPrograma(t *testing.T) {
+	tests := []struct {
+		name              string
+		setup             func()
+		programaNombre    string
+		silenciar         bool
+		expectInVars      bool
+		expectInFunciones bool
+		expectErrores     int
+	}{
+		{
+			name: "programa nuevo se registra en ambas tablas",
+			setup: func() {
+				tablaVariablesGlobal = symbols.NewTablaVariables()
+				directorioFunciones = symbols.NewDirectorioFunciones()
+				funcionActual = nil
+				errorContador = 0
+			},
+			programaNombre:    "miPrograma",
+			expectInVars:      true,
+			expectInFunciones: true,
+			expectErrores:     0,
+		},
+		{
+			name: "colisiona con variable global preexistente",
+			setup: func() {
+				tablaVariablesGlobal = symbols.NewTablaVariables()
+				directorioFunciones = symbols.NewDirectorioFunciones()
+				funcionActual = nil
+				errorContador = 0
+				tablaVariablesGlobal.Agregar("foo", types.TipoConstante)
+			},
+			programaNombre:    "foo",
+			silenciar:         true,
+			expectInVars:      true,
+			expectInFunciones: true,
+			expectErrores:     1,
+		},
+		{
+			name: "colisiona con función preexistente",
+			setup: func() {
+				tablaVariablesGlobal = symbols.NewTablaVariables()
+				directorioFunciones = symbols.NewDirectorioFunciones()
+				funcionActual = nil
+				errorContador = 0
+				directorioFunciones.Agregar("bar", types.TipoNula, nil)
+			},
+			programaNombre:    "bar",
+			silenciar:         true,
+			expectInVars:      true,
+			expectInFunciones: true,
+			expectErrores:     1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.silenciar {
+				silenciarStderr(t)
+			}
+			tt.setup()
+
+			IniciarPrograma(tt.programaNombre)
+
+			if _, ok := tablaVariablesGlobal.Variables[tt.programaNombre]; ok != tt.expectInVars {
+				t.Errorf("presente en tablaVariablesGlobal = %v; Esperado %v", ok, tt.expectInVars)
+			}
+			if _, ok := directorioFunciones.Funciones[tt.programaNombre]; ok != tt.expectInFunciones {
+				t.Errorf("presente en directorioFunciones = %v; Esperado %v", ok, tt.expectInFunciones)
+			}
+			if funcionActual != nil {
+				t.Errorf("funcionActual = %+v; Esperado nil tras IniciarPrograma", funcionActual)
+			}
+			if errorContador != tt.expectErrores {
+				t.Errorf("errorContador = %d; Esperado %d", errorContador, tt.expectErrores)
+			}
+		})
+	}
+}
+
+func TestIniciarProgramaNoEntraEnScope(t *testing.T) {
+	tablaVariablesGlobal = symbols.NewTablaVariables()
+	directorioFunciones = symbols.NewDirectorioFunciones()
+	funcionActual = nil
+	errorContador = 0
+
+	IniciarPrograma("mainProg")
+	DeclararVariable("x", types.TipoConstante)
+
+	if _, ok := tablaVariablesGlobal.Variables["x"]; !ok {
+		t.Error("variable x debió declararse en tablaVariablesGlobal después de IniciarPrograma")
+	}
+	if funcionActual != nil {
+		t.Errorf("funcionActual = %+v; Esperado nil tras IniciarPrograma", funcionActual)
+	}
+}
+
+func TestHasError(t *testing.T) {
+	silenciarStderr(t)
+	errorContador = 0
+
+	if HasError() {
+		t.Error("HasError() = true; Esperado false sin errores")
+	}
+
+	ErrorSemantico("error de prueba")
+
+	if !HasError() {
+		t.Error("HasError() = false; Esperado true tras ErrorSemantico")
+	}
+}
+
+func TestErrorSemanticoContador(t *testing.T) {
+	silenciarStderr(t)
+	errorContador = 0
+
+	ErrorSemantico("primero")
+	ErrorSemantico("segundo")
+	ErrorSemantico("tercero")
+
+	if errorContador != 3 {
+		t.Errorf("errorContador = %d; Esperado 3", errorContador)
 	}
 }
