@@ -41,6 +41,7 @@ func IniciarFuncion(nombre string, tipoRetorno types.Tipo, parametros []*symbols
 	f, err := directorioFunciones.Agregar(nombre, tipoRetorno, parametros)
     if err != nil {
         ErrorSemantico(err.Error())
+		funcionActual = nil
         return
     }
     funcionActual = f

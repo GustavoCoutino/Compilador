@@ -11,10 +11,12 @@ Actualmente el compilador realiza:
 - **Análisis sintáctico**: valida que la secuencia de tokens respete la
   gramática del lenguaje Patito. Implementado con `goyacc` (LALR(1))
   a partir de la gramática definida en `parser.y`.
-
-Si el programa de entrada es válido, el compilador imprime
-`El análisis léxico fue exitoso`. Si no, imprime un mensaje de
-`Error de sintaxis` describiendo la falla e imprimiendo el error.
+- **Análisis semántico**: conecta la definición de variables y funciones
+  con sus usos, guardando sus datos y alcance correcto. Implementando
+  con un mapa de directories y un mapa de variables por alcance.
+  Si el programa de entrada es válido, el compilador imprime
+  `El análisis léxico fue exitoso`. Si no, imprime un mensaje de
+  `Error de sintaxis` describiendo la falla e imprimiendo el error.
 
 ## Requisitos
 
@@ -51,8 +53,6 @@ Si se omite, se usa `programa1.patito` por defecto.
 
 ## To Do
 
-- [ ] **Acciones de gramática** — agregar acciones semánticas en `parser.y`
-      para construir tablas de símbolos, etc.
 - [ ] **Validaciones semánticas** — verificación de tipos, declaración previa
       de variables y funciones, llamadas, etc.
 - [ ] **Código intermedio** — generación a partir de las

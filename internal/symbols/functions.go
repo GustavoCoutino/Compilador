@@ -31,6 +31,11 @@ func (d *DirectorioFunciones) Agregar(nombre string, tipo types.Tipo, parametros
         Parametros:  parametros,
         Variables:   NewTablaVariables(),
     }
+    for _, v := range parametros {
+        if err := f.Variables.Agregar(v.Nombre, v.Tipo); err != nil {
+          return nil, fmt.Errorf("en función '%s': %w", nombre, err)
+      }
+    }
     d.Funciones[nombre] = f
     return f, nil
 }
