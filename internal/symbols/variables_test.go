@@ -34,7 +34,7 @@ func TestTablaVariablesAgregar(t *testing.T) {
 		{
 			name:      "agregar nueva variable",
 			nombre:    "x",
-			tipo:      types.TipoConstante,
+			tipo:      types.TipoEntero,
 			expectErr: false,
 		},
 		{
@@ -42,7 +42,7 @@ func TestTablaVariablesAgregar(t *testing.T) {
 			preexisting: []struct {
 				nombre string
 				tipo   types.Tipo
-			}{{"x", types.TipoConstante}},
+			}{{"x", types.TipoEntero}},
 			nombre:    "x",
 			tipo:      types.TipoFlotante,
 			expectErr: true,
@@ -83,12 +83,12 @@ func TestTablaVariablesAgregar(t *testing.T) {
 
 func TestTablaVariablesAgregarNoSobrescribe(t *testing.T) {
 	tabla := NewTablaVariables()
-	tabla.Agregar("x", types.TipoConstante)
+	tabla.Agregar("x", types.TipoEntero)
 
 	tabla.Agregar("x", types.TipoFlotante)
 
-	if got := tabla.Variables["x"].Tipo; got != types.TipoConstante {
-		t.Errorf("Tipo = %s; Esperado %s (duplicado no debe sobrescribir)", got, types.TipoConstante)
+	if got := tabla.Variables["x"].Tipo; got != types.TipoEntero {
+		t.Errorf("Tipo = %s; Esperado %s (duplicado no debe sobrescribir)", got, types.TipoEntero)
 	}
 }
 
@@ -102,14 +102,14 @@ func TestTablaVariablesBuscar(t *testing.T) {
 	}{
 		{
 			name:         "variable existente",
-			seed:         map[string]types.Tipo{"x": types.TipoConstante},
+			seed:         map[string]types.Tipo{"x": types.TipoEntero},
 			nombre:       "x",
 			expectFound:  true,
-			expectedTipo: types.TipoConstante,
+			expectedTipo: types.TipoEntero,
 		},
 		{
 			name:        "variable inexistente",
-			seed:        map[string]types.Tipo{"x": types.TipoConstante},
+			seed:        map[string]types.Tipo{"x": types.TipoEntero},
 			nombre:      "y",
 			expectFound: false,
 		},

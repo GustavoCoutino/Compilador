@@ -10,12 +10,12 @@ entero calcular(base: entero, altura: entero) {
 
 inicio
 {
-    x = 5;
-    a = 10;
-    z = 2;
+    a = 5;
+    b = 10;
+    c = 2;
     f = 10.234e+10;
 
-    r = 10.2432423523;
+    g = 10.2432423523;
     escribe("hola adios ");
     si (10+4>(3+6) + 3) {
         escribe("adios");

@@ -7,6 +7,8 @@ import (
     "strconv"
     "gustavocoutino.compilador/internal/types"
     "gustavocoutino.compilador/internal/semantics"
+    "gustavocoutino.compilador/internal/quadruples"
+    "gustavocoutino.compilador/internal/ops"
 )
 %}
 
@@ -42,6 +44,7 @@ Programa : PROGRAMA ID PCOMA {
 } VarsOpt FuncsOpt INICIO Cuerpo FIN {
     semantics.ImprimirTablaVariablesGlobal()
     semantics.ImprimirDirectorioFunciones()
+    quadruples.ImprimirCuadruplos()
 } ;
 VarsOpt: Vars | /* vacío */ ;
 FuncsOpt: FuncsOpt Funcs | /* vacío */ ;
@@ -56,7 +59,7 @@ IdsLista: ID IdsListaExtension {
 IdsListaExtension: IdsListaExtension COMA ID {
     semantics.AgregarIdActual($3)
 }| /* vacío */ ;
-Tipo: ENTERO { $$ = types.TipoConstante } | FLOTANTE { $$ = types.TipoFlotante } ;
+Tipo: ENTERO { $$ = types.TipoEntero } | FLOTANTE { $$ = types.TipoFlotante } ;
 Cuerpo: LLLAVE EstatutosLista RLLAVE ;
 EstatutosLista: EstatutosLista Estatuto | /* vacío */ ;
 Funcs: TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS {
@@ -75,21 +78,65 @@ ParametrosListaExtension: ParametrosListaExtension COMA ID DOSPUNTOS Tipo {
     semantics.AgregarParametroActual($3, $5)
 } | /* vacío */ ;
 Estatuto: Asigna | Condicion | Ciclo | Llamada PCOMA | Imprime | EstatutoBloque | Retorno ;
-Retorno: RETORNO Expresion PCOMA ;
+Retorno: RETORNO Expresion {
+    quadruples.GenerarRetornoCuadruplo()
+} PCOMA ;
 EstatutoBloque: LCORCHETE EstatutosBloqueLista RCORCHETE ; 
 EstatutosBloqueLista: EstatutosBloqueLista Estatuto | Estatuto ;
-Asigna: ID ASIGNAVAR Expresion PCOMA ;
-Expresion: Exp | Exp Operadores Exp ;
-Operadores: MAYOR | MENOR | IGUAL | DIFERENTE ;
-Exp: Exp MAS Termino | Exp MENOS Termino | Termino ;
-Termino: Termino POR Factor | Termino ENTRE Factor | Factor ;
+Asigna: ID ASIGNAVAR Expresion {
+    quadruples.GenerarAsignaCuadruplo($1)
+} PCOMA ;
+Expresion: Exp | Exp Operadores Exp {
+    quadruples.GenerarCuadruplo()
+} ;
+Operadores: MAYOR {
+    quadruples.EmpujarOperador(ops.MAYOR)
+} | MENOR {
+    quadruples.EmpujarOperador(ops.MENOR)
+} | IGUAL {
+    quadruples.EmpujarOperador(ops.IGUAL)
+} | DIFERENTE {
+    quadruples.EmpujarOperador(ops.DIFERENTE)
+} ;
+Exp: Exp MAS {
+    quadruples.EmpujarOperador(ops.MAS)
+} Termino {
+    quadruples.GenerarCuadruplo()
+} | Exp MENOS {
+    quadruples.EmpujarOperador(ops.MAS)
+} Termino {
+    quadruples.GenerarCuadruplo()
+} | Termino ;
+Termino: Termino POR {
+    quadruples.EmpujarOperador(ops.POR)
+} Factor {
+    quadruples.GenerarCuadruplo()
+} | Termino ENTRE {
+    quadruples.EmpujarOperador(ops.ENTRE)
+} Factor {
+    quadruples.GenerarCuadruplo()
+} | Factor ;
 Factor: LPARENTESIS Expresion RPARENTESIS | FactorOpt | MAS FactorOpt | MENOS FactorOpt | Llamada ;
-FactorOpt: ID | CTE ;
-CTE: CTE_ENT | CTE_FLOT ;
+FactorOpt: ID {
+    if variable, existe := semantics.BuscarVariable($1); existe {
+        quadruples.EmpujarOperando(variable.Direccion, variable.Tipo)
+    } else {
+        semantics.ErrorSemantico(fmt.Sprintf("variable '%s' no declarada", $1))
+    }
+} | CTE ;
+CTE: CTE_ENT {
+    direccion, tipo := semantics.ProcesarConstante(strconv.Itoa($1), types.TipoEntero)
+    quadruples.EmpujarOperando(direccion, tipo)
+} | CTE_FLOT {
+    direccion, tipo := semantics.ProcesarConstante(strconv.FormatFloat($1, 'g', -1, 64), types.TipoFlotante)
+    quadruples.EmpujarOperando(direccion, tipo)
+} ;
 Condicion: SI LPARENTESIS Expresion RPARENTESIS Cuerpo SinoOpt PCOMA ;
 SinoOpt: SINO Cuerpo | /* vacío */ ;
 Ciclo: MIENTRAS LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA ;
-Imprime: ESCRIBE LPARENTESIS ImprimeLista RPARENTESIS PCOMA ;
+Imprime: ESCRIBE LPARENTESIS ImprimeLista {
+    quadruples.GenerarEscribeCuadruplo()
+} RPARENTESIS PCOMA ;
 ImprimeLista: ImprimeEl | ImprimeLista COMA ImprimeEl ;
 ImprimeEl: Expresion | LITERAL ;
 Llamada: ID LPARENTESIS ArgumentosOpt RPARENTESIS ;

@@ -19,7 +19,7 @@ func TestString(t *testing.T){
 	}{
 		{
 			name:      "regresar tipo constante",
-			tipo:      TipoConstante,
+			tipo:      TipoEntero,
 			expectedType: entero,
 		},
 		{

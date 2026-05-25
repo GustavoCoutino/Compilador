@@ -31,7 +31,7 @@ func TestDeclararVariable(t *testing.T) {
 		expectedName string
 		expectedTipo types.Tipo
 	}{
-		{"declarar variable global entera", "x", types.TipoConstante, false, "x", types.TipoConstante},
+		{"declarar variable global entera", "x", types.TipoEntero, false, "x", types.TipoEntero},
 		{"declarar variable global flotante", "y", types.TipoFlotante, false, "y", types.TipoFlotante},
 		{"declarar variable local flotante", "z", types.TipoFlotante, true, "z", types.TipoFlotante},
 	}
@@ -72,7 +72,7 @@ func TestBuscarVariable( t *testing.T){
 		enFuncion    bool
 		expectedName string
 	}{
-		{"buscar variable global", "x", types.TipoConstante, false, "x"},
+		{"buscar variable global", "x", types.TipoEntero, false, "x"},
 		{"buscar variable local", "z", types.TipoFlotante, true, "z"},
 	}
 	for _, tt := range tests {
@@ -102,9 +102,9 @@ func TestIniciarFuncion(t *testing.T) {
 		parametros  []*symbols.Variable
 	}{
 		{"funcion sin parametros", "main", types.TipoNula, nil},
-		{"funcion con parametros", "suma", types.TipoConstante, []*symbols.Variable{
-			{Nombre: "a", Tipo: types.TipoConstante},
-			{Nombre: "b", Tipo: types.TipoConstante},
+		{"funcion con parametros", "suma", types.TipoEntero, []*symbols.Variable{
+			{Nombre: "a", Tipo: types.TipoEntero},
+			{Nombre: "b", Tipo: types.TipoEntero},
 		}},
 	}
 
@@ -169,7 +169,7 @@ func TestDeclararIdsActuales(t *testing.T) {
 		tipo      types.Tipo
 		enFuncion bool
 	}{
-		{"declarar ids globales", []string{"a", "b", "c"}, types.TipoConstante, false},
+		{"declarar ids globales", []string{"a", "b", "c"}, types.TipoEntero, false},
 		{"declarar ids locales", []string{"x", "y"}, types.TipoFlotante, true},
 	}
 
@@ -208,14 +208,14 @@ func TestDeclararIdsActuales(t *testing.T) {
 func TestAgregarParametroActual(t *testing.T) {
 	listaParametrosActual = nil
 
-	AgregarParametroActual("a", types.TipoConstante)
+	AgregarParametroActual("a", types.TipoEntero)
 	AgregarParametroActual("b", types.TipoFlotante)
 
 	if len(listaParametrosActual) != 2 {
 		t.Fatalf("len(listaParametrosActual) = %d; Esperado 2", len(listaParametrosActual))
 	}
-	if listaParametrosActual[0].Nombre != "a" || listaParametrosActual[0].Tipo != types.TipoConstante {
-		t.Errorf("listaParametrosActual[0] = %+v; Esperado {a, TipoConstante}", listaParametrosActual[0])
+	if listaParametrosActual[0].Nombre != "a" || listaParametrosActual[0].Tipo != types.TipoEntero {
+		t.Errorf("listaParametrosActual[0] = %+v; Esperado {a, TipoEntero}", listaParametrosActual[0])
 	}
 	if listaParametrosActual[1].Nombre != "b" || listaParametrosActual[1].Tipo != types.TipoFlotante {
 		t.Errorf("listaParametrosActual[1] = %+v; Esperado {b, TipoFlotante}", listaParametrosActual[1])
@@ -226,11 +226,11 @@ func TestIniciarFuncionConParametros(t *testing.T) {
 	directorioFunciones = symbols.NewDirectorioFunciones()
 	funcionActual = nil
 	listaParametrosActual = []*symbols.Variable{
-		{Nombre: "a", Tipo: types.TipoConstante},
+		{Nombre: "a", Tipo: types.TipoEntero},
 		{Nombre: "b", Tipo: types.TipoFlotante},
 	}
 
-	IniciarFuncionConParametros("suma", types.TipoConstante)
+	IniciarFuncionConParametros("suma", types.TipoEntero)
 
 	if funcionActual == nil {
 		t.Fatal("funcionActual no fue establecida")
@@ -252,15 +252,15 @@ func TestDeclararVariableRedeclaracion(t *testing.T) {
 	funcionActual = nil
 	errorContador = 0
 
-	DeclararVariable("x", types.TipoConstante)
+	DeclararVariable("x", types.TipoEntero)
 	DeclararVariable("x", types.TipoFlotante)
 
 	v, ok := tablaVariablesGlobal.Variables["x"]
 	if !ok {
 		t.Fatal("variable x no existe")
 	}
-	if v.Tipo != types.TipoConstante {
-		t.Errorf("Tipo = %s; Esperado %s (redeclaración no debe sobrescribir)", v.Tipo, types.TipoConstante)
+	if v.Tipo != types.TipoEntero {
+		t.Errorf("Tipo = %s; Esperado %s (redeclaración no debe sobrescribir)", v.Tipo, types.TipoEntero)
 	}
 	if errorContador != 1 {
 		t.Errorf("errorContador = %d; Esperado 1 tras redeclaración", errorContador)
@@ -288,18 +288,18 @@ func TestBuscarVariableEdgeCases(t *testing.T) {
 			name: "global encontrada desde scope local",
 			setup: func() {
 				tablaVariablesGlobal = symbols.NewTablaVariables()
-				tablaVariablesGlobal.Agregar("x", types.TipoConstante)
+				tablaVariablesGlobal.Agregar("x", types.TipoEntero)
 				funcionActual = &symbols.Funcion{Variables: symbols.NewTablaVariables()}
 			},
 			nombre:       "x",
 			expectFound:  true,
-			expectedTipo: types.TipoConstante,
+			expectedTipo: types.TipoEntero,
 		},
 		{
 			name: "local opaca a global",
 			setup: func() {
 				tablaVariablesGlobal = symbols.NewTablaVariables()
-				tablaVariablesGlobal.Agregar("x", types.TipoConstante)
+				tablaVariablesGlobal.Agregar("x", types.TipoEntero)
 				funcionActual = &symbols.Funcion{Variables: symbols.NewTablaVariables()}
 				funcionActual.Variables.Agregar("x", types.TipoFlotante)
 			},
@@ -332,7 +332,7 @@ func TestIniciarFuncionDuplicada(t *testing.T) {
 	IniciarFuncion("f", types.TipoNula, nil)
 	primera := funcionActual
 
-	IniciarFuncion("f", types.TipoConstante, nil)
+	IniciarFuncion("f", types.TipoEntero, nil)
 
 	if funcionActual == primera {
 		t.Errorf("funcionActual no fue reseteada tras declaración duplicada")
@@ -363,7 +363,7 @@ func TestDeclararIdsActualesVacio(t *testing.T) {
 	funcionActual = nil
 	listaIdsActual = nil
 
-	DeclararIdsActuales(types.TipoConstante)
+	DeclararIdsActuales(types.TipoEntero)
 
 	if len(tablaVariablesGlobal.Variables) != 0 {
 		t.Errorf("se declararon %d variables sin ids en la lista", len(tablaVariablesGlobal.Variables))
@@ -378,7 +378,7 @@ func TestIniciarFuncionConParametrosLimpiaListaSiempre(t *testing.T) {
 	directorioFunciones.Agregar("f", types.TipoNula, nil)
 
 	listaParametrosActual = []*symbols.Variable{
-		{Nombre: "a", Tipo: types.TipoConstante},
+		{Nombre: "a", Tipo: types.TipoEntero},
 	}
 
 	IniciarFuncionConParametros("f", types.TipoNula)
@@ -421,7 +421,7 @@ func TestIniciarPrograma(t *testing.T) {
 				directorioFunciones = symbols.NewDirectorioFunciones()
 				funcionActual = nil
 				errorContador = 0
-				tablaVariablesGlobal.Agregar("foo", types.TipoConstante)
+				tablaVariablesGlobal.Agregar("foo", types.TipoEntero)
 			},
 			programaNombre:    "foo",
 			silenciar:         true,
@@ -478,7 +478,7 @@ func TestIniciarProgramaNoEntraEnScope(t *testing.T) {
 	errorContador = 0
 
 	IniciarPrograma("mainProg")
-	DeclararVariable("x", types.TipoConstante)
+	DeclararVariable("x", types.TipoEntero)
 
 	if _, ok := tablaVariablesGlobal.Variables["x"]; !ok {
 		t.Error("variable x debió declararse en tablaVariablesGlobal después de IniciarPrograma")

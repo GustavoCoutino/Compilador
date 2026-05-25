@@ -38,17 +38,17 @@ func TestDirectorioFuncionesAgregar(t *testing.T) {
 		{
 			name:        "agregar funcion con parametros",
 			nombre:      "suma",
-			tipoRetorno: types.TipoConstante,
+			tipoRetorno: types.TipoEntero,
 			parametros: []*Variable{
-				{Nombre: "a", Tipo: types.TipoConstante},
-				{Nombre: "b", Tipo: types.TipoConstante},
+				{Nombre: "a", Tipo: types.TipoEntero},
+				{Nombre: "b", Tipo: types.TipoEntero},
 			},
 		},
 		{
 			name:        "agregar funcion duplicada",
 			preexisting: []string{"f"},
 			nombre:      "f",
-			tipoRetorno: types.TipoConstante,
+			tipoRetorno: types.TipoEntero,
 			expectErr:   true,
 		},
 	}
@@ -101,7 +101,7 @@ func TestDirectorioFuncionesAgregarNoSobrescribe(t *testing.T) {
 	dir.Agregar("f", types.TipoNula, nil)
 	original := dir.Funciones["f"]
 
-	dir.Agregar("f", types.TipoConstante, nil)
+	dir.Agregar("f", types.TipoEntero, nil)
 
 	if dir.Funciones["f"] != original {
 		t.Error("funcion fue sobrescrita en duplicado")

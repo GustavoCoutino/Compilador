@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"gustavocoutino.compilador/internal/memory"
 	"gustavocoutino.compilador/internal/symbols"
 	"gustavocoutino.compilador/internal/types"
 )
@@ -15,18 +16,44 @@ var (
 	listaIdsActual []string
 	listaParametrosActual []*symbols.Variable
 	errorContador int
+	tablaConstantes = map[string]*symbols.Variable{}
 )
 
 func DeclararVariable(nombre string, tipo types.Tipo) {
     var tabla *symbols.TablaVariables
+    segmento := memory.Global
     if funcionActual != nil {
         tabla = funcionActual.Variables
+        segmento = memory.Local
     } else {
         tabla = tablaVariablesGlobal
     }
     if err := tabla.Agregar(nombre, tipo); err != nil {
         ErrorSemantico(err.Error())
+        return
     }
+    direccion, err := memory.Asignar(segmento, tipo)
+    if err != nil {
+        ErrorSemantico(err.Error())
+        return
+    }
+    variable, _ := tabla.Buscar(nombre)
+    variable.Direccion = direccion
+    memory.RegistrarNombre(direccion, nombre)
+}
+
+func ProcesarConstante(literal string, tipo types.Tipo) (int, types.Tipo) {
+    if variable, ok := tablaConstantes[literal]; ok {
+        return variable.Direccion, variable.Tipo
+    }
+    direccion, err := memory.Asignar(memory.Constante, tipo)
+    if err != nil {
+        ErrorSemantico(err.Error())
+        return -1, types.TipoError
+    }
+    tablaConstantes[literal] = &symbols.Variable{Nombre: literal, Tipo: tipo, Direccion: direccion}
+    memory.RegistrarNombre(direccion, literal)
+    return direccion, tipo
 }
 
 func BuscarVariable(nombre string) (*symbols.Variable, bool) {
@@ -46,6 +73,24 @@ func IniciarFuncion(nombre string, tipoRetorno types.Tipo, parametros []*symbols
         return
     }
     funcionActual = f
+    for _, parametro := range f.Parametros {
+        direccion, err := memory.Asignar(memory.Local, parametro.Tipo)
+        if err != nil {
+            ErrorSemantico(err.Error())
+            continue
+        }
+        if variable, ok := f.Variables.Buscar(parametro.Nombre); ok {
+            variable.Direccion = direccion
+        }
+        memory.RegistrarNombre(direccion, parametro.Nombre)
+    }
+}
+
+func TipoRetornoActual() (types.Tipo, bool) {
+	if funcionActual == nil {
+		return types.TipoNula, false
+	}
+	return funcionActual.TipoRetorno, true
 }
 
 func TerminarFuncion() {

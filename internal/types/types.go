@@ -3,7 +3,7 @@ package types
 type Tipo int
 
 const (
-	TipoConstante Tipo = iota
+	TipoEntero Tipo = iota
 	TipoFlotante
 	TipoError
 	TipoNula
@@ -11,7 +11,7 @@ const (
 
 func (t Tipo) String() string {
 	switch t {
-		case TipoConstante:
+		case TipoEntero:
 			return "entero"
 		case TipoFlotante:
 			return "flotante"
