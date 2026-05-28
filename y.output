@@ -15,21 +15,21 @@ state 1
 
 
 state 2
-	Programa:  PROGRAMA.ID PCOMA $$1 VarsOpt FuncsOpt INICIO Cuerpo FIN 
+	Programa:  PROGRAMA.ID PCOMA $$1 VarsOpt FuncsOpt INICIO $$2 Cuerpo FIN 
 
 	ID  shift 3
 	.  error
 
 
 state 3
-	Programa:  PROGRAMA ID.PCOMA $$1 VarsOpt FuncsOpt INICIO Cuerpo FIN 
+	Programa:  PROGRAMA ID.PCOMA $$1 VarsOpt FuncsOpt INICIO $$2 Cuerpo FIN 
 
 	PCOMA  shift 4
 	.  error
 
 
 state 4
-	Programa:  PROGRAMA ID PCOMA.$$1 VarsOpt FuncsOpt INICIO Cuerpo FIN 
+	Programa:  PROGRAMA ID PCOMA.$$1 VarsOpt FuncsOpt INICIO $$2 Cuerpo FIN 
 	$$1: .    (1)
 
 	.  reduce 1 (src line 42)
@@ -37,27 +37,27 @@ state 4
 	$$1  goto 5
 
 state 5
-	Programa:  PROGRAMA ID PCOMA $$1.VarsOpt FuncsOpt INICIO Cuerpo FIN 
-	VarsOpt: .    (4)
+	Programa:  PROGRAMA ID PCOMA $$1.VarsOpt FuncsOpt INICIO $$2 Cuerpo FIN 
+	VarsOpt: .    (5)
 
 	VARS  shift 8
-	.  reduce 4 (src line 49)
+	.  reduce 5 (src line 53)
 
 	VarsOpt  goto 6
 	Vars  goto 7
 
 state 6
-	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt.FuncsOpt INICIO Cuerpo FIN 
-	FuncsOpt: .    (6)
+	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt.FuncsOpt INICIO $$2 Cuerpo FIN 
+	FuncsOpt: .    (7)
 
-	.  reduce 6 (src line 50)
+	.  reduce 7 (src line 54)
 
 	FuncsOpt  goto 9
 
 state 7
-	VarsOpt:  Vars.    (3)
+	VarsOpt:  Vars.    (4)
 
-	.  reduce 3 (src line 49)
+	.  reduce 4 (src line 53)
 
 
 state 8
@@ -68,7 +68,7 @@ state 8
 
 
 state 9
-	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt.INICIO Cuerpo FIN 
+	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt.INICIO $$2 Cuerpo FIN 
 	FuncsOpt:  FuncsOpt.Funcs 
 
 	INICIO  shift 11
@@ -92,48 +92,48 @@ state 10
 	IdsLista  goto 20
 
 state 11
-	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt INICIO.Cuerpo FIN 
+	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt INICIO.$$2 Cuerpo FIN 
+	$$2: .    (2)
 
-	LLLAVE  shift 23
-	.  error
+	.  reduce 2 (src line 45)
 
-	Cuerpo  goto 22
+	$$2  goto 22
 
 state 12
-	FuncsOpt:  FuncsOpt Funcs.    (5)
+	FuncsOpt:  FuncsOpt Funcs.    (6)
 
-	.  reduce 5 (src line 50)
+	.  reduce 6 (src line 54)
 
 
 state 13
-	Funcs:  TipoRetorno.ID LPARENTESIS ParametrosOpt RPARENTESIS $$19 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
+	Funcs:  TipoRetorno.ID LPARENTESIS ParametrosOpt RPARENTESIS $$20 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
 
-	ID  shift 24
+	ID  shift 23
 	.  error
 
 
 state 14
-	TipoRetorno:  Tipo.    (21)
+	TipoRetorno:  Tipo.    (22)
 
-	.  reduce 21 (src line 72)
+	.  reduce 22 (src line 76)
 
 
 state 15
-	TipoRetorno:  NULA.    (22)
+	TipoRetorno:  NULA.    (23)
 
-	.  reduce 22 (src line 72)
+	.  reduce 23 (src line 76)
 
 
 state 16
-	Tipo:  ENTERO.    (14)
+	Tipo:  ENTERO.    (15)
 
-	.  reduce 14 (src line 62)
+	.  reduce 15 (src line 66)
 
 
 state 17
-	Tipo:  FLOTANTE.    (15)
+	Tipo:  FLOTANTE.    (16)
 
-	.  reduce 15 (src line 62)
+	.  reduce 16 (src line 66)
 
 
 state 18
@@ -141,1157 +141,1152 @@ state 18
 	DeclaracionLista:  DeclaracionLista.Declaracion 
 
 	ID  shift 21
-	RLLAVE  shift 25
+	RLLAVE  shift 24
 	.  error
 
-	Declaracion  goto 26
+	Declaracion  goto 25
 	IdsLista  goto 20
 
 state 19
-	DeclaracionLista:  Declaracion.    (8)
+	DeclaracionLista:  Declaracion.    (9)
 
-	.  reduce 8 (src line 52)
+	.  reduce 9 (src line 56)
 
 
 state 20
 	Declaracion:  IdsLista.DOSPUNTOS Tipo PCOMA 
 
-	DOSPUNTOS  shift 27
+	DOSPUNTOS  shift 26
 	.  error
 
 
 state 21
 	IdsLista:  ID.IdsListaExtension 
-	IdsListaExtension: .    (13)
+	IdsListaExtension: .    (14)
 
-	.  reduce 13 (src line 61)
+	.  reduce 14 (src line 65)
 
-	IdsListaExtension  goto 28
+	IdsListaExtension  goto 27
 
 state 22
-	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt INICIO Cuerpo.FIN 
+	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt INICIO $$2.Cuerpo FIN 
 
-	FIN  shift 29
+	LLLAVE  shift 29
 	.  error
 
+	Cuerpo  goto 28
 
 state 23
-	Cuerpo:  LLLAVE.EstatutosLista RLLAVE 
-	EstatutosLista: .    (18)
+	Funcs:  TipoRetorno ID.LPARENTESIS ParametrosOpt RPARENTESIS $$20 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
 
-	.  reduce 18 (src line 64)
+	LPARENTESIS  shift 30
+	.  error
 
-	EstatutosLista  goto 30
 
 state 24
-	Funcs:  TipoRetorno ID.LPARENTESIS ParametrosOpt RPARENTESIS $$19 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
+	Vars:  VARS LLLAVE DeclaracionLista RLLAVE.    (8)
 
-	LPARENTESIS  shift 31
-	.  error
+	.  reduce 8 (src line 55)
 
 
 state 25
-	Vars:  VARS LLLAVE DeclaracionLista RLLAVE.    (7)
+	DeclaracionLista:  DeclaracionLista Declaracion.    (10)
 
-	.  reduce 7 (src line 51)
+	.  reduce 10 (src line 56)
 
 
 state 26
-	DeclaracionLista:  DeclaracionLista Declaracion.    (9)
-
-	.  reduce 9 (src line 52)
-
-
-state 27
 	Declaracion:  IdsLista DOSPUNTOS.Tipo PCOMA 
 
 	ENTERO  shift 16
 	FLOTANTE  shift 17
 	.  error
 
-	Tipo  goto 32
+	Tipo  goto 31
 
-state 28
-	IdsLista:  ID IdsListaExtension.    (11)
+state 27
+	IdsLista:  ID IdsListaExtension.    (12)
 	IdsListaExtension:  IdsListaExtension.COMA ID 
 
-	COMA  shift 33
-	.  reduce 11 (src line 56)
+	COMA  shift 32
+	.  reduce 12 (src line 60)
+
+
+state 28
+	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt INICIO $$2 Cuerpo.FIN 
+
+	FIN  shift 33
+	.  error
 
 
 state 29
-	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt INICIO Cuerpo FIN.    (2)
+	Cuerpo:  LLLAVE.EstatutosLista RLLAVE 
+	EstatutosLista: .    (19)
 
-	.  reduce 2 (src line 44)
+	.  reduce 19 (src line 68)
 
+	EstatutosLista  goto 34
 
 state 30
-	Cuerpo:  LLLAVE EstatutosLista.RLLAVE 
-	EstatutosLista:  EstatutosLista.Estatuto 
+	Funcs:  TipoRetorno ID LPARENTESIS.ParametrosOpt RPARENTESIS $$20 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
+	ParametrosOpt: .    (25)
 
-	ID  shift 43
-	RETORNO  shift 48
-	SI  shift 44
-	MIENTRAS  shift 45
-	ESCRIBE  shift 46
-	RLLAVE  shift 34
-	LCORCHETE  shift 47
-	.  error
+	ID  shift 37
+	.  reduce 25 (src line 79)
 
-	Estatuto  goto 35
-	Asigna  goto 36
-	Condicion  goto 37
-	Ciclo  goto 38
-	Llamada  goto 39
-	Imprime  goto 40
-	EstatutoBloque  goto 41
-	Retorno  goto 42
+	ParametrosOpt  goto 35
+	ParametrosLista  goto 36
 
 state 31
-	Funcs:  TipoRetorno ID LPARENTESIS.ParametrosOpt RPARENTESIS $$19 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
-	ParametrosOpt: .    (24)
-
-	ID  shift 51
-	.  reduce 24 (src line 75)
-
-	ParametrosOpt  goto 49
-	ParametrosLista  goto 50
-
-state 32
 	Declaracion:  IdsLista DOSPUNTOS Tipo.PCOMA 
 
-	PCOMA  shift 52
+	PCOMA  shift 38
+	.  error
+
+
+state 32
+	IdsListaExtension:  IdsListaExtension COMA.ID 
+
+	ID  shift 39
 	.  error
 
 
 state 33
-	IdsListaExtension:  IdsListaExtension COMA.ID 
+	Programa:  PROGRAMA ID PCOMA $$1 VarsOpt FuncsOpt INICIO $$2 Cuerpo FIN.    (3)
 
-	ID  shift 53
-	.  error
+	.  reduce 3 (src line 47)
 
 
 state 34
-	Cuerpo:  LLLAVE EstatutosLista RLLAVE.    (16)
+	Cuerpo:  LLLAVE EstatutosLista.RLLAVE 
+	EstatutosLista:  EstatutosLista.Estatuto 
 
-	.  reduce 16 (src line 63)
+	ID  shift 49
+	RETORNO  shift 54
+	SI  shift 50
+	MIENTRAS  shift 51
+	ESCRIBE  shift 52
+	RLLAVE  shift 40
+	LCORCHETE  shift 53
+	.  error
 
+	Estatuto  goto 41
+	Asigna  goto 42
+	Condicion  goto 43
+	Ciclo  goto 44
+	Llamada  goto 45
+	Imprime  goto 46
+	EstatutoBloque  goto 47
+	Retorno  goto 48
 
 state 35
-	EstatutosLista:  EstatutosLista Estatuto.    (17)
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt.RPARENTESIS $$20 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
 
-	.  reduce 17 (src line 64)
+	RPARENTESIS  shift 55
+	.  error
 
 
 state 36
-	Estatuto:  Asigna.    (29)
+	ParametrosOpt:  ParametrosLista.    (24)
 
-	.  reduce 29 (src line 82)
+	.  reduce 24 (src line 79)
 
 
 state 37
-	Estatuto:  Condicion.    (30)
+	ParametrosLista:  ID.DOSPUNTOS Tipo $$26 ParametrosListaExtension 
 
-	.  reduce 30 (src line 82)
+	DOSPUNTOS  shift 56
+	.  error
 
 
 state 38
-	Estatuto:  Ciclo.    (31)
+	Declaracion:  IdsLista DOSPUNTOS Tipo PCOMA.    (11)
 
-	.  reduce 31 (src line 82)
+	.  reduce 11 (src line 57)
 
 
 state 39
-	Estatuto:  Llamada.PCOMA 
+	IdsListaExtension:  IdsListaExtension COMA ID.    (13)
 
-	PCOMA  shift 54
-	.  error
+	.  reduce 13 (src line 63)
 
 
 state 40
-	Estatuto:  Imprime.    (33)
+	Cuerpo:  LLLAVE EstatutosLista RLLAVE.    (17)
 
-	.  reduce 33 (src line 82)
+	.  reduce 17 (src line 67)
 
 
 state 41
-	Estatuto:  EstatutoBloque.    (34)
+	EstatutosLista:  EstatutosLista Estatuto.    (18)
 
-	.  reduce 34 (src line 82)
+	.  reduce 18 (src line 68)
 
 
 state 42
-	Estatuto:  Retorno.    (35)
+	Estatuto:  Asigna.    (30)
 
-	.  reduce 35 (src line 82)
+	.  reduce 30 (src line 86)
 
 
 state 43
-	Asigna:  ID.ASIGNAVAR Expresion $$41 PCOMA 
-	Llamada:  ID.$$81 LPARENTESIS ArgumentosOpt RPARENTESIS 
-	$$81: .    (81)
+	Estatuto:  Condicion.    (31)
 
-	ASIGNAVAR  shift 55
-	.  reduce 81 (src line 152)
+	.  reduce 31 (src line 86)
 
-	$$81  goto 56
 
 state 44
-	Condicion:  SI.LPARENTESIS Expresion RPARENTESIS $$68 Cuerpo $$69 SinoOpt PCOMA 
+	Estatuto:  Ciclo.    (32)
 
-	LPARENTESIS  shift 57
-	.  error
+	.  reduce 32 (src line 86)
 
 
 state 45
-	Ciclo:  MIENTRAS.$$73 LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA 
-	$$73: .    (73)
+	Estatuto:  Llamada.PCOMA 
 
-	.  reduce 73 (src line 142)
+	PCOMA  shift 57
+	.  error
 
-	$$73  goto 58
 
 state 46
-	Imprime:  ESCRIBE.LPARENTESIS ImprimeLista $$75 RPARENTESIS PCOMA 
+	Estatuto:  Imprime.    (34)
 
-	LPARENTESIS  shift 59
-	.  error
+	.  reduce 34 (src line 86)
 
 
 state 47
-	EstatutoBloque:  LCORCHETE.EstatutosBloqueLista RCORCHETE 
+	Estatuto:  EstatutoBloque.    (35)
 
-	ID  shift 43
-	RETORNO  shift 48
-	SI  shift 44
-	MIENTRAS  shift 45
-	ESCRIBE  shift 46
-	LCORCHETE  shift 47
-	.  error
+	.  reduce 35 (src line 86)
 
-	Estatuto  goto 61
-	Asigna  goto 36
-	Condicion  goto 37
-	Ciclo  goto 38
-	Llamada  goto 39
-	Imprime  goto 40
-	EstatutoBloque  goto 41
-	Retorno  goto 42
-	EstatutosBloqueLista  goto 60
 
 state 48
-	Retorno:  RETORNO.Expresion $$36 PCOMA 
+	Estatuto:  Retorno.    (36)
 
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
+	.  reduce 36 (src line 86)
 
-	Llamada  goto 70
-	Expresion  goto 62
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
 
 state 49
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt.RPARENTESIS $$19 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
+	Asigna:  ID.ASIGNAVAR Expresion $$42 PCOMA 
+	Llamada:  ID.$$83 LPARENTESIS ArgumentosOpt RPARENTESIS 
+	$$83: .    (83)
 
-	RPARENTESIS  shift 75
-	.  error
+	ASIGNAVAR  shift 58
+	.  reduce 83 (src line 162)
 
+	$$83  goto 59
 
 state 50
-	ParametrosOpt:  ParametrosLista.    (23)
+	Condicion:  SI.LPARENTESIS Expresion RPARENTESIS $$69 Cuerpo SinoOpt PCOMA 
 
-	.  reduce 23 (src line 75)
+	LPARENTESIS  shift 60
+	.  error
 
 
 state 51
-	ParametrosLista:  ID.DOSPUNTOS Tipo $$25 ParametrosListaExtension 
+	Ciclo:  MIENTRAS.$$74 LPARENTESIS Expresion RPARENTESIS $$75 HAZ Cuerpo PCOMA 
+	$$74: .    (74)
 
-	DOSPUNTOS  shift 76
-	.  error
+	.  reduce 74 (src line 150)
 
+	$$74  goto 61
 
 state 52
-	Declaracion:  IdsLista DOSPUNTOS Tipo PCOMA.    (10)
+	Imprime:  ESCRIBE.LPARENTESIS ImprimeLista $$77 RPARENTESIS PCOMA 
 
-	.  reduce 10 (src line 53)
+	LPARENTESIS  shift 62
+	.  error
 
 
 state 53
-	IdsListaExtension:  IdsListaExtension COMA ID.    (12)
+	EstatutoBloque:  LCORCHETE.EstatutosBloqueLista RCORCHETE 
 
-	.  reduce 12 (src line 59)
+	ID  shift 49
+	RETORNO  shift 54
+	SI  shift 50
+	MIENTRAS  shift 51
+	ESCRIBE  shift 52
+	LCORCHETE  shift 53
+	.  error
 
+	Estatuto  goto 64
+	Asigna  goto 42
+	Condicion  goto 43
+	Ciclo  goto 44
+	Llamada  goto 45
+	Imprime  goto 46
+	EstatutoBloque  goto 47
+	Retorno  goto 48
+	EstatutosBloqueLista  goto 63
 
 state 54
-	Estatuto:  Llamada PCOMA.    (32)
+	Retorno:  RETORNO.Expresion $$37 PCOMA 
 
-	.  reduce 32 (src line 82)
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
 
+	Llamada  goto 73
+	Expresion  goto 65
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
 
 state 55
-	Asigna:  ID ASIGNAVAR.Expresion $$41 PCOMA 
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS.$$20 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
+	$$20: .    (20)
 
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
+	.  reduce 20 (src line 69)
 
-	Llamada  goto 70
-	Expresion  goto 77
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
+	$$20  goto 78
 
 state 56
-	Llamada:  ID $$81.LPARENTESIS ArgumentosOpt RPARENTESIS 
-
-	LPARENTESIS  shift 78
-	.  error
-
-
-state 57
-	Condicion:  SI LPARENTESIS.Expresion RPARENTESIS $$68 Cuerpo $$69 SinoOpt PCOMA 
-
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
-
-	Llamada  goto 70
-	Expresion  goto 79
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
-
-state 58
-	Ciclo:  MIENTRAS $$73.LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA 
-
-	LPARENTESIS  shift 80
-	.  error
-
-
-state 59
-	Imprime:  ESCRIBE LPARENTESIS.ImprimeLista $$75 RPARENTESIS PCOMA 
-
-	ID  shift 71
-	LITERAL  shift 84
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
-
-	Llamada  goto 70
-	Expresion  goto 83
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
-	ImprimeLista  goto 81
-	ImprimeEl  goto 82
-
-state 60
-	EstatutoBloque:  LCORCHETE EstatutosBloqueLista.RCORCHETE 
-	EstatutosBloqueLista:  EstatutosBloqueLista.Estatuto 
-
-	ID  shift 43
-	RETORNO  shift 48
-	SI  shift 44
-	MIENTRAS  shift 45
-	ESCRIBE  shift 46
-	LCORCHETE  shift 47
-	RCORCHETE  shift 85
-	.  error
-
-	Estatuto  goto 86
-	Asigna  goto 36
-	Condicion  goto 37
-	Ciclo  goto 38
-	Llamada  goto 39
-	Imprime  goto 40
-	EstatutoBloque  goto 41
-	Retorno  goto 42
-
-state 61
-	EstatutosBloqueLista:  Estatuto.    (40)
-
-	.  reduce 40 (src line 87)
-
-
-state 62
-	Retorno:  RETORNO Expresion.$$36 PCOMA 
-	$$36: .    (36)
-
-	.  reduce 36 (src line 83)
-
-	$$36  goto 87
-
-state 63
-	Expresion:  Exp.    (43)
-	Expresion:  Exp.Operadores Exp 
-	Exp:  Exp.MAS $$49 Termino 
-	Exp:  Exp.MENOS $$51 Termino 
-
-	MAS  shift 89
-	MENOS  shift 90
-	MAYOR  shift 91
-	MENOR  shift 92
-	IGUAL  shift 93
-	DIFERENTE  shift 94
-	.  reduce 43 (src line 91)
-
-	Operadores  goto 88
-
-state 64
-	Exp:  Termino.    (53)
-	Termino:  Termino.POR $$54 Factor 
-	Termino:  Termino.ENTRE $$56 Factor 
-
-	POR  shift 95
-	ENTRE  shift 96
-	.  reduce 53 (src line 111)
-
-
-state 65
-	Termino:  Factor.    (58)
-
-	.  reduce 58 (src line 120)
-
-
-state 66
-	Factor:  LPARENTESIS.Expresion RPARENTESIS 
-
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
-
-	Llamada  goto 70
-	Expresion  goto 97
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
-
-state 67
-	Factor:  FactorOpt.    (60)
-
-	.  reduce 60 (src line 121)
-
-
-state 68
-	Factor:  MAS.FactorOpt 
-
-	ID  shift 99
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	.  error
-
-	FactorOpt  goto 98
-	CTE  goto 72
-
-state 69
-	Factor:  MENOS.FactorOpt 
-
-	ID  shift 99
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	.  error
-
-	FactorOpt  goto 100
-	CTE  goto 72
-
-state 70
-	Factor:  Llamada.    (63)
-
-	.  reduce 63 (src line 121)
-
-
-state 71
-	FactorOpt:  ID.    (64)
-	Llamada:  ID.$$81 LPARENTESIS ArgumentosOpt RPARENTESIS 
-	$$81: .    (81)
-
-	LPARENTESIS  reduce 81 (src line 152)
-	.  reduce 64 (src line 122)
-
-	$$81  goto 56
-
-state 72
-	FactorOpt:  CTE.    (65)
-
-	.  reduce 65 (src line 128)
-
-
-state 73
-	CTE:  CTE_ENT.    (66)
-
-	.  reduce 66 (src line 129)
-
-
-state 74
-	CTE:  CTE_FLOT.    (67)
-
-	.  reduce 67 (src line 132)
-
-
-state 75
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS.$$19 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
-	$$19: .    (19)
-
-	.  reduce 19 (src line 65)
-
-	$$19  goto 101
-
-state 76
-	ParametrosLista:  ID DOSPUNTOS.Tipo $$25 ParametrosListaExtension 
+	ParametrosLista:  ID DOSPUNTOS.Tipo $$26 ParametrosListaExtension 
 
 	ENTERO  shift 16
 	FLOTANTE  shift 17
 	.  error
 
-	Tipo  goto 102
+	Tipo  goto 79
+
+state 57
+	Estatuto:  Llamada PCOMA.    (33)
+
+	.  reduce 33 (src line 86)
+
+
+state 58
+	Asigna:  ID ASIGNAVAR.Expresion $$42 PCOMA 
+
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
+
+	Llamada  goto 73
+	Expresion  goto 80
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+
+state 59
+	Llamada:  ID $$83.LPARENTESIS ArgumentosOpt RPARENTESIS 
+
+	LPARENTESIS  shift 81
+	.  error
+
+
+state 60
+	Condicion:  SI LPARENTESIS.Expresion RPARENTESIS $$69 Cuerpo SinoOpt PCOMA 
+
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
+
+	Llamada  goto 73
+	Expresion  goto 82
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+
+state 61
+	Ciclo:  MIENTRAS $$74.LPARENTESIS Expresion RPARENTESIS $$75 HAZ Cuerpo PCOMA 
+
+	LPARENTESIS  shift 83
+	.  error
+
+
+state 62
+	Imprime:  ESCRIBE LPARENTESIS.ImprimeLista $$77 RPARENTESIS PCOMA 
+
+	ID  shift 74
+	LITERAL  shift 87
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
+
+	Llamada  goto 73
+	Expresion  goto 86
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+	ImprimeLista  goto 84
+	ImprimeEl  goto 85
+
+state 63
+	EstatutoBloque:  LCORCHETE EstatutosBloqueLista.RCORCHETE 
+	EstatutosBloqueLista:  EstatutosBloqueLista.Estatuto 
+
+	ID  shift 49
+	RETORNO  shift 54
+	SI  shift 50
+	MIENTRAS  shift 51
+	ESCRIBE  shift 52
+	LCORCHETE  shift 53
+	RCORCHETE  shift 88
+	.  error
+
+	Estatuto  goto 89
+	Asigna  goto 42
+	Condicion  goto 43
+	Ciclo  goto 44
+	Llamada  goto 45
+	Imprime  goto 46
+	EstatutoBloque  goto 47
+	Retorno  goto 48
+
+state 64
+	EstatutosBloqueLista:  Estatuto.    (41)
+
+	.  reduce 41 (src line 91)
+
+
+state 65
+	Retorno:  RETORNO Expresion.$$37 PCOMA 
+	$$37: .    (37)
+
+	.  reduce 37 (src line 87)
+
+	$$37  goto 90
+
+state 66
+	Expresion:  Exp.    (44)
+	Expresion:  Exp.Operadores Exp 
+	Exp:  Exp.MAS $$50 Termino 
+	Exp:  Exp.MENOS $$52 Termino 
+
+	MAS  shift 92
+	MENOS  shift 93
+	MAYOR  shift 94
+	MENOR  shift 95
+	IGUAL  shift 96
+	DIFERENTE  shift 97
+	.  reduce 44 (src line 95)
+
+	Operadores  goto 91
+
+state 67
+	Exp:  Termino.    (54)
+	Termino:  Termino.POR $$55 Factor 
+	Termino:  Termino.ENTRE $$57 Factor 
+
+	POR  shift 98
+	ENTRE  shift 99
+	.  reduce 54 (src line 115)
+
+
+state 68
+	Termino:  Factor.    (59)
+
+	.  reduce 59 (src line 124)
+
+
+state 69
+	Factor:  LPARENTESIS.Expresion RPARENTESIS 
+
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
+
+	Llamada  goto 73
+	Expresion  goto 100
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+
+state 70
+	Factor:  FactorOpt.    (61)
+
+	.  reduce 61 (src line 125)
+
+
+state 71
+	Factor:  MAS.FactorOpt 
+
+	ID  shift 102
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	.  error
+
+	FactorOpt  goto 101
+	CTE  goto 75
+
+state 72
+	Factor:  MENOS.FactorOpt 
+
+	ID  shift 102
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	.  error
+
+	FactorOpt  goto 103
+	CTE  goto 75
+
+state 73
+	Factor:  Llamada.    (64)
+
+	.  reduce 64 (src line 125)
+
+
+state 74
+	FactorOpt:  ID.    (65)
+	Llamada:  ID.$$83 LPARENTESIS ArgumentosOpt RPARENTESIS 
+	$$83: .    (83)
+
+	LPARENTESIS  reduce 83 (src line 162)
+	.  reduce 65 (src line 126)
+
+	$$83  goto 59
+
+state 75
+	FactorOpt:  CTE.    (66)
+
+	.  reduce 66 (src line 132)
+
+
+state 76
+	CTE:  CTE_ENT.    (67)
+
+	.  reduce 67 (src line 133)
+
 
 state 77
-	Asigna:  ID ASIGNAVAR Expresion.$$41 PCOMA 
-	$$41: .    (41)
-
-	.  reduce 41 (src line 88)
-
-	$$41  goto 103
-
-state 78
-	Llamada:  ID $$81 LPARENTESIS.ArgumentosOpt RPARENTESIS 
-	ArgumentosOpt: .    (84)
-
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  reduce 84 (src line 158)
-
-	Llamada  goto 70
-	Expresion  goto 106
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
-	ArgumentosOpt  goto 104
-	ArgumentosLista  goto 105
-
-state 79
-	Condicion:  SI LPARENTESIS Expresion.RPARENTESIS $$68 Cuerpo $$69 SinoOpt PCOMA 
-
-	RPARENTESIS  shift 107
-	.  error
-
-
-state 80
-	Ciclo:  MIENTRAS $$73 LPARENTESIS.Expresion RPARENTESIS HAZ Cuerpo PCOMA 
-
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
-
-	Llamada  goto 70
-	Expresion  goto 108
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
-
-state 81
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista.$$75 RPARENTESIS PCOMA 
-	ImprimeLista:  ImprimeLista.COMA ImprimeEl 
-	$$75: .    (75)
-
-	COMA  shift 110
-	.  reduce 75 (src line 147)
-
-	$$75  goto 109
-
-state 82
-	ImprimeLista:  ImprimeEl.    (77)
-
-	.  reduce 77 (src line 150)
-
-
-state 83
-	ImprimeEl:  Expresion.    (79)
-
-	.  reduce 79 (src line 151)
-
-
-state 84
-	ImprimeEl:  LITERAL.    (80)
-
-	.  reduce 80 (src line 151)
-
-
-state 85
-	EstatutoBloque:  LCORCHETE EstatutosBloqueLista RCORCHETE.    (38)
-
-	.  reduce 38 (src line 86)
-
-
-state 86
-	EstatutosBloqueLista:  EstatutosBloqueLista Estatuto.    (39)
-
-	.  reduce 39 (src line 87)
-
-
-state 87
-	Retorno:  RETORNO Expresion $$36.PCOMA 
-
-	PCOMA  shift 111
-	.  error
-
-
-state 88
-	Expresion:  Exp Operadores.Exp 
-
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
-
-	Llamada  goto 70
-	Exp  goto 112
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
-
-state 89
-	Exp:  Exp MAS.$$49 Termino 
-	$$49: .    (49)
-
-	.  reduce 49 (src line 103)
-
-	$$49  goto 113
-
-state 90
-	Exp:  Exp MENOS.$$51 Termino 
-	$$51: .    (51)
-
-	.  reduce 51 (src line 107)
-
-	$$51  goto 114
-
-state 91
-	Operadores:  MAYOR.    (45)
-
-	.  reduce 45 (src line 94)
-
-
-state 92
-	Operadores:  MENOR.    (46)
-
-	.  reduce 46 (src line 96)
-
-
-state 93
-	Operadores:  IGUAL.    (47)
-
-	.  reduce 47 (src line 98)
-
-
-state 94
-	Operadores:  DIFERENTE.    (48)
-
-	.  reduce 48 (src line 100)
-
-
-state 95
-	Termino:  Termino POR.$$54 Factor 
-	$$54: .    (54)
-
-	.  reduce 54 (src line 112)
-
-	$$54  goto 115
-
-state 96
-	Termino:  Termino ENTRE.$$56 Factor 
-	$$56: .    (56)
-
-	.  reduce 56 (src line 116)
-
-	$$56  goto 116
-
-state 97
-	Factor:  LPARENTESIS Expresion.RPARENTESIS 
-
-	RPARENTESIS  shift 117
-	.  error
-
-
-state 98
-	Factor:  MAS FactorOpt.    (61)
-
-	.  reduce 61 (src line 121)
-
-
-state 99
-	FactorOpt:  ID.    (64)
-
-	.  reduce 64 (src line 122)
-
-
-state 100
-	Factor:  MENOS FactorOpt.    (62)
-
-	.  reduce 62 (src line 121)
-
-
-state 101
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$19.LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
-
-	LLLAVE  shift 118
-	.  error
-
-
-state 102
-	ParametrosLista:  ID DOSPUNTOS Tipo.$$25 ParametrosListaExtension 
-	$$25: .    (25)
-
-	.  reduce 25 (src line 76)
-
-	$$25  goto 119
-
-state 103
-	Asigna:  ID ASIGNAVAR Expresion $$41.PCOMA 
-
-	PCOMA  shift 120
-	.  error
-
-
-state 104
-	Llamada:  ID $$81 LPARENTESIS ArgumentosOpt.RPARENTESIS 
-
-	RPARENTESIS  shift 121
-	.  error
-
-
-state 105
-	ArgumentosOpt:  ArgumentosLista.    (83)
-	ArgumentosLista:  ArgumentosLista.COMA Expresion 
-
-	COMA  shift 122
-	.  reduce 83 (src line 158)
-
-
-state 106
-	ArgumentosLista:  Expresion.    (85)
-
-	.  reduce 85 (src line 159)
-
-
-state 107
-	Condicion:  SI LPARENTESIS Expresion RPARENTESIS.$$68 Cuerpo $$69 SinoOpt PCOMA 
-	$$68: .    (68)
+	CTE:  CTE_FLOT.    (68)
 
 	.  reduce 68 (src line 136)
 
-	$$68  goto 123
 
-state 108
-	Ciclo:  MIENTRAS $$73 LPARENTESIS Expresion.RPARENTESIS HAZ Cuerpo PCOMA 
+state 78
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$20.LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA 
+
+	LLLAVE  shift 104
+	.  error
+
+
+state 79
+	ParametrosLista:  ID DOSPUNTOS Tipo.$$26 ParametrosListaExtension 
+	$$26: .    (26)
+
+	.  reduce 26 (src line 80)
+
+	$$26  goto 105
+
+state 80
+	Asigna:  ID ASIGNAVAR Expresion.$$42 PCOMA 
+	$$42: .    (42)
+
+	.  reduce 42 (src line 92)
+
+	$$42  goto 106
+
+state 81
+	Llamada:  ID $$83 LPARENTESIS.ArgumentosOpt RPARENTESIS 
+	ArgumentosOpt: .    (86)
+
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  reduce 86 (src line 168)
+
+	Llamada  goto 73
+	Expresion  goto 109
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+	ArgumentosOpt  goto 107
+	ArgumentosLista  goto 108
+
+state 82
+	Condicion:  SI LPARENTESIS Expresion.RPARENTESIS $$69 Cuerpo SinoOpt PCOMA 
+
+	RPARENTESIS  shift 110
+	.  error
+
+
+state 83
+	Ciclo:  MIENTRAS $$74 LPARENTESIS.Expresion RPARENTESIS $$75 HAZ Cuerpo PCOMA 
+
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
+
+	Llamada  goto 73
+	Expresion  goto 111
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+
+state 84
+	Imprime:  ESCRIBE LPARENTESIS ImprimeLista.$$77 RPARENTESIS PCOMA 
+	ImprimeLista:  ImprimeLista.COMA ImprimeEl 
+	$$77: .    (77)
+
+	COMA  shift 113
+	.  reduce 77 (src line 157)
+
+	$$77  goto 112
+
+state 85
+	ImprimeLista:  ImprimeEl.    (79)
+
+	.  reduce 79 (src line 160)
+
+
+state 86
+	ImprimeEl:  Expresion.    (81)
+
+	.  reduce 81 (src line 161)
+
+
+state 87
+	ImprimeEl:  LITERAL.    (82)
+
+	.  reduce 82 (src line 161)
+
+
+state 88
+	EstatutoBloque:  LCORCHETE EstatutosBloqueLista RCORCHETE.    (39)
+
+	.  reduce 39 (src line 90)
+
+
+state 89
+	EstatutosBloqueLista:  EstatutosBloqueLista Estatuto.    (40)
+
+	.  reduce 40 (src line 91)
+
+
+state 90
+	Retorno:  RETORNO Expresion $$37.PCOMA 
+
+	PCOMA  shift 114
+	.  error
+
+
+state 91
+	Expresion:  Exp Operadores.Exp 
+
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
+
+	Llamada  goto 73
+	Exp  goto 115
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+
+state 92
+	Exp:  Exp MAS.$$50 Termino 
+	$$50: .    (50)
+
+	.  reduce 50 (src line 107)
+
+	$$50  goto 116
+
+state 93
+	Exp:  Exp MENOS.$$52 Termino 
+	$$52: .    (52)
+
+	.  reduce 52 (src line 111)
+
+	$$52  goto 117
+
+state 94
+	Operadores:  MAYOR.    (46)
+
+	.  reduce 46 (src line 98)
+
+
+state 95
+	Operadores:  MENOR.    (47)
+
+	.  reduce 47 (src line 100)
+
+
+state 96
+	Operadores:  IGUAL.    (48)
+
+	.  reduce 48 (src line 102)
+
+
+state 97
+	Operadores:  DIFERENTE.    (49)
+
+	.  reduce 49 (src line 104)
+
+
+state 98
+	Termino:  Termino POR.$$55 Factor 
+	$$55: .    (55)
+
+	.  reduce 55 (src line 116)
+
+	$$55  goto 118
+
+state 99
+	Termino:  Termino ENTRE.$$57 Factor 
+	$$57: .    (57)
+
+	.  reduce 57 (src line 120)
+
+	$$57  goto 119
+
+state 100
+	Factor:  LPARENTESIS Expresion.RPARENTESIS 
+
+	RPARENTESIS  shift 120
+	.  error
+
+
+state 101
+	Factor:  MAS FactorOpt.    (62)
+
+	.  reduce 62 (src line 125)
+
+
+state 102
+	FactorOpt:  ID.    (65)
+
+	.  reduce 65 (src line 126)
+
+
+state 103
+	Factor:  MENOS FactorOpt.    (63)
+
+	.  reduce 63 (src line 125)
+
+
+state 104
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$20 LLLAVE.VarsOpt EstatutosLista RLLAVE PCOMA 
+	VarsOpt: .    (5)
+
+	VARS  shift 8
+	.  reduce 5 (src line 53)
+
+	VarsOpt  goto 121
+	Vars  goto 7
+
+state 105
+	ParametrosLista:  ID DOSPUNTOS Tipo $$26.ParametrosListaExtension 
+	ParametrosListaExtension: .    (29)
+
+	.  reduce 29 (src line 85)
+
+	ParametrosListaExtension  goto 122
+
+state 106
+	Asigna:  ID ASIGNAVAR Expresion $$42.PCOMA 
+
+	PCOMA  shift 123
+	.  error
+
+
+state 107
+	Llamada:  ID $$83 LPARENTESIS ArgumentosOpt.RPARENTESIS 
 
 	RPARENTESIS  shift 124
 	.  error
 
 
-state 109
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$75.RPARENTESIS PCOMA 
+state 108
+	ArgumentosOpt:  ArgumentosLista.    (85)
+	ArgumentosLista:  ArgumentosLista.COMA Expresion 
 
-	RPARENTESIS  shift 125
-	.  error
+	COMA  shift 125
+	.  reduce 85 (src line 168)
+
+
+state 109
+	ArgumentosLista:  Expresion.    (87)
+
+	.  reduce 87 (src line 169)
 
 
 state 110
-	ImprimeLista:  ImprimeLista COMA.ImprimeEl 
+	Condicion:  SI LPARENTESIS Expresion RPARENTESIS.$$69 Cuerpo SinoOpt PCOMA 
+	$$69: .    (69)
 
-	ID  shift 71
-	LITERAL  shift 84
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
+	.  reduce 69 (src line 140)
 
-	Llamada  goto 70
-	Expresion  goto 83
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
-	ImprimeEl  goto 126
+	$$69  goto 126
 
 state 111
-	Retorno:  RETORNO Expresion $$36 PCOMA.    (37)
+	Ciclo:  MIENTRAS $$74 LPARENTESIS Expresion.RPARENTESIS $$75 HAZ Cuerpo PCOMA 
 
-	.  reduce 37 (src line 85)
+	RPARENTESIS  shift 127
+	.  error
 
 
 state 112
-	Expresion:  Exp Operadores Exp.    (44)
-	Exp:  Exp.MAS $$49 Termino 
-	Exp:  Exp.MENOS $$51 Termino 
+	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$77.RPARENTESIS PCOMA 
 
-	MAS  shift 89
-	MENOS  shift 90
-	.  reduce 44 (src line 91)
+	RPARENTESIS  shift 128
+	.  error
 
 
 state 113
-	Exp:  Exp MAS $$49.Termino 
+	ImprimeLista:  ImprimeLista COMA.ImprimeEl 
 
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
+	ID  shift 74
+	LITERAL  shift 87
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
 	.  error
 
-	Llamada  goto 70
-	Termino  goto 127
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
+	Llamada  goto 73
+	Expresion  goto 86
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
+	ImprimeEl  goto 129
 
 state 114
-	Exp:  Exp MENOS $$51.Termino 
+	Retorno:  RETORNO Expresion $$37 PCOMA.    (38)
 
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
+	.  reduce 38 (src line 89)
 
-	Llamada  goto 70
-	Termino  goto 128
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
 
 state 115
-	Termino:  Termino POR $$54.Factor 
+	Expresion:  Exp Operadores Exp.    (45)
+	Exp:  Exp.MAS $$50 Termino 
+	Exp:  Exp.MENOS $$52 Termino 
 
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
+	MAS  shift 92
+	MENOS  shift 93
+	.  reduce 45 (src line 95)
 
-	Llamada  goto 70
-	Factor  goto 129
-	FactorOpt  goto 67
-	CTE  goto 72
 
 state 116
-	Termino:  Termino ENTRE $$56.Factor 
+	Exp:  Exp MAS $$50.Termino 
 
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
 	.  error
 
-	Llamada  goto 70
-	Factor  goto 130
-	FactorOpt  goto 67
-	CTE  goto 72
+	Llamada  goto 73
+	Termino  goto 130
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
 
 state 117
-	Factor:  LPARENTESIS Expresion RPARENTESIS.    (59)
+	Exp:  Exp MENOS $$52.Termino 
 
-	.  reduce 59 (src line 121)
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
 
+	Llamada  goto 73
+	Termino  goto 131
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
 
 state 118
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$19 LLLAVE.VarsOpt EstatutosLista RLLAVE PCOMA 
-	VarsOpt: .    (4)
+	Termino:  Termino POR $$55.Factor 
 
-	VARS  shift 8
-	.  reduce 4 (src line 49)
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
 
-	VarsOpt  goto 131
-	Vars  goto 7
+	Llamada  goto 73
+	Factor  goto 132
+	FactorOpt  goto 70
+	CTE  goto 75
 
 state 119
-	ParametrosLista:  ID DOSPUNTOS Tipo $$25.ParametrosListaExtension 
-	ParametrosListaExtension: .    (28)
+	Termino:  Termino ENTRE $$57.Factor 
 
-	.  reduce 28 (src line 81)
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
+	.  error
 
-	ParametrosListaExtension  goto 132
+	Llamada  goto 73
+	Factor  goto 133
+	FactorOpt  goto 70
+	CTE  goto 75
 
 state 120
-	Asigna:  ID ASIGNAVAR Expresion $$41 PCOMA.    (42)
+	Factor:  LPARENTESIS Expresion RPARENTESIS.    (60)
 
-	.  reduce 42 (src line 90)
+	.  reduce 60 (src line 125)
 
 
 state 121
-	Llamada:  ID $$81 LPARENTESIS ArgumentosOpt RPARENTESIS.    (82)
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$20 LLLAVE VarsOpt.EstatutosLista RLLAVE PCOMA 
+	EstatutosLista: .    (19)
 
-	.  reduce 82 (src line 155)
+	.  reduce 19 (src line 68)
 
+	EstatutosLista  goto 134
 
 state 122
-	ArgumentosLista:  ArgumentosLista COMA.Expresion 
+	ParametrosLista:  ID DOSPUNTOS Tipo $$26 ParametrosListaExtension.    (27)
+	ParametrosListaExtension:  ParametrosListaExtension.COMA ID DOSPUNTOS Tipo 
 
-	ID  shift 71
-	CTE_ENT  shift 73
-	CTE_FLOT  shift 74
-	MAS  shift 68
-	MENOS  shift 69
-	LPARENTESIS  shift 66
-	.  error
+	COMA  shift 135
+	.  reduce 27 (src line 82)
 
-	Llamada  goto 70
-	Expresion  goto 133
-	Exp  goto 63
-	Termino  goto 64
-	Factor  goto 65
-	FactorOpt  goto 67
-	CTE  goto 72
 
 state 123
-	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$68.Cuerpo $$69 SinoOpt PCOMA 
+	Asigna:  ID ASIGNAVAR Expresion $$42 PCOMA.    (43)
 
-	LLLAVE  shift 23
-	.  error
+	.  reduce 43 (src line 94)
 
-	Cuerpo  goto 134
 
 state 124
-	Ciclo:  MIENTRAS $$73 LPARENTESIS Expresion RPARENTESIS.HAZ Cuerpo PCOMA 
+	Llamada:  ID $$83 LPARENTESIS ArgumentosOpt RPARENTESIS.    (84)
 
-	HAZ  shift 135
-	.  error
+	.  reduce 84 (src line 165)
 
 
 state 125
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$75 RPARENTESIS.PCOMA 
+	ArgumentosLista:  ArgumentosLista COMA.Expresion 
 
-	PCOMA  shift 136
+	ID  shift 74
+	CTE_ENT  shift 76
+	CTE_FLOT  shift 77
+	MAS  shift 71
+	MENOS  shift 72
+	LPARENTESIS  shift 69
 	.  error
 
+	Llamada  goto 73
+	Expresion  goto 136
+	Exp  goto 66
+	Termino  goto 67
+	Factor  goto 68
+	FactorOpt  goto 70
+	CTE  goto 75
 
 state 126
-	ImprimeLista:  ImprimeLista COMA ImprimeEl.    (78)
+	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$69.Cuerpo SinoOpt PCOMA 
 
-	.  reduce 78 (src line 150)
+	LLLAVE  shift 29
+	.  error
 
+	Cuerpo  goto 137
 
 state 127
-	Exp:  Exp MAS $$49 Termino.    (50)
-	Termino:  Termino.POR $$54 Factor 
-	Termino:  Termino.ENTRE $$56 Factor 
+	Ciclo:  MIENTRAS $$74 LPARENTESIS Expresion RPARENTESIS.$$75 HAZ Cuerpo PCOMA 
+	$$75: .    (75)
 
-	POR  shift 95
-	ENTRE  shift 96
-	.  reduce 50 (src line 105)
+	.  reduce 75 (src line 152)
 
+	$$75  goto 138
 
 state 128
-	Exp:  Exp MENOS $$51 Termino.    (52)
-	Termino:  Termino.POR $$54 Factor 
-	Termino:  Termino.ENTRE $$56 Factor 
+	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$77 RPARENTESIS.PCOMA 
 
-	POR  shift 95
-	ENTRE  shift 96
-	.  reduce 52 (src line 109)
+	PCOMA  shift 139
+	.  error
 
 
 state 129
-	Termino:  Termino POR $$54 Factor.    (55)
+	ImprimeLista:  ImprimeLista COMA ImprimeEl.    (80)
 
-	.  reduce 55 (src line 114)
+	.  reduce 80 (src line 160)
 
 
 state 130
-	Termino:  Termino ENTRE $$56 Factor.    (57)
+	Exp:  Exp MAS $$50 Termino.    (51)
+	Termino:  Termino.POR $$55 Factor 
+	Termino:  Termino.ENTRE $$57 Factor 
 
-	.  reduce 57 (src line 118)
+	POR  shift 98
+	ENTRE  shift 99
+	.  reduce 51 (src line 109)
 
 
 state 131
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$19 LLLAVE VarsOpt.EstatutosLista RLLAVE PCOMA 
-	EstatutosLista: .    (18)
+	Exp:  Exp MENOS $$52 Termino.    (53)
+	Termino:  Termino.POR $$55 Factor 
+	Termino:  Termino.ENTRE $$57 Factor 
 
-	.  reduce 18 (src line 64)
+	POR  shift 98
+	ENTRE  shift 99
+	.  reduce 53 (src line 113)
 
-	EstatutosLista  goto 137
 
 state 132
-	ParametrosLista:  ID DOSPUNTOS Tipo $$25 ParametrosListaExtension.    (26)
-	ParametrosListaExtension:  ParametrosListaExtension.COMA ID DOSPUNTOS Tipo 
+	Termino:  Termino POR $$55 Factor.    (56)
 
-	COMA  shift 138
-	.  reduce 26 (src line 78)
+	.  reduce 56 (src line 118)
 
 
 state 133
-	ArgumentosLista:  ArgumentosLista COMA Expresion.    (86)
+	Termino:  Termino ENTRE $$57 Factor.    (58)
 
-	.  reduce 86 (src line 161)
+	.  reduce 58 (src line 122)
 
 
 state 134
-	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$68 Cuerpo.$$69 SinoOpt PCOMA 
-	$$69: .    (69)
+	EstatutosLista:  EstatutosLista.Estatuto 
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$20 LLLAVE VarsOpt EstatutosLista.RLLAVE PCOMA 
 
-	.  reduce 69 (src line 138)
-
-	$$69  goto 139
-
-state 135
-	Ciclo:  MIENTRAS $$73 LPARENTESIS Expresion RPARENTESIS HAZ.Cuerpo PCOMA 
-
-	LLLAVE  shift 23
+	ID  shift 49
+	RETORNO  shift 54
+	SI  shift 50
+	MIENTRAS  shift 51
+	ESCRIBE  shift 52
+	RLLAVE  shift 140
+	LCORCHETE  shift 53
 	.  error
 
-	Cuerpo  goto 140
+	Estatuto  goto 41
+	Asigna  goto 42
+	Condicion  goto 43
+	Ciclo  goto 44
+	Llamada  goto 45
+	Imprime  goto 46
+	EstatutoBloque  goto 47
+	Retorno  goto 48
+
+state 135
+	ParametrosListaExtension:  ParametrosListaExtension COMA.ID DOSPUNTOS Tipo 
+
+	ID  shift 141
+	.  error
+
 
 state 136
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$75 RPARENTESIS PCOMA.    (76)
+	ArgumentosLista:  ArgumentosLista COMA Expresion.    (88)
 
-	.  reduce 76 (src line 149)
+	.  reduce 88 (src line 171)
 
 
 state 137
-	EstatutosLista:  EstatutosLista.Estatuto 
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$19 LLLAVE VarsOpt EstatutosLista.RLLAVE PCOMA 
+	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$69 Cuerpo.SinoOpt PCOMA 
+	SinoOpt: .    (73)
 
-	ID  shift 43
-	RETORNO  shift 48
-	SI  shift 44
-	MIENTRAS  shift 45
-	ESCRIBE  shift 46
-	RLLAVE  shift 141
-	LCORCHETE  shift 47
-	.  error
+	SINO  shift 143
+	.  reduce 73 (src line 147)
 
-	Estatuto  goto 35
-	Asigna  goto 36
-	Condicion  goto 37
-	Ciclo  goto 38
-	Llamada  goto 39
-	Imprime  goto 40
-	EstatutoBloque  goto 41
-	Retorno  goto 42
+	SinoOpt  goto 142
 
 state 138
-	ParametrosListaExtension:  ParametrosListaExtension COMA.ID DOSPUNTOS Tipo 
+	Ciclo:  MIENTRAS $$74 LPARENTESIS Expresion RPARENTESIS $$75.HAZ Cuerpo PCOMA 
 
-	ID  shift 142
+	HAZ  shift 144
 	.  error
 
 
 state 139
-	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$68 Cuerpo $$69.SinoOpt PCOMA 
-	SinoOpt: .    (72)
+	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$77 RPARENTESIS PCOMA.    (78)
 
-	SINO  shift 144
-	.  reduce 72 (src line 141)
+	.  reduce 78 (src line 159)
 
-	SinoOpt  goto 143
 
 state 140
-	Ciclo:  MIENTRAS $$73 LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo.PCOMA 
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$20 LLLAVE VarsOpt EstatutosLista RLLAVE.PCOMA 
 
 	PCOMA  shift 145
 	.  error
 
 
 state 141
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$19 LLLAVE VarsOpt EstatutosLista RLLAVE.PCOMA 
+	ParametrosListaExtension:  ParametrosListaExtension COMA ID.DOSPUNTOS Tipo 
 
-	PCOMA  shift 146
+	DOSPUNTOS  shift 146
 	.  error
 
 
 state 142
-	ParametrosListaExtension:  ParametrosListaExtension COMA ID.DOSPUNTOS Tipo 
+	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$69 Cuerpo SinoOpt.PCOMA 
 
-	DOSPUNTOS  shift 147
+	PCOMA  shift 147
 	.  error
 
 
 state 143
-	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$68 Cuerpo $$69 SinoOpt.PCOMA 
+	SinoOpt:  SINO.$$71 Cuerpo 
+	$$71: .    (71)
 
-	PCOMA  shift 148
-	.  error
+	.  reduce 71 (src line 143)
 
+	$$71  goto 148
 
 state 144
-	SinoOpt:  SINO.Cuerpo 
+	Ciclo:  MIENTRAS $$74 LPARENTESIS Expresion RPARENTESIS $$75 HAZ.Cuerpo PCOMA 
 
-	LLLAVE  shift 23
+	LLLAVE  shift 29
 	.  error
 
 	Cuerpo  goto 149
 
 state 145
-	Ciclo:  MIENTRAS $$73 LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA.    (74)
+	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$20 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA.    (21)
 
-	.  reduce 74 (src line 144)
+	.  reduce 21 (src line 72)
 
 
 state 146
-	Funcs:  TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS $$19 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA.    (20)
-
-	.  reduce 20 (src line 68)
-
-
-state 147
 	ParametrosListaExtension:  ParametrosListaExtension COMA ID DOSPUNTOS.Tipo 
 
 	ENTERO  shift 16
@@ -1300,33 +1295,54 @@ state 147
 
 	Tipo  goto 150
 
+state 147
+	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$69 Cuerpo SinoOpt PCOMA.    (70)
+
+	.  reduce 70 (src line 142)
+
+
 state 148
-	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$68 Cuerpo $$69 SinoOpt PCOMA.    (70)
+	SinoOpt:  SINO $$71.Cuerpo 
 
-	.  reduce 70 (src line 140)
+	LLLAVE  shift 29
+	.  error
 
+	Cuerpo  goto 151
 
 state 149
-	SinoOpt:  SINO Cuerpo.    (71)
+	Ciclo:  MIENTRAS $$74 LPARENTESIS Expresion RPARENTESIS $$75 HAZ Cuerpo.PCOMA 
 
-	.  reduce 71 (src line 141)
+	PCOMA  shift 152
+	.  error
 
 
 state 150
-	ParametrosListaExtension:  ParametrosListaExtension COMA ID DOSPUNTOS Tipo.    (27)
+	ParametrosListaExtension:  ParametrosListaExtension COMA ID DOSPUNTOS Tipo.    (28)
 
-	.  reduce 27 (src line 79)
+	.  reduce 28 (src line 83)
 
 
-38 terminals, 52 nonterminals
-87 grammar rules, 151/16000 states
+state 151
+	SinoOpt:  SINO $$71 Cuerpo.    (72)
+
+	.  reduce 72 (src line 145)
+
+
+state 152
+	Ciclo:  MIENTRAS $$74 LPARENTESIS Expresion RPARENTESIS $$75 HAZ Cuerpo PCOMA.    (76)
+
+	.  reduce 76 (src line 154)
+
+
+38 terminals, 54 nonterminals
+89 grammar rules, 153/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-101 working sets used
-memory: parser 230/240000
+103 working sets used
+memory: parser 222/240000
 53 extra closures
 191 shift entries, 2 exceptions
-81 goto entries
+83 goto entries
 92 entries saved by goto default
-Optimizer space used: output 184/240000
-184 table entries, 0 zero
-maximum spread: 38, maximum offset: 147
+Optimizer space used: output 186/240000
+186 table entries, 0 zero
+maximum spread: 38, maximum offset: 148

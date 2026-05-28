@@ -40,11 +40,15 @@ import (
 %%
 
 Programa : PROGRAMA ID PCOMA {
+    quadruples.CrearCuadruploGotoInicio()
     semantics.IniciarPrograma($2)
-} VarsOpt FuncsOpt INICIO Cuerpo FIN {
+} VarsOpt FuncsOpt INICIO {
+    quadruples.ActualizarSalto()
+} Cuerpo FIN {
     semantics.ImprimirTablaVariablesGlobal()
     semantics.ImprimirDirectorioFunciones()
     quadruples.ImprimirCuadruplos()
+    quadruples.CrearCuadruploFin()
 } ;
 VarsOpt: Vars | /* vacío */ ;
 FuncsOpt: FuncsOpt Funcs | /* vacío */ ;
@@ -135,13 +139,19 @@ CTE: CTE_ENT {
 } ;
 Condicion: SI LPARENTESIS Expresion RPARENTESIS {
     quadruples.EmpujarSalto(ops.GOTOF)
+} Cuerpo SinoOpt PCOMA ;
+SinoOpt: SINO {
+    quadruples.ActualizarSino()
 } Cuerpo {
     quadruples.ActualizarSalto()
-} SinoOpt PCOMA ;
-SinoOpt: SINO Cuerpo | /* vacío */ ;
+} | /* vacío */ {
+    quadruples.ActualizarSalto()
+} ;
 Ciclo: MIENTRAS {
     quadruples.GuardarMientrasUbicacion()
-} LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA {
+} LPARENTESIS Expresion RPARENTESIS {
+    quadruples.CrearCuadruploMientrasGotof()
+} HAZ Cuerpo PCOMA {
     quadruples.ActualizarMientras()
 } ;
 Imprime: ESCRIBE LPARENTESIS ImprimeLista {

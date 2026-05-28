@@ -34,6 +34,15 @@ func ContadorActual() int {
     return filaCuadruplos.Len()
 }
 
+func CrearCuadruploGotoInicio(){
+	pilaDeSaltos.Push(ContadorActual())
+	filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, -1})
+}
+
+func CrearCuadruploFin(){
+	filaCuadruplos.Push(Quadruple{ops.FIN, -1, -1, -1})
+}
+
 func EmpujarOperando(direccion int, tipo types.Tipo) {
 	pilaOperandos.Push(direccion)
 	pilaOperandosType.Push(tipo)
@@ -47,9 +56,26 @@ func GuardarMientrasUbicacion(){
 	pilaDeSaltos.Push(ContadorActual())
 }
 
+func CrearCuadruploMientrasGotof(){
+	temporal, _ := filaCuadruplos.Back()
+	filaCuadruplos.Push(Quadruple{ops.GOTOF, temporal.resultado, -1, -1})
+	pilaDeSaltos.Push(ContadorActual()-1)
+}
+
+func ActualizarSino(){
+    falso, _ := pilaDeSaltos.Pop()                        
+    filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, -1})  
+    pilaDeSaltos.Push(ContadorActual() - 1)            
+    c := filaCuadruplos.Find(falso)
+    c.resultado = ContadorActual()                        
+}
+
 func ActualizarMientras(){
-	i, _ := pilaDeSaltos.Pop()
-	filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, i})
+	gotofWhile, _ := pilaDeSaltos.Pop()
+	comienzoWhile, _ := pilaDeSaltos.Pop()
+	filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, comienzoWhile})
+	c := filaCuadruplos.Find(gotofWhile)
+	c.resultado = ContadorActual()
 }
 
 func EmpujarSalto(operador int){

@@ -109,7 +109,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:165
+//line parser.y:175
 
 // Lexer es una representacion de un analizador lexico.
 // Lexer contiene el indice del caracter actual de la entrda de caracteres,
@@ -392,125 +392,125 @@ var yyExca = [...]int8{
 	-1, 1,
 	1, -1,
 	-2, 0,
-	-1, 71,
-	33, 81,
-	-2, 64,
+	-1, 74,
+	33, 83,
+	-2, 65,
 }
 
 const yyPrivate = 57344
 
-const yyLast = 184
+const yyLast = 186
 
 var yyAct = [...]uint8{
-	14, 22, 70, 30, 83, 6, 65, 82, 63, 67,
-	43, 35, 23, 21, 64, 118, 10, 125, 124, 121,
-	117, 48, 44, 43, 45, 107, 46, 75, 32, 71,
-	84, 73, 74, 39, 48, 44, 80, 45, 78, 46,
-	59, 57, 147, 47, 85, 25, 68, 69, 31, 76,
-	39, 138, 27, 62, 43, 141, 47, 148, 66, 61,
-	77, 146, 79, 39, 145, 48, 44, 136, 45, 120,
-	46, 97, 86, 111, 54, 52, 4, 102, 98, 100,
-	43, 122, 110, 106, 33, 108, 34, 47, 55, 95,
-	96, 48, 44, 135, 45, 144, 46, 112, 89, 90,
-	16, 17, 71, 8, 73, 74, 29, 19, 2, 142,
-	89, 90, 53, 47, 91, 92, 93, 94, 126, 68,
-	69, 51, 129, 130, 131, 134, 26, 133, 127, 128,
-	99, 66, 73, 74, 24, 137, 21, 140, 11, 3,
-	39, 16, 17, 15, 105, 104, 149, 56, 150, 109,
-	81, 58, 143, 139, 123, 72, 116, 115, 114, 113,
-	88, 103, 60, 87, 42, 41, 40, 38, 37, 36,
-	132, 119, 50, 101, 49, 28, 20, 18, 12, 7,
-	9, 5, 1, 13,
+	28, 14, 73, 34, 86, 67, 85, 6, 66, 68,
+	70, 49, 29, 41, 21, 104, 10, 128, 49, 127,
+	124, 120, 54, 50, 110, 51, 55, 52, 31, 54,
+	50, 83, 51, 81, 52, 62, 60, 45, 30, 144,
+	146, 56, 135, 26, 53, 88, 24, 152, 92, 93,
+	140, 53, 94, 95, 96, 97, 45, 49, 79, 65,
+	147, 145, 139, 80, 49, 82, 45, 64, 54, 50,
+	123, 51, 114, 52, 100, 54, 50, 89, 51, 57,
+	52, 38, 101, 103, 58, 4, 109, 125, 111, 40,
+	53, 113, 74, 87, 76, 77, 32, 53, 98, 99,
+	115, 92, 93, 143, 8, 19, 16, 17, 33, 71,
+	72, 2, 121, 141, 74, 39, 76, 77, 37, 23,
+	129, 69, 130, 131, 25, 134, 21, 137, 132, 133,
+	136, 71, 72, 3, 108, 11, 107, 45, 16, 17,
+	15, 59, 112, 69, 102, 149, 76, 77, 150, 151,
+	84, 138, 61, 148, 142, 126, 75, 119, 118, 117,
+	116, 91, 106, 63, 90, 48, 47, 46, 44, 43,
+	42, 122, 105, 36, 78, 35, 27, 20, 18, 12,
+	7, 22, 9, 5, 1, 13,
 }
 
 var yyPact = [...]int16{
-	100, -1000, 135, 45, -1000, 92, -1000, -1000, -19, 129,
-	132, -23, -1000, 130, -1000, -1000, -1000, -1000, 9, -1000,
-	20, -1000, 96, -1000, 15, -1000, -1000, 88, 54, -1000,
-	50, 117, 44, 108, -1000, -1000, -1000, -1000, -1000, 43,
-	-1000, -1000, -1000, 59, 8, -1000, 7, 76, 98, -7,
-	-1000, 17, -1000, -1000, -1000, 98, 5, 98, 3, 25,
-	6, -1000, -1000, 89, 66, -1000, 98, -1000, 126, 126,
-	-1000, -1000, -1000, -1000, -1000, -1000, 88, -1000, 98, -9,
-	98, 52, -1000, -1000, -1000, -1000, -1000, 42, 98, -1000,
-	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -14, -1000, -1000,
-	-1000, -20, -1000, 38, -15, 51, -1000, -1000, -16, -17,
-	25, -1000, 77, 98, 98, 98, 98, -1000, 92, -1000,
-	-1000, -1000, 98, -23, 74, 36, -1000, 66, 66, -1000,
-	-1000, -1000, 21, -1000, -1000, -23, -1000, 19, 105, 78,
-	33, 30, 10, 26, -23, -1000, -1000, 88, -1000, -1000,
-	-1000,
+	103, -1000, 129, 54, -1000, 93, -1000, -1000, -19, 126,
+	122, -1000, -1000, 115, -1000, -1000, -1000, -1000, 10, -1000,
+	11, -1000, -23, 5, -1000, -1000, 94, 66, 98, -1000,
+	114, 50, 111, -1000, 53, -8, -1000, 9, -1000, -1000,
+	-1000, -1000, -1000, -1000, -1000, 48, -1000, -1000, -1000, 55,
+	3, -1000, 2, 60, 110, -1000, 94, -1000, 110, 0,
+	110, -2, 88, 7, -1000, -1000, 27, 75, -1000, 110,
+	-1000, 140, 140, -1000, -1000, -1000, -1000, -1000, -20, -1000,
+	-1000, 110, -10, 110, 61, -1000, -1000, -1000, -1000, -1000,
+	41, 110, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
+	-13, -1000, -1000, -1000, 93, -1000, 39, -14, 57, -1000,
+	-1000, -15, -17, 88, -1000, 80, 110, 110, 110, 110,
+	-1000, -1000, 12, -1000, -1000, 110, -23, -1000, 31, -1000,
+	75, 75, -1000, -1000, 14, 109, -1000, 86, 20, -1000,
+	30, 8, 29, -1000, -23, -1000, 94, -1000, -23, 16,
+	-1000, -1000, -1000,
 }
 
 var yyPgo = [...]uint8{
-	0, 0, 183, 182, 181, 5, 180, 1, 179, 178,
-	177, 107, 176, 175, 3, 11, 174, 173, 172, 171,
-	170, 169, 168, 167, 2, 166, 165, 164, 4, 163,
-	162, 161, 8, 160, 159, 14, 158, 157, 6, 156,
-	9, 155, 154, 153, 152, 151, 150, 149, 7, 147,
-	145, 144,
+	0, 1, 185, 184, 183, 7, 182, 181, 0, 180,
+	179, 178, 105, 177, 176, 3, 13, 175, 174, 173,
+	172, 171, 170, 169, 168, 2, 167, 166, 165, 4,
+	164, 163, 162, 8, 161, 160, 5, 159, 158, 9,
+	157, 10, 156, 155, 154, 153, 152, 151, 150, 142,
+	6, 141, 136, 134,
 }
 
 var yyR1 = [...]int8{
-	0, 4, 3, 5, 5, 6, 6, 8, 10, 10,
-	11, 12, 13, 13, 1, 1, 7, 14, 14, 17,
-	9, 2, 2, 16, 16, 19, 18, 20, 20, 15,
-	15, 15, 15, 15, 15, 15, 29, 27, 26, 30,
-	30, 31, 21, 28, 28, 33, 33, 33, 33, 34,
-	32, 36, 32, 32, 37, 35, 39, 35, 35, 38,
-	38, 38, 38, 38, 40, 40, 41, 41, 42, 43,
-	22, 44, 44, 45, 23, 47, 25, 46, 46, 48,
-	48, 49, 24, 50, 50, 51, 51,
+	0, 4, 7, 3, 5, 5, 6, 6, 9, 11,
+	11, 12, 13, 14, 14, 1, 1, 8, 15, 15,
+	18, 10, 2, 2, 17, 17, 20, 19, 21, 21,
+	16, 16, 16, 16, 16, 16, 16, 30, 28, 27,
+	31, 31, 32, 22, 29, 29, 34, 34, 34, 34,
+	35, 33, 37, 33, 33, 38, 36, 40, 36, 36,
+	39, 39, 39, 39, 39, 41, 41, 42, 42, 43,
+	23, 45, 44, 44, 46, 47, 24, 49, 26, 48,
+	48, 50, 50, 51, 25, 52, 52, 53, 53,
 }
 
 var yyR2 = [...]int8{
-	0, 0, 9, 1, 0, 2, 0, 4, 1, 2,
-	4, 2, 3, 0, 1, 1, 3, 2, 0, 0,
-	11, 1, 1, 1, 0, 0, 5, 5, 0, 1,
-	1, 1, 2, 1, 1, 1, 0, 4, 3, 2,
-	1, 0, 5, 1, 3, 1, 1, 1, 1, 0,
-	4, 0, 4, 1, 0, 4, 0, 4, 1, 3,
-	1, 2, 2, 1, 1, 1, 1, 1, 0, 0,
-	9, 2, 0, 0, 8, 0, 6, 1, 3, 1,
-	1, 0, 5, 1, 0, 1, 3,
+	0, 0, 0, 10, 1, 0, 2, 0, 4, 1,
+	2, 4, 2, 3, 0, 1, 1, 3, 2, 0,
+	0, 11, 1, 1, 1, 0, 0, 5, 5, 0,
+	1, 1, 1, 2, 1, 1, 1, 0, 4, 3,
+	2, 1, 0, 5, 1, 3, 1, 1, 1, 1,
+	0, 4, 0, 4, 1, 0, 4, 0, 4, 1,
+	3, 1, 2, 2, 1, 1, 1, 1, 1, 0,
+	8, 0, 3, 0, 0, 0, 9, 0, 6, 1,
+	3, 1, 1, 0, 5, 1, 0, 1, 3,
 }
 
 var yyChk = [...]int16{
-	-1000, -3, 8, 4, 31, -4, -5, -8, 11, -6,
-	35, 9, -9, -2, -1, 14, 12, 13, -10, -11,
-	-12, 4, -7, 35, 4, 36, -11, 32, -13, 10,
-	-14, 33, -1, 30, 36, -15, -21, -22, -23, -24,
-	-25, -26, -27, 4, 16, 18, 20, 37, 15, -16,
-	-18, 4, 31, 4, 31, 29, -49, 33, -45, 33,
-	-30, -15, -28, -32, -35, -38, 33, -40, 21, 22,
-	-24, 4, -41, 6, 7, 34, 32, -28, 33, -28,
-	33, -46, -48, -28, 5, 38, -15, -29, -33, 21,
-	22, 25, 26, 27, 28, 23, 24, -28, -40, 4,
-	-40, -17, -1, -31, -50, -51, -28, 34, -28, -47,
-	30, 31, -32, -34, -36, -37, -39, 34, 35, -19,
-	31, 34, 30, -42, 34, 34, -48, -35, -35, -38,
-	-38, -5, -20, -28, -7, 19, 31, -14, 30, -43,
-	-7, 36, 4, -44, 17, 31, 31, 32, 31, -7,
-	-1,
+	-1000, -3, 8, 4, 31, -4, -5, -9, 11, -6,
+	35, 9, -10, -2, -1, 14, 12, 13, -11, -12,
+	-13, 4, -7, 4, 36, -12, 32, -14, -8, 35,
+	33, -1, 30, 10, -15, -17, -19, 4, 31, 4,
+	36, -16, -22, -23, -24, -25, -26, -27, -28, 4,
+	16, 18, 20, 37, 15, 34, 32, 31, 29, -51,
+	33, -46, 33, -31, -16, -29, -33, -36, -39, 33,
+	-41, 21, 22, -25, 4, -42, 6, 7, -18, -1,
+	-29, 33, -29, 33, -48, -50, -29, 5, 38, -16,
+	-30, -34, 21, 22, 25, 26, 27, 28, 23, 24,
+	-29, -41, 4, -41, 35, -20, -32, -52, -53, -29,
+	34, -29, -49, 30, 31, -33, -35, -37, -38, -40,
+	34, -5, -21, 31, 34, 30, -43, 34, 34, -50,
+	-36, -36, -39, -39, -15, 30, -29, -8, -47, 31,
+	36, 4, -44, 17, 19, 31, 32, 31, -45, -8,
+	-1, -8, 31,
 }
 
 var yyDef = [...]int8{
-	0, -2, 0, 0, 1, 4, 6, 3, 0, 0,
-	0, 0, 5, 0, 21, 22, 14, 15, 0, 8,
-	0, 13, 0, 18, 0, 7, 9, 0, 11, 2,
-	0, 24, 0, 0, 16, 17, 29, 30, 31, 0,
-	33, 34, 35, 81, 0, 73, 0, 0, 0, 0,
-	23, 0, 10, 12, 32, 0, 0, 0, 0, 0,
-	0, 40, 36, 43, 53, 58, 0, 60, 0, 0,
-	63, -2, 65, 66, 67, 19, 0, 41, 84, 0,
-	0, 75, 77, 79, 80, 38, 39, 0, 0, 49,
-	51, 45, 46, 47, 48, 54, 56, 0, 61, 64,
-	62, 0, 25, 0, 0, 83, 85, 68, 0, 0,
-	0, 37, 44, 0, 0, 0, 0, 59, 4, 28,
-	42, 82, 0, 0, 0, 0, 78, 50, 52, 55,
-	57, 18, 26, 86, 69, 0, 76, 0, 0, 72,
-	0, 0, 0, 0, 0, 74, 20, 0, 70, 71,
-	27,
+	0, -2, 0, 0, 1, 5, 7, 4, 0, 0,
+	0, 2, 6, 0, 22, 23, 15, 16, 0, 9,
+	0, 14, 0, 0, 8, 10, 0, 12, 0, 19,
+	25, 0, 0, 3, 0, 0, 24, 0, 11, 13,
+	17, 18, 30, 31, 32, 0, 34, 35, 36, 83,
+	0, 74, 0, 0, 0, 20, 0, 33, 0, 0,
+	0, 0, 0, 0, 41, 37, 44, 54, 59, 0,
+	61, 0, 0, 64, -2, 66, 67, 68, 0, 26,
+	42, 86, 0, 0, 77, 79, 81, 82, 39, 40,
+	0, 0, 50, 52, 46, 47, 48, 49, 55, 57,
+	0, 62, 65, 63, 5, 29, 0, 0, 85, 87,
+	69, 0, 0, 0, 38, 45, 0, 0, 0, 0,
+	60, 19, 27, 43, 84, 0, 0, 75, 0, 80,
+	51, 53, 56, 58, 0, 0, 88, 73, 0, 78,
+	0, 0, 0, 71, 0, 21, 0, 70, 0, 0,
+	28, 72, 76,
 }
 
 var yyTok1 = [...]int8{
@@ -869,171 +869,179 @@ yydefault:
 		yyDollar = yyS[yypt-3 : yypt+1]
 //line parser.y:42
 		{
+			quadruples.CrearCuadruploGotoInicio()
 			semantics.IniciarPrograma(yyDollar[2].texto)
 		}
 	case 2:
-		yyDollar = yyS[yypt-9 : yypt+1]
-//line parser.y:44
+		yyDollar = yyS[yypt-7 : yypt+1]
+//line parser.y:45
+		{
+			quadruples.ActualizarSalto()
+		}
+	case 3:
+		yyDollar = yyS[yypt-10 : yypt+1]
+//line parser.y:47
 		{
 			semantics.ImprimirTablaVariablesGlobal()
 			semantics.ImprimirDirectorioFunciones()
 			quadruples.ImprimirCuadruplos()
+			quadruples.CrearCuadruploFin()
 		}
-	case 10:
+	case 11:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:53
+//line parser.y:57
 		{
 			semantics.DeclararIdsActuales(yyDollar[3].tipo)
 		}
-	case 11:
+	case 12:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:56
+//line parser.y:60
 		{
 			semantics.AgregarIdActual(yyDollar[1].texto)
 		}
-	case 12:
+	case 13:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:59
+//line parser.y:63
 		{
 			semantics.AgregarIdActual(yyDollar[3].texto)
 		}
-	case 14:
+	case 15:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:62
+//line parser.y:66
 		{
 			yyVAL.tipo = types.TipoEntero
 		}
-	case 15:
+	case 16:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:62
+//line parser.y:66
 		{
 			yyVAL.tipo = types.TipoFlotante
 		}
-	case 19:
+	case 20:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:65
+//line parser.y:69
 		{
 			semantics.IniciarFuncionConParametros(yyDollar[2].texto, yyDollar[1].tipo)
 			semantics.AsignarCuadruploInicio(quadruples.ContadorActual())
 		}
-	case 20:
+	case 21:
 		yyDollar = yyS[yypt-11 : yypt+1]
-//line parser.y:68
+//line parser.y:72
 		{
 			semantics.TerminarFuncion()
 			quadruples.GenerarCuadruploAcabarFunc()
 		}
-	case 22:
+	case 23:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:72
+//line parser.y:76
 		{
 			yyVAL.tipo = types.TipoNula
 		}
-	case 25:
+	case 26:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:76
+//line parser.y:80
 		{
 			semantics.AgregarParametroActual(yyDollar[1].texto, yyDollar[3].tipo)
 		}
-	case 27:
+	case 28:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:79
+//line parser.y:83
 		{
 			semantics.AgregarParametroActual(yyDollar[3].texto, yyDollar[5].tipo)
 		}
-	case 36:
+	case 37:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:83
+//line parser.y:87
 		{
 			quadruples.GenerarCuadruploRetorno()
 		}
-	case 41:
+	case 42:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:88
+//line parser.y:92
 		{
 			quadruples.GenerarCuadruploAsigna(yyDollar[1].texto)
 		}
-	case 44:
+	case 45:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:91
+//line parser.y:95
 		{
 			quadruples.GenerarCuadruplo()
-		}
-	case 45:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:94
-		{
-			quadruples.EmpujarOperador(ops.MAYOR)
 		}
 	case 46:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:96
+//line parser.y:98
 		{
-			quadruples.EmpujarOperador(ops.MENOR)
+			quadruples.EmpujarOperador(ops.MAYOR)
 		}
 	case 47:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:98
+//line parser.y:100
 		{
-			quadruples.EmpujarOperador(ops.IGUAL)
+			quadruples.EmpujarOperador(ops.MENOR)
 		}
 	case 48:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:100
+//line parser.y:102
+		{
+			quadruples.EmpujarOperador(ops.IGUAL)
+		}
+	case 49:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:104
 		{
 			quadruples.EmpujarOperador(ops.DIFERENTE)
 		}
-	case 49:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:103
-		{
-			quadruples.EmpujarOperador(ops.MAS)
-		}
 	case 50:
-		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:105
-		{
-			quadruples.GenerarCuadruplo()
-		}
-	case 51:
 		yyDollar = yyS[yypt-2 : yypt+1]
 //line parser.y:107
 		{
 			quadruples.EmpujarOperador(ops.MAS)
 		}
-	case 52:
+	case 51:
 		yyDollar = yyS[yypt-4 : yypt+1]
 //line parser.y:109
 		{
 			quadruples.GenerarCuadruplo()
 		}
-	case 54:
+	case 52:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:112
+//line parser.y:111
 		{
-			quadruples.EmpujarOperador(ops.POR)
+			quadruples.EmpujarOperador(ops.MAS)
 		}
-	case 55:
+	case 53:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:114
+//line parser.y:113
 		{
 			quadruples.GenerarCuadruplo()
 		}
-	case 56:
+	case 55:
 		yyDollar = yyS[yypt-2 : yypt+1]
 //line parser.y:116
 		{
-			quadruples.EmpujarOperador(ops.ENTRE)
+			quadruples.EmpujarOperador(ops.POR)
 		}
-	case 57:
+	case 56:
 		yyDollar = yyS[yypt-4 : yypt+1]
 //line parser.y:118
 		{
 			quadruples.GenerarCuadruplo()
 		}
-	case 64:
-		yyDollar = yyS[yypt-1 : yypt+1]
+	case 57:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:120
+		{
+			quadruples.EmpujarOperador(ops.ENTRE)
+		}
+	case 58:
+		yyDollar = yyS[yypt-4 : yypt+1]
 //line parser.y:122
+		{
+			quadruples.GenerarCuadruplo()
+		}
+	case 65:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:126
 		{
 			if variable, existe := semantics.BuscarVariable(yyDollar[1].texto); existe {
 				quadruples.EmpujarOperando(variable.Direccion, variable.Tipo)
@@ -1041,72 +1049,90 @@ yydefault:
 				semantics.ErrorSemantico(fmt.Sprintf("variable '%s' no declarada", yyDollar[1].texto))
 			}
 		}
-	case 66:
+	case 67:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:129
+//line parser.y:133
 		{
 			direccion, tipo := semantics.ProcesarConstante(strconv.Itoa(yyDollar[1].entero), types.TipoEntero)
 			quadruples.EmpujarOperando(direccion, tipo)
 		}
-	case 67:
+	case 68:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:132
+//line parser.y:136
 		{
 			direccion, tipo := semantics.ProcesarConstante(strconv.FormatFloat(yyDollar[1].flotante, 'g', -1, 64), types.TipoFlotante)
 			quadruples.EmpujarOperando(direccion, tipo)
 		}
-	case 68:
+	case 69:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:136
+//line parser.y:140
 		{
 			quadruples.EmpujarSalto(ops.GOTOF)
 		}
-	case 69:
-		yyDollar = yyS[yypt-6 : yypt+1]
-//line parser.y:138
+	case 71:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:143
+		{
+			quadruples.ActualizarSino()
+		}
+	case 72:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:145
 		{
 			quadruples.ActualizarSalto()
 		}
 	case 73:
+		yyDollar = yyS[yypt-0 : yypt+1]
+//line parser.y:147
+		{
+			quadruples.ActualizarSalto()
+		}
+	case 74:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:142
+//line parser.y:150
 		{
 			quadruples.GuardarMientrasUbicacion()
 		}
-	case 74:
-		yyDollar = yyS[yypt-8 : yypt+1]
-//line parser.y:144
+	case 75:
+		yyDollar = yyS[yypt-5 : yypt+1]
+//line parser.y:152
+		{
+			quadruples.CrearCuadruploMientrasGotof()
+		}
+	case 76:
+		yyDollar = yyS[yypt-9 : yypt+1]
+//line parser.y:154
 		{
 			quadruples.ActualizarMientras()
 		}
-	case 75:
+	case 77:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:147
+//line parser.y:157
 		{
 			quadruples.GenerarCuadruploEscribe()
 		}
-	case 81:
+	case 83:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:152
+//line parser.y:162
 		{
 			quadruples.GuardarNombreFuncionActual(yyDollar[1].texto)
 			quadruples.GenerarCuadruploEra()
 		}
-	case 82:
+	case 84:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:155
+//line parser.y:165
 		{
 			quadruples.GenerarCuadruploGosub()
 		}
-	case 85:
+	case 87:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:159
+//line parser.y:169
 		{
 			quadruples.GenerarCuadruploParametro()
 		}
-	case 86:
+	case 88:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:161
+//line parser.y:171
 		{
 			quadruples.GenerarCuadruploParametro()
 		}

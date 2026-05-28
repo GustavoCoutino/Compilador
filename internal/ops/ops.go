@@ -22,6 +22,7 @@ const (
 	ERA
 	PARAM
 	GOSUB
+	INICIO
 	FIN
 )
 
@@ -69,6 +70,10 @@ func Simbolo(op int) string {
 		return "param"
 	case GOSUB:
 		return "gosub"
+	case INICIO:
+		return "inicio"
+	case FIN:
+		return "fin"
 	default:
 		return "?"
 	}
