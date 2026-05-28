@@ -46,6 +46,14 @@ func (q *Queue[T]) Back() (T, error) {
 	return q.Items[len(q.Items)-1], nil
 }
 
+func (q *Queue[T]) Find(index int) *T {
+	return &q.Items[index]
+}
+
 func (q *Queue[T]) Empty() bool {
 	return len(q.Items) == 0
+}
+
+func (q *Queue[T]) Len() int {
+	return len(q.Items)
 }

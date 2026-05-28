@@ -53,10 +53,10 @@ func TestTablaVariablesAgregar(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tabla := NewTablaVariables()
 			for _, pre := range tt.preexisting {
-				tabla.Agregar(pre.nombre, pre.tipo)
+				tabla.Agregar(&Variable{Nombre: pre.nombre, Tipo: pre.tipo})
 			}
 
-			err := tabla.Agregar(tt.nombre, tt.tipo)
+			err := tabla.Agregar(&Variable{Nombre: tt.nombre, Tipo: tt.tipo})
 
 			if tt.expectErr {
 				if err == nil {
@@ -83,9 +83,9 @@ func TestTablaVariablesAgregar(t *testing.T) {
 
 func TestTablaVariablesAgregarNoSobrescribe(t *testing.T) {
 	tabla := NewTablaVariables()
-	tabla.Agregar("x", types.TipoEntero)
+	tabla.Agregar(&Variable{Nombre: "x", Tipo: types.TipoEntero})
 
-	tabla.Agregar("x", types.TipoFlotante)
+	tabla.Agregar(&Variable{Nombre: "x", Tipo: types.TipoFlotante})
 
 	if got := tabla.Variables["x"].Tipo; got != types.TipoEntero {
 		t.Errorf("Tipo = %s; Esperado %s (duplicado no debe sobrescribir)", got, types.TipoEntero)
@@ -124,7 +124,7 @@ func TestTablaVariablesBuscar(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tabla := NewTablaVariables()
 			for nombre, tipo := range tt.seed {
-				tabla.Agregar(nombre, tipo)
+				tabla.Agregar(&Variable{Nombre: nombre, Tipo: tipo})
 			}
 
 			v, ok := tabla.Buscar(tt.nombre)

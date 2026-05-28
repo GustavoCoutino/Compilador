@@ -12,6 +12,17 @@ const (
 	ASIGNAVAR
 	IMPRIME
 	RETORNO
+	SI
+	SINO
+	MIENTRAS
+	GOTO
+	GOTOF
+	GOTOT
+	ENDFUNC
+	ERA
+	PARAM
+	GOSUB
+	FIN
 )
 
 func Simbolo(op int) string {
@@ -38,6 +49,26 @@ func Simbolo(op int) string {
 		return "escribe"
 	case RETORNO:
 		return "retorno"
+	case SI:	
+		return "si"
+	case SINO:
+		return "sino"
+	case MIENTRAS:
+		return "mientras"
+	case GOTO:
+		return "goto"
+	case GOTOF:
+		return "gotof"
+	case GOTOT:
+		return "gotot"
+	case ENDFUNC:
+		return "endfunc"
+	case ERA:
+		return "era"
+	case PARAM:
+		return "param"
+	case GOSUB:
+		return "gosub"
 	default:
 		return "?"
 	}

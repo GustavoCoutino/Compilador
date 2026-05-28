@@ -20,11 +20,11 @@ func NewTablaVariables() *TablaVariables {
 	return &TablaVariables{Variables: make(map[string]*Variable)} 
 }
 
-func (t *TablaVariables) Agregar(nombre string, tipo types.Tipo) error {
-	if _, existe := t.Variables[nombre]; existe {
-		return fmt.Errorf("variable '%s' ya declarada", nombre)
+func (t *TablaVariables) Agregar(v *Variable) error {
+	if _, existe := t.Variables[v.Nombre]; existe {
+		return fmt.Errorf("variable '%s' ya declarada", v.Nombre)
 	}
-	t.Variables[nombre] = &Variable{Nombre: nombre, Tipo: tipo}
+	t.Variables[v.Nombre] = v
 	return nil
 }
 

@@ -11,6 +11,8 @@ type Funcion struct {
 	TipoRetorno types.Tipo
 	Parametros []*Variable
 	Variables *TablaVariables
+    DirInicio int
+    Recursos int
 }
 
 type DirectorioFunciones struct {
@@ -32,7 +34,7 @@ func (d *DirectorioFunciones) Agregar(nombre string, tipo types.Tipo, parametros
         Variables:   NewTablaVariables(),
     }
     for _, v := range parametros {
-        if err := f.Variables.Agregar(v.Nombre, v.Tipo); err != nil {
+        if err := f.Variables.Agregar(v); err != nil {
           return nil, fmt.Errorf("en función '%s': %w", nombre, err)
       }
     }

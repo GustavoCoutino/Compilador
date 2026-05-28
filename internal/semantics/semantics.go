@@ -19,6 +19,12 @@ var (
 	tablaConstantes = map[string]*symbols.Variable{}
 )
 
+func AsignarCuadruploInicio(inicio int) {
+    if funcionActual != nil {
+        funcionActual.DirInicio = inicio
+    }       
+}
+
 func DeclararVariable(nombre string, tipo types.Tipo) {
     var tabla *symbols.TablaVariables
     segmento := memory.Global
@@ -28,7 +34,8 @@ func DeclararVariable(nombre string, tipo types.Tipo) {
     } else {
         tabla = tablaVariablesGlobal
     }
-    if err := tabla.Agregar(nombre, tipo); err != nil {
+    variable := &symbols.Variable{Nombre: nombre, Tipo: tipo}
+    if err := tabla.Agregar(variable); err != nil {
         ErrorSemantico(err.Error())
         return
     }
@@ -37,7 +44,6 @@ func DeclararVariable(nombre string, tipo types.Tipo) {
         ErrorSemantico(err.Error())
         return
     }
-    variable, _ := tabla.Buscar(nombre)
     variable.Direccion = direccion
     memory.RegistrarNombre(direccion, nombre)
 }
@@ -79,9 +85,7 @@ func IniciarFuncion(nombre string, tipoRetorno types.Tipo, parametros []*symbols
             ErrorSemantico(err.Error())
             continue
         }
-        if variable, ok := f.Variables.Buscar(parametro.Nombre); ok {
-            variable.Direccion = direccion
-        }
+        parametro.Direccion = direccion
         memory.RegistrarNombre(direccion, parametro.Nombre)
     }
 }
@@ -94,6 +98,8 @@ func TipoRetornoActual() (types.Tipo, bool) {
 }
 
 func TerminarFuncion() {
+    funcionActual.Recursos = len(funcionActual.Variables.Variables)
+    memory.New().LiberarMemoria()
 	funcionActual = nil
 }
 
@@ -117,8 +123,13 @@ func IniciarFuncionConParametros(nombre string, tipoRetorno types.Tipo) {
 	listaParametrosActual = nil
 }
 
+func BuscarFuncion(nombre string) (*symbols.Funcion, bool) {
+    return directorioFunciones.Buscar(nombre)
+}
+
 func IniciarPrograma(nombre string) {
-	if err := tablaVariablesGlobal.Agregar(nombre, types.TipoNula); err != nil {
+    variable := &symbols.Variable{Nombre: nombre, Tipo: types.TipoNula}
+	if err := tablaVariablesGlobal.Agregar(variable); err != nil {
         ErrorSemantico(err.Error())
 	}
     if _, err := directorioFunciones.Agregar(nombre, types.TipoNula, nil); err != nil {
@@ -144,6 +155,8 @@ func ImprimirDirectorioFunciones() {
 			fmt.Println(vv.Nombre)
 			fmt.Println(vv.Tipo)
 		}
+        fmt.Println("Recursos")
+        fmt.Println(v.Recursos)
 		fmt.Print("\n")
 	}
 }

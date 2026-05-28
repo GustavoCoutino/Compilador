@@ -64,8 +64,10 @@ Cuerpo: LLLAVE EstatutosLista RLLAVE ;
 EstatutosLista: EstatutosLista Estatuto | /* vacío */ ;
 Funcs: TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS {
     semantics.IniciarFuncionConParametros($2, $1)
+    semantics.AsignarCuadruploInicio(quadruples.ContadorActual())
 } LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA {
     semantics.TerminarFuncion()
+    quadruples.GenerarCuadruploAcabarFunc()
 } ;
 TipoRetorno: Tipo | NULA {
     $$ = types.TipoNula
@@ -79,12 +81,12 @@ ParametrosListaExtension: ParametrosListaExtension COMA ID DOSPUNTOS Tipo {
 } | /* vacío */ ;
 Estatuto: Asigna | Condicion | Ciclo | Llamada PCOMA | Imprime | EstatutoBloque | Retorno ;
 Retorno: RETORNO Expresion {
-    quadruples.GenerarRetornoCuadruplo()
+    quadruples.GenerarCuadruploRetorno()
 } PCOMA ;
 EstatutoBloque: LCORCHETE EstatutosBloqueLista RCORCHETE ; 
 EstatutosBloqueLista: EstatutosBloqueLista Estatuto | Estatuto ;
 Asigna: ID ASIGNAVAR Expresion {
-    quadruples.GenerarAsignaCuadruplo($1)
+    quadruples.GenerarCuadruploAsigna($1)
 } PCOMA ;
 Expresion: Exp | Exp Operadores Exp {
     quadruples.GenerarCuadruplo()
@@ -131,22 +133,39 @@ CTE: CTE_ENT {
     direccion, tipo := semantics.ProcesarConstante(strconv.FormatFloat($1, 'g', -1, 64), types.TipoFlotante)
     quadruples.EmpujarOperando(direccion, tipo)
 } ;
-Condicion: SI LPARENTESIS Expresion RPARENTESIS Cuerpo SinoOpt PCOMA ;
+Condicion: SI LPARENTESIS Expresion RPARENTESIS {
+    quadruples.EmpujarSalto(ops.GOTOF)
+} Cuerpo {
+    quadruples.ActualizarSalto()
+} SinoOpt PCOMA ;
 SinoOpt: SINO Cuerpo | /* vacío */ ;
-Ciclo: MIENTRAS LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA ;
+Ciclo: MIENTRAS {
+    quadruples.GuardarMientrasUbicacion()
+} LPARENTESIS Expresion RPARENTESIS HAZ Cuerpo PCOMA {
+    quadruples.ActualizarMientras()
+} ;
 Imprime: ESCRIBE LPARENTESIS ImprimeLista {
-    quadruples.GenerarEscribeCuadruplo()
+    quadruples.GenerarCuadruploEscribe()
 } RPARENTESIS PCOMA ;
 ImprimeLista: ImprimeEl | ImprimeLista COMA ImprimeEl ;
 ImprimeEl: Expresion | LITERAL ;
-Llamada: ID LPARENTESIS ArgumentosOpt RPARENTESIS ;
+Llamada: ID {
+    quadruples.GuardarNombreFuncionActual($1)
+    quadruples.GenerarCuadruploEra()
+} LPARENTESIS ArgumentosOpt RPARENTESIS {
+    quadruples.GenerarCuadruploGosub()
+} ;
 ArgumentosOpt: ArgumentosLista | /* vacío */ ;
-ArgumentosLista: Expresion | ArgumentosLista COMA Expresion ;
+ArgumentosLista: Expresion {
+    quadruples.GenerarCuadruploParametro()
+} | ArgumentosLista COMA Expresion {
+    quadruples.GenerarCuadruploParametro()
+} ;
 
 %%
 
 // Lexer es una representacion de un analizador lexico.
-// Lexer contiene el indice del caracter actual de la entrada de caracteres,
+// Lexer contiene el indice del caracter actual de la entrda de caracteres,
 // el indice del caracter leido, la entrada de caracteres, y el caracter
 // actual
 type Lexer struct{

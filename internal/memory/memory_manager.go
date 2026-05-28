@@ -47,6 +47,14 @@ func (m *MemoryManager) Asignar(s Segmento, t types.Tipo) (int, error) {
 	return dir, nil
 }
 
+func (m *MemoryManager) LiberarMemoria(){
+	for _, segmento := range []Segmento{Local, Temporal}{
+		for _, tipo := range tiposDir {
+            delete(m.contadores, base(segmento, tipo))
+        }
+	}	
+}
+
 // Las siguientes lineas de codigo solo existe para parte 
 // de las pruebas de imprimir la fila de cuadruplos, 
 // no tienen ningun proposito practico

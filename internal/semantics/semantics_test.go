@@ -288,7 +288,7 @@ func TestBuscarVariableEdgeCases(t *testing.T) {
 			name: "global encontrada desde scope local",
 			setup: func() {
 				tablaVariablesGlobal = symbols.NewTablaVariables()
-				tablaVariablesGlobal.Agregar("x", types.TipoEntero)
+				tablaVariablesGlobal.Agregar(&symbols.Variable{Nombre: "x", Tipo: types.TipoEntero})
 				funcionActual = &symbols.Funcion{Variables: symbols.NewTablaVariables()}
 			},
 			nombre:       "x",
@@ -299,9 +299,9 @@ func TestBuscarVariableEdgeCases(t *testing.T) {
 			name: "local opaca a global",
 			setup: func() {
 				tablaVariablesGlobal = symbols.NewTablaVariables()
-				tablaVariablesGlobal.Agregar("x", types.TipoEntero)
+				tablaVariablesGlobal.Agregar(&symbols.Variable{Nombre: "x", Tipo: types.TipoEntero})
 				funcionActual = &symbols.Funcion{Variables: symbols.NewTablaVariables()}
-				funcionActual.Variables.Agregar("x", types.TipoFlotante)
+				funcionActual.Variables.Agregar(&symbols.Variable{Nombre: "x", Tipo: types.TipoFlotante})
 			},
 			nombre:       "x",
 			expectFound:  true,
@@ -421,7 +421,7 @@ func TestIniciarPrograma(t *testing.T) {
 				directorioFunciones = symbols.NewDirectorioFunciones()
 				funcionActual = nil
 				errorContador = 0
-				tablaVariablesGlobal.Agregar("foo", types.TipoEntero)
+				tablaVariablesGlobal.Agregar(&symbols.Variable{Nombre: "foo", Tipo: types.TipoEntero})
 			},
 			programaNombre:    "foo",
 			silenciar:         true,

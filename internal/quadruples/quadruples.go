@@ -8,6 +8,7 @@ import (
 	"gustavocoutino.compilador/internal/memory"
 	"gustavocoutino.compilador/internal/ops"
 	"gustavocoutino.compilador/internal/semantics"
+	"gustavocoutino.compilador/internal/symbols"
 	"gustavocoutino.compilador/internal/types"
 )
 
@@ -24,6 +25,9 @@ var (
 	pilaOperandos = stack.New[int]()
 	pilaOperandosType = stack.New[types.Tipo]()
 	filaCuadruplos = queue.New[Quadruple]()
+	pilaDeSaltos = stack.New[int]()
+	contadorParametro = 0
+	funcionLlamada *symbols.Funcion
 )
 
 
@@ -37,6 +41,10 @@ func operandoStr(direccion int) string {
 	return fmt.Sprintf("%d", direccion)
 }
 
+func ContadorActual() int {
+    return filaCuadruplos.Len()
+}
+
 func EmpujarOperando(direccion int, tipo types.Tipo) {
 	pilaOperandos.Push(direccion)
 	pilaOperandosType.Push(tipo)
@@ -46,6 +54,41 @@ func EmpujarOperador(operador int){
 	pilaOperadores.Push(operador)
 }
 
+func GuardarMientrasUbicacion(){
+	pilaDeSaltos.Push(ContadorActual())
+}
+
+func ActualizarMientras(){
+	i, _ := pilaDeSaltos.Pop()
+	filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, i})
+}
+
+func EmpujarSalto(operador int){
+	temporal, _ := filaCuadruplos.Back()
+	filaCuadruplos.Push(Quadruple{operador, temporal.resultado, -1, -1})
+	i := ContadorActual() - 1
+	pilaDeSaltos.Push(i)
+}
+
+func ActualizarSalto(){
+	i, _ := pilaDeSaltos.Pop()
+	q := filaCuadruplos.Find(i)
+	q.resultado = ContadorActual()
+}
+
+func GuardarNombreFuncionActual(nombre string) {
+	funcion, existe := semantics.BuscarFuncion(nombre)
+	if !existe {
+		semantics.ErrorSemantico("Funcion no ha sido declarada")
+		return
+	}
+	funcionLlamada = funcion
+}
+
+
+func GenerarCuadruploAcabarFunc(){
+	filaCuadruplos.Push(Quadruple{ops.ENDFUNC, -1, -1, -1})
+}
 
 func GenerarCuadruplo(){
 	operandoDerecho, _ := pilaOperandos.Pop()
@@ -69,13 +112,44 @@ func GenerarCuadruplo(){
 	pilaOperandosType.Push(tipoResultado)
 }
 
-func GenerarEscribeCuadruplo(){
-	operando, _ := pilaOperandos.Pop()
-	pilaOperandosType.Pop()
-	filaCuadruplos.Push(Quadruple{ops.IMPRIME, -1, -1, operando})
+func GenerarCuadruploParametro(){
+	if funcionLlamada != nil {
+		argumento, _ := pilaOperandos.Pop()
+		tipoArgumento, _ := pilaOperandosType.Pop()
+		if contadorParametro >= len(funcionLlamada.Parametros) {
+			semantics.ErrorSemantico("demasiados argumentos en la llamada")
+			return
+		}
+		parametro := funcionLlamada.Parametros[contadorParametro]
+		if tipoArgumento != parametro.Tipo {
+			semantics.ErrorSemantico(fmt.Sprintf("tipo del argumento %d no coincide", contadorParametro+1))
+			return
+		}
+		filaCuadruplos.Push(Quadruple{ops.PARAM, argumento, -1, parametro.Direccion})
+		contadorParametro++
+	}
 }
 
-func GenerarRetornoCuadruplo(){
+func GenerarCuadruploEra(){
+	if funcionLlamada != nil {
+		contadorParametro = 0
+		filaCuadruplos.Push(Quadruple{ops.ERA, -1, -1, funcionLlamada.DirInicio})
+	}
+}
+
+func GenerarCuadruploGosub(){
+	if funcionLlamada != nil {
+		filaCuadruplos.Push(Quadruple{ops.GOSUB, -1, -1, funcionLlamada.DirInicio})
+	}
+}
+
+func GenerarCuadruploEscribe(){
+    operando, _ := pilaOperandos.Pop()
+    pilaOperandosType.Pop()
+    filaCuadruplos.Push(Quadruple{ops.IMPRIME, -1, -1, operando})
+}
+
+func GenerarCuadruploRetorno(){
 	operando, _ := pilaOperandos.Pop()
 	tipoValor, _ := pilaOperandosType.Pop()
 	tipoRetorno, dentroDeFuncion := semantics.TipoRetornoActual()
@@ -94,7 +168,7 @@ func GenerarRetornoCuadruplo(){
 	filaCuadruplos.Push(Quadruple{ops.RETORNO, -1, -1, operando})
 }
 
-func GenerarAsignaCuadruplo(nombre string) {
+func GenerarCuadruploAsigna(nombre string) {
 	operando, _ := pilaOperandos.Pop()
 	tipoValor, _ := pilaOperandosType.Pop()
 
