@@ -30,17 +30,6 @@ var (
 	funcionLlamada *symbols.Funcion
 )
 
-
-func operandoStr(direccion int) string {
-	if direccion < 0 {
-		return "_"
-	}
-	if etiqueta, ok := memory.NombreDe(direccion); ok {
-		return etiqueta
-	}
-	return fmt.Sprintf("%d", direccion)
-}
-
 func ContadorActual() int {
     return filaCuadruplos.Len()
 }
@@ -187,11 +176,11 @@ func GenerarCuadruploAsigna(nombre string) {
 func ImprimirCuadruplos() {
 	fmt.Printf("%-4s %-6s %-8s %-8s %-8s\n", "#", "op", "izq", "der", "res")
 	for i, q := range filaCuadruplos.Items {
-		fmt.Printf("%-4d %-6s %-8s %-8s %-8s\n",
+		fmt.Printf("%-4d %-6s %-8d %-8d %-8d\n",
 			i,
 			ops.Simbolo(q.operador),
-			operandoStr(q.izquierda),
-			operandoStr(q.derecha),
-			operandoStr(q.resultado))
+			q.izquierda,
+			q.derecha,
+			q.resultado)
 	}
 }
