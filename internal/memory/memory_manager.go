@@ -2,6 +2,7 @@ package memory
 
 import (
 	"fmt"
+	"sort"
 
 	"gustavocoutino.compilador/internal/types"
 )
@@ -82,4 +83,34 @@ func RegistrarNombre(direccion int, etiqueta string) {
 func NombreDe(direccion int) (string, bool) {
 	n, ok := nombres[direccion]
 	return n, ok
+}
+
+func segmentoNombre(direccion int) string {
+	switch Segmento(direccion/tamanoBloque/len(tiposDir)) {
+	case Global:
+		return "global"
+	case Local:
+		return "local"
+	case Temporal:
+		return "temporal"
+	case Constante:
+		return "constante"
+	default:
+		return "?"
+	}
+}
+
+func ImprimirMemoria() {
+	dirs := make([]int, 0, len(nombres))
+	for d := range nombres {
+		dirs = append(dirs, d)
+	}
+	sort.Ints(dirs)
+
+	fmt.Println("Asignador de memoria")
+	fmt.Printf("%-10s %-10s %-14s\n", "Dirección", "Segmento", "Nombre")
+	for _, d := range dirs {
+		fmt.Printf("%-10d %-10s %-14s\n", d, segmentoNombre(d), nombres[d])
+	}
+	fmt.Println()
 }

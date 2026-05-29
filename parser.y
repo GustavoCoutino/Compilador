@@ -8,6 +8,7 @@ import (
     "gustavocoutino.compilador/internal/types"
     "gustavocoutino.compilador/internal/semantics"
     "gustavocoutino.compilador/internal/quadruples"
+    "gustavocoutino.compilador/internal/memory"
     "gustavocoutino.compilador/internal/ops"
 )
 %}
@@ -45,10 +46,11 @@ Programa : PROGRAMA ID PCOMA {
 } VarsOpt FuncsOpt INICIO {
     quadruples.ActualizarSalto()
 } Cuerpo FIN {
+    quadruples.CrearCuadruploFin()
     semantics.ImprimirTablaVariablesGlobal()
     semantics.ImprimirDirectorioFunciones()
+    memory.ImprimirMemoria()
     quadruples.ImprimirCuadruplos()
-    quadruples.CrearCuadruploFin()
 } ;
 VarsOpt: Vars | /* vacío */ ;
 FuncsOpt: FuncsOpt Funcs | /* vacío */ ;

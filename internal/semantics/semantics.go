@@ -3,6 +3,8 @@ package semantics
 import (
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 
 	"gustavocoutino.compilador/internal/memory"
 	"gustavocoutino.compilador/internal/symbols"
@@ -106,6 +108,9 @@ func TipoRetornoActual() (types.Tipo, bool) {
 }
 
 func TerminarFuncion() {
+    if funcionActual == nil {
+        return
+    }
     tempEnteros := memory.Contador(memory.Temporal, types.TipoEntero)
     tempFlotantes := memory.Contador(memory.Temporal, types.TipoFlotante)
     funcionActual.Recursos = len(funcionActual.Variables.Variables) + tempEnteros + tempFlotantes
@@ -148,26 +153,50 @@ func IniciarPrograma(nombre string) {
     funcionActual = nil
 }
 
-func ImprimirTablaVariablesGlobal() {
-	for k, v := range tablaVariablesGlobal.Variables {
-		fmt.Println(k)
-		fmt.Println(v.Tipo)
-		fmt.Print("\n")
+func imprimirTablaVariables(tabla *symbols.TablaVariables, sangria string) {
+	vars := make([]*symbols.Variable, 0, len(tabla.Variables))
+	for _, v := range tabla.Variables {
+		vars = append(vars, v)
+	}
+	sort.Slice(vars, func(i, j int) bool { return vars[i].Direccion < vars[j].Direccion })
+
+	fmt.Printf("%s%-14s %-10s %-10s\n", sangria, "Nombre", "Tipo", "Dirección")
+	for _, v := range vars {
+		fmt.Printf("%s%-14s %-10s %-10d\n", sangria, v.Nombre, v.Tipo, v.Direccion)
 	}
 }
 
+func ImprimirTablaVariablesGlobal() {
+	fmt.Println("Tabla de variables global")
+	imprimirTablaVariables(tablaVariablesGlobal, "")
+	fmt.Println()
+}
+
 func ImprimirDirectorioFunciones() {
-	for _, v := range directorioFunciones.Funciones {
-		fmt.Println(v.Nombre)
-		fmt.Println(v.TipoRetorno)
-		fmt.Println("Variables")
-		for _, vv := range v.Variables.Variables {
-			fmt.Println(vv.Nombre)
-			fmt.Println(vv.Tipo)
+	funcs := make([]*symbols.Funcion, 0, len(directorioFunciones.Funciones))
+	for _, f := range directorioFunciones.Funciones {
+		funcs = append(funcs, f)
+	}
+	sort.Slice(funcs, func(i, j int) bool { return funcs[i].DirInicio < funcs[j].DirInicio })
+
+	fmt.Println("Directorio de funciones")
+	fmt.Printf("%-14s %-10s %-8s %-9s %s\n", "Función", "Retorno", "Inicio", "Recursos", "Parámetros")
+	for _, f := range funcs {
+		partes := make([]string, len(f.Parametros))
+		for i, p := range f.Parametros {
+			partes[i] = fmt.Sprintf("%s:%s", p.Nombre, p.Tipo)
 		}
-        fmt.Println("Recursos")
-        fmt.Println(v.Recursos)
-		fmt.Print("\n")
+		fmt.Printf("%-14s %-10s %-8d %-9d %s\n", f.Nombre, f.TipoRetorno, f.DirInicio, f.Recursos, strings.Join(partes, ", "))
+	}
+	fmt.Println()
+
+	for _, f := range funcs {
+		if len(f.Variables.Variables) == 0 {
+			continue
+		}
+		fmt.Printf("  %s:\n", f.Nombre)
+		imprimirTablaVariables(f.Variables, "  ")
+		fmt.Println()
 	}
 }
 
