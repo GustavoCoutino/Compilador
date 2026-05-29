@@ -62,6 +62,7 @@ func ProcesarConstante(literal string, tipo types.Tipo) (int, types.Tipo) {
     return direccion, tipo
 }
 
+
 func BuscarVariable(nombre string) (*symbols.Variable, bool) {
 	if funcionActual != nil {
 		if variable, ok := funcionActual.Variables.Buscar(nombre); ok {

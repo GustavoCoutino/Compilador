@@ -7,6 +7,7 @@ const (
 	TipoFlotante
 	TipoError
 	TipoNula
+	TipoLiteral
 )
 
 func (t Tipo) String() string {

@@ -17,7 +17,7 @@ const (
 
 const tamanoBloque = 1000 
 
-var tiposDir = []types.Tipo{types.TipoEntero, types.TipoFlotante}
+var tiposDir = []types.Tipo{types.TipoEntero, types.TipoFlotante, types.TipoLiteral}
 
 func base(s Segmento, t types.Tipo) int {
 	idxTipo := 0

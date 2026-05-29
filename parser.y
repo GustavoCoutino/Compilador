@@ -66,7 +66,9 @@ IdsListaExtension: IdsListaExtension COMA ID {
 Tipo: ENTERO { $$ = types.TipoEntero } | FLOTANTE { $$ = types.TipoFlotante } ;
 Cuerpo: LLLAVE EstatutosLista RLLAVE ;
 EstatutosLista: EstatutosLista Estatuto | /* vacío */ ;
-Funcs: TipoRetorno ID LPARENTESIS ParametrosOpt RPARENTESIS {
+Funcs: TipoRetorno ID {
+    semantics.DeclararVariable($2, $1)
+} LPARENTESIS ParametrosOpt RPARENTESIS {
     semantics.IniciarFuncionConParametros($2, $1)
     semantics.AsignarCuadruploInicio(quadruples.ContadorActual())
 } LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA {
@@ -158,7 +160,11 @@ Imprime: ESCRIBE LPARENTESIS ImprimeLista {
     quadruples.GenerarCuadruploEscribe()
 } RPARENTESIS PCOMA ;
 ImprimeLista: ImprimeEl | ImprimeLista COMA ImprimeEl ;
-ImprimeEl: Expresion | LITERAL ;
+ImprimeEl: Expresion | LITERAL {
+    dir, _ := semantics.ProcesarConstante($1, types.TipoLiteral)
+    quadruples.EmpujarOperando(dir, types.TipoLiteral)
+    quadruples.GenerarCuadruploEscribe()
+} ;
 Llamada: ID {
     quadruples.GuardarNombreFuncionActual($1)
     quadruples.GenerarCuadruploEra()
