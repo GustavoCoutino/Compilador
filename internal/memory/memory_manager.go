@@ -16,7 +16,8 @@ const (
 	Constante
 )
 
-const tamanoBloque = 1000 
+const tamanoBloque = 2000 
+
 
 var tiposDir = []types.Tipo{types.TipoEntero, types.TipoFlotante, types.TipoLiteral}
 
