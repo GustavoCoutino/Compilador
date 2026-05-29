@@ -156,9 +156,7 @@ Ciclo: MIENTRAS {
 } HAZ Cuerpo PCOMA {
     quadruples.ActualizarMientras()
 } ;
-Imprime: ESCRIBE LPARENTESIS ImprimeLista {
-    quadruples.GenerarCuadruploEscribe()
-} RPARENTESIS PCOMA ;
+Imprime: ESCRIBE LPARENTESIS ImprimeLista RPARENTESIS PCOMA ;
 ImprimeLista: ImprimeEl | ImprimeLista COMA ImprimeEl ;
 ImprimeEl: Expresion | LITERAL {
     dir, _ := semantics.ProcesarConstante($1, types.TipoLiteral)
@@ -170,6 +168,7 @@ Llamada: ID {
     quadruples.GenerarCuadruploEra()
 } LPARENTESIS ArgumentosOpt RPARENTESIS {
     quadruples.GenerarCuadruploGosub()
+    quadruples.GenerarCuadruploResultadoLlamada()
 } ;
 ArgumentosOpt: ArgumentosLista | /* vacío */ ;
 ArgumentosLista: Expresion {

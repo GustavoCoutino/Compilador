@@ -55,15 +55,24 @@ func (m *MemoryManager) LiberarMemoria(){
 	}	
 }
 
-// Las siguientes lineas de codigo solo existe para parte 
-// de las pruebas de imprimir la fila de cuadruplos, 
-// no tienen ningun proposito practico
+func (m *MemoryManager) Contador(s Segmento, t types.Tipo) int {
+    return m.contadores[base(s, t)]
+}
+
 var gestor = New()
 
 var nombres = map[int]string{}
 
 func Asignar(s Segmento, t types.Tipo) (int, error) {
 	return gestor.Asignar(s, t)
+}
+
+func LiberarMemoria() {
+	gestor.LiberarMemoria()
+}
+
+func Contador(s Segmento, t types.Tipo) int {
+    return gestor.Contador(s, t)
 }
 
 func RegistrarNombre(direccion int, etiqueta string) {

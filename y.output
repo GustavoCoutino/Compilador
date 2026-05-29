@@ -356,13 +356,13 @@ state 46
 
 state 47
 	Asigna:  ID.ASIGNAVAR Expresion $$43 PCOMA 
-	Llamada:  ID.$$84 LPARENTESIS ArgumentosOpt RPARENTESIS 
-	$$84: .    (84)
+	Llamada:  ID.$$83 LPARENTESIS ArgumentosOpt RPARENTESIS 
+	$$83: .    (83)
 
 	ASIGNAVAR  shift 57
-	.  reduce 84 (src line 168)
+	.  reduce 83 (src line 166)
 
-	$$84  goto 58
+	$$83  goto 58
 
 state 48
 	Condicion:  SI.LPARENTESIS Expresion RPARENTESIS $$70 Cuerpo SinoOpt PCOMA 
@@ -380,7 +380,7 @@ state 49
 	$$75  goto 60
 
 state 50
-	Imprime:  ESCRIBE.LPARENTESIS ImprimeLista $$78 RPARENTESIS PCOMA 
+	Imprime:  ESCRIBE.LPARENTESIS ImprimeLista RPARENTESIS PCOMA 
 
 	LPARENTESIS  shift 61
 	.  error
@@ -472,7 +472,7 @@ state 57
 	CTE  goto 74
 
 state 58
-	Llamada:  ID $$84.LPARENTESIS ArgumentosOpt RPARENTESIS 
+	Llamada:  ID $$83.LPARENTESIS ArgumentosOpt RPARENTESIS 
 
 	LPARENTESIS  shift 80
 	.  error
@@ -505,7 +505,7 @@ state 60
 
 
 state 61
-	Imprime:  ESCRIBE LPARENTESIS.ImprimeLista $$78 RPARENTESIS PCOMA 
+	Imprime:  ESCRIBE LPARENTESIS.ImprimeLista RPARENTESIS PCOMA 
 
 	ID  shift 73
 	LITERAL  shift 86
@@ -649,13 +649,13 @@ state 72
 
 state 73
 	FactorOpt:  ID.    (66)
-	Llamada:  ID.$$84 LPARENTESIS ArgumentosOpt RPARENTESIS 
-	$$84: .    (84)
+	Llamada:  ID.$$83 LPARENTESIS ArgumentosOpt RPARENTESIS 
+	$$83: .    (83)
 
-	LPARENTESIS  reduce 84 (src line 168)
+	LPARENTESIS  reduce 83 (src line 166)
 	.  reduce 66 (src line 128)
 
-	$$84  goto 58
+	$$83  goto 58
 
 state 74
 	FactorOpt:  CTE.    (67)
@@ -701,8 +701,8 @@ state 79
 	$$43  goto 105
 
 state 80
-	Llamada:  ID $$84 LPARENTESIS.ArgumentosOpt RPARENTESIS 
-	ArgumentosOpt: .    (87)
+	Llamada:  ID $$83 LPARENTESIS.ArgumentosOpt RPARENTESIS 
+	ArgumentosOpt: .    (86)
 
 	ID  shift 73
 	CTE_ENT  shift 75
@@ -710,7 +710,7 @@ state 80
 	MAS  shift 70
 	MENOS  shift 71
 	LPARENTESIS  shift 68
-	.  reduce 87 (src line 174)
+	.  reduce 86 (src line 173)
 
 	Llamada  goto 72
 	Expresion  goto 108
@@ -749,31 +749,30 @@ state 82
 	CTE  goto 74
 
 state 83
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista.$$78 RPARENTESIS PCOMA 
+	Imprime:  ESCRIBE LPARENTESIS ImprimeLista.RPARENTESIS PCOMA 
 	ImprimeLista:  ImprimeLista.COMA ImprimeEl 
-	$$78: .    (78)
 
 	COMA  shift 112
-	.  reduce 78 (src line 159)
+	RPARENTESIS  shift 111
+	.  error
 
-	$$78  goto 111
 
 state 84
-	ImprimeLista:  ImprimeEl.    (80)
+	ImprimeLista:  ImprimeEl.    (79)
 
-	.  reduce 80 (src line 162)
+	.  reduce 79 (src line 160)
 
 
 state 85
-	ImprimeEl:  Expresion.    (82)
+	ImprimeEl:  Expresion.    (81)
 
-	.  reduce 82 (src line 163)
+	.  reduce 81 (src line 161)
 
 
 state 86
-	ImprimeEl:  LITERAL.    (83)
+	ImprimeEl:  LITERAL.    (82)
 
-	.  reduce 83 (src line 163)
+	.  reduce 82 (src line 161)
 
 
 state 87
@@ -917,24 +916,24 @@ state 105
 
 
 state 106
-	Llamada:  ID $$84 LPARENTESIS ArgumentosOpt.RPARENTESIS 
+	Llamada:  ID $$83 LPARENTESIS ArgumentosOpt.RPARENTESIS 
 
 	RPARENTESIS  shift 123
 	.  error
 
 
 state 107
-	ArgumentosOpt:  ArgumentosLista.    (86)
+	ArgumentosOpt:  ArgumentosLista.    (85)
 	ArgumentosLista:  ArgumentosLista.COMA Expresion 
 
 	COMA  shift 124
-	.  reduce 86 (src line 174)
+	.  reduce 85 (src line 173)
 
 
 state 108
-	ArgumentosLista:  Expresion.    (88)
+	ArgumentosLista:  Expresion.    (87)
 
-	.  reduce 88 (src line 175)
+	.  reduce 87 (src line 174)
 
 
 state 109
@@ -953,9 +952,9 @@ state 110
 
 
 state 111
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$78.RPARENTESIS PCOMA 
+	Imprime:  ESCRIBE LPARENTESIS ImprimeLista RPARENTESIS.PCOMA 
 
-	RPARENTESIS  shift 127
+	PCOMA  shift 127
 	.  error
 
 
@@ -1093,9 +1092,9 @@ state 122
 
 
 state 123
-	Llamada:  ID $$84 LPARENTESIS ArgumentosOpt RPARENTESIS.    (85)
+	Llamada:  ID $$83 LPARENTESIS ArgumentosOpt RPARENTESIS.    (84)
 
-	.  reduce 85 (src line 171)
+	.  reduce 84 (src line 169)
 
 
 state 124
@@ -1134,16 +1133,15 @@ state 126
 	$$76  goto 137
 
 state 127
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$78 RPARENTESIS.PCOMA 
+	Imprime:  ESCRIBE LPARENTESIS ImprimeLista RPARENTESIS PCOMA.    (78)
 
-	PCOMA  shift 138
-	.  error
+	.  reduce 78 (src line 159)
 
 
 state 128
-	ImprimeLista:  ImprimeLista COMA ImprimeEl.    (81)
+	ImprimeLista:  ImprimeLista COMA ImprimeEl.    (80)
 
-	.  reduce 81 (src line 162)
+	.  reduce 80 (src line 160)
 
 
 state 129
@@ -1184,45 +1182,39 @@ state 133
 
 	.  reduce 19 (src line 68)
 
-	EstatutosLista  goto 139
+	EstatutosLista  goto 138
 
 state 134
 	ParametrosLista:  ID DOSPUNTOS Tipo $$27 ParametrosListaExtension.    (28)
 	ParametrosListaExtension:  ParametrosListaExtension.COMA ID DOSPUNTOS Tipo 
 
-	COMA  shift 140
+	COMA  shift 139
 	.  reduce 28 (src line 84)
 
 
 state 135
-	ArgumentosLista:  ArgumentosLista COMA Expresion.    (89)
+	ArgumentosLista:  ArgumentosLista COMA Expresion.    (88)
 
-	.  reduce 89 (src line 177)
+	.  reduce 88 (src line 176)
 
 
 state 136
 	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$70 Cuerpo.SinoOpt PCOMA 
 	SinoOpt: .    (74)
 
-	SINO  shift 142
+	SINO  shift 141
 	.  reduce 74 (src line 149)
 
-	SinoOpt  goto 141
+	SinoOpt  goto 140
 
 state 137
 	Ciclo:  MIENTRAS $$75 LPARENTESIS Expresion RPARENTESIS $$76.HAZ Cuerpo PCOMA 
 
-	HAZ  shift 143
+	HAZ  shift 142
 	.  error
 
 
 state 138
-	Imprime:  ESCRIBE LPARENTESIS ImprimeLista $$78 RPARENTESIS PCOMA.    (79)
-
-	.  reduce 79 (src line 161)
-
-
-state 139
 	EstatutosLista:  EstatutosLista.Estatuto 
 	Funcs:  TipoRetorno ID $$20 LPARENTESIS ParametrosOpt RPARENTESIS $$21 LLLAVE VarsOpt EstatutosLista.RLLAVE PCOMA 
 
@@ -1231,7 +1223,7 @@ state 139
 	SI  shift 48
 	MIENTRAS  shift 49
 	ESCRIBE  shift 50
-	RLLAVE  shift 144
+	RLLAVE  shift 143
 	LCORCHETE  shift 51
 	.  error
 
@@ -1244,113 +1236,113 @@ state 139
 	EstatutoBloque  goto 45
 	Retorno  goto 46
 
-state 140
+state 139
 	ParametrosListaExtension:  ParametrosListaExtension COMA.ID DOSPUNTOS Tipo 
 
-	ID  shift 145
+	ID  shift 144
+	.  error
+
+
+state 140
+	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$70 Cuerpo SinoOpt.PCOMA 
+
+	PCOMA  shift 145
 	.  error
 
 
 state 141
-	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$70 Cuerpo SinoOpt.PCOMA 
-
-	PCOMA  shift 146
-	.  error
-
-
-state 142
 	SinoOpt:  SINO.$$72 Cuerpo 
 	$$72: .    (72)
 
 	.  reduce 72 (src line 145)
 
-	$$72  goto 147
+	$$72  goto 146
 
-state 143
+state 142
 	Ciclo:  MIENTRAS $$75 LPARENTESIS Expresion RPARENTESIS $$76 HAZ.Cuerpo PCOMA 
 
 	LLLAVE  shift 29
 	.  error
 
-	Cuerpo  goto 148
+	Cuerpo  goto 147
 
-state 144
+state 143
 	Funcs:  TipoRetorno ID $$20 LPARENTESIS ParametrosOpt RPARENTESIS $$21 LLLAVE VarsOpt EstatutosLista RLLAVE.PCOMA 
 
-	PCOMA  shift 149
+	PCOMA  shift 148
+	.  error
+
+
+state 144
+	ParametrosListaExtension:  ParametrosListaExtension COMA ID.DOSPUNTOS Tipo 
+
+	DOSPUNTOS  shift 149
 	.  error
 
 
 state 145
-	ParametrosListaExtension:  ParametrosListaExtension COMA ID.DOSPUNTOS Tipo 
-
-	DOSPUNTOS  shift 150
-	.  error
-
-
-state 146
 	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$70 Cuerpo SinoOpt PCOMA.    (71)
 
 	.  reduce 71 (src line 144)
 
 
-state 147
+state 146
 	SinoOpt:  SINO $$72.Cuerpo 
 
 	LLLAVE  shift 29
 	.  error
 
-	Cuerpo  goto 151
+	Cuerpo  goto 150
 
-state 148
+state 147
 	Ciclo:  MIENTRAS $$75 LPARENTESIS Expresion RPARENTESIS $$76 HAZ Cuerpo.PCOMA 
 
-	PCOMA  shift 152
+	PCOMA  shift 151
 	.  error
 
 
-state 149
+state 148
 	Funcs:  TipoRetorno ID $$20 LPARENTESIS ParametrosOpt RPARENTESIS $$21 LLLAVE VarsOpt EstatutosLista RLLAVE PCOMA.    (22)
 
 	.  reduce 22 (src line 74)
 
 
-state 150
+state 149
 	ParametrosListaExtension:  ParametrosListaExtension COMA ID DOSPUNTOS.Tipo 
 
 	ENTERO  shift 16
 	FLOTANTE  shift 17
 	.  error
 
-	Tipo  goto 153
+	Tipo  goto 152
 
-state 151
+state 150
 	SinoOpt:  SINO $$72 Cuerpo.    (73)
 
 	.  reduce 73 (src line 147)
 
 
-state 152
+state 151
 	Ciclo:  MIENTRAS $$75 LPARENTESIS Expresion RPARENTESIS $$76 HAZ Cuerpo PCOMA.    (77)
 
 	.  reduce 77 (src line 156)
 
 
-state 153
+state 152
 	ParametrosListaExtension:  ParametrosListaExtension COMA ID DOSPUNTOS Tipo.    (29)
 
 	.  reduce 29 (src line 85)
 
 
-38 terminals, 55 nonterminals
-90 grammar rules, 154/16000 states
+38 terminals, 54 nonterminals
+89 grammar rules, 153/16000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-104 working sets used
-memory: parser 224/240000
-53 extra closures
+103 working sets used
+memory: parser 234/240000
+52 extra closures
 191 shift entries, 2 exceptions
-84 goto entries
+83 goto entries
 92 entries saved by goto default
-Optimizer space used: output 187/240000
-187 table entries, 0 zero
-maximum spread: 38, maximum offset: 150
+Optimizer space used: output 186/240000
+186 table entries, 0 zero
+maximum spread: 38, maximum offset: 149

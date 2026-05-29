@@ -180,7 +180,8 @@ func GenerarCuadruploRetorno(){
 		semantics.ErrorSemantico("el tipo del retorno no coincide con el de la función")
 		return
 	}
-	filaCuadruplos.Push(Quadruple{ops.RETORNO, -1, -1, operando})
+	dirFuncMem := semantics.ObtenerFuncionDireccion()
+	filaCuadruplos.Push(Quadruple{ops.RETORNO, operando, -1, dirFuncMem})
 }
 
 func GenerarCuadruploAsigna(nombre string) {
@@ -197,6 +198,19 @@ func GenerarCuadruploAsigna(nombre string) {
 		return
 	}
 	filaCuadruplos.Push(Quadruple{ops.ASIGNAVAR, operando, -1, variable.Direccion})
+}
+
+func GenerarCuadruploResultadoLlamada(){
+	global, _ := semantics.BuscarVariable(funcionLlamada.Nombre)
+	temporal, err := memory.Asignar(memory.Temporal, global.Tipo)
+	if err != nil {
+        semantics.ErrorSemantico(err.Error())
+        return
+    }
+    memory.RegistrarNombre(temporal, fmt.Sprintf("t%d", temporal))
+    filaCuadruplos.Push(Quadruple{ops.ASIGNAVAR, global.Direccion, -1, temporal})
+    pilaOperandos.Push(temporal)
+    pilaOperandosType.Push(global.Tipo)
 }
 
 func ImprimirCuadruplos() {

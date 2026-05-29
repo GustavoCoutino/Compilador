@@ -62,7 +62,6 @@ func ProcesarConstante(literal string, tipo types.Tipo) (int, types.Tipo) {
     return direccion, tipo
 }
 
-
 func BuscarVariable(nombre string) (*symbols.Variable, bool) {
 	if funcionActual != nil {
 		if variable, ok := funcionActual.Variables.Buscar(nombre); ok {
@@ -71,6 +70,14 @@ func BuscarVariable(nombre string) (*symbols.Variable, bool) {
 	}
 	return tablaVariablesGlobal.Buscar(nombre)
 }
+
+func ObtenerFuncionDireccion () int {
+    if funcion, existe := tablaVariablesGlobal.Buscar(funcionActual.Nombre); !existe {
+		return -1
+	} else {
+        return funcion.Direccion
+    }
+} 
 
 func IniciarFuncion(nombre string, tipoRetorno types.Tipo, parametros []*symbols.Variable) {
 	f, err := directorioFunciones.Agregar(nombre, tipoRetorno, parametros)
@@ -99,8 +106,10 @@ func TipoRetornoActual() (types.Tipo, bool) {
 }
 
 func TerminarFuncion() {
-    funcionActual.Recursos = len(funcionActual.Variables.Variables)
-    memory.New().LiberarMemoria()
+    tempEnteros := memory.Contador(memory.Temporal, types.TipoEntero)
+    tempFlotantes := memory.Contador(memory.Temporal, types.TipoFlotante)
+    funcionActual.Recursos = len(funcionActual.Variables.Variables) + tempEnteros + tempFlotantes
+    memory.LiberarMemoria()
 	funcionActual = nil
 }
 
