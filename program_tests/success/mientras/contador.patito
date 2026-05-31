@@ -1,0 +1,14 @@
+programa mientras_contador;
+
+vars { i, n: entero; }
+
+inicio
+{
+    i = 0;
+    n = 5;
+    mientras (i < n) haz {
+        escribe(i);
+        i = i + 1;
+    };
+}
+fin

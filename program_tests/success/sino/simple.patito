@@ -1,0 +1,14 @@
+programa sino_simple;
+
+vars { x: entero; }
+
+inicio
+{
+    x = 5;
+    si (x > 0) {
+        escribe("positivo");
+    } sino {
+        escribe("no positivo");
+    };
+}
+fin

@@ -1,0 +1,15 @@
+programa si_anidado;
+
+vars { x, y: entero; }
+
+inicio
+{
+    x = 5;
+    y = 10;
+    si (x > 0) {
+        si (y > x) {
+            escribe("ambos positivos y y mayor");
+        };
+    };
+}
+fin

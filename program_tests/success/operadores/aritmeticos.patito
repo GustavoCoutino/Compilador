@@ -1,0 +1,15 @@
+programa ops_arit;
+
+vars { a, b, c, r: entero; }
+
+inicio
+{
+    a = 10;
+    b = 4;
+    c = 2;
+    r = a + b - c * c / b;
+    escribe("resultado:", r);
+    r = (a + b) * c;
+    escribe("con parentesis:", r);
+}
+fin

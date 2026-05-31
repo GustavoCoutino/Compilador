@@ -1,0 +1,14 @@
+programa fallo_tipo_arg;
+
+vars { f: flotante; r: entero; }
+
+entero suma(x: entero, y: entero) {
+    retorno x + y;
+};
+
+inicio
+{
+    f = 2.5;
+    r = suma(f, 1);
+}
+fin

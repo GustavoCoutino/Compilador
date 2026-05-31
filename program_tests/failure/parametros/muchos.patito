@@ -1,0 +1,14 @@
+programa fallo_muchos;
+
+vars { a, r: entero; }
+
+entero doble(x: entero) {
+    retorno x + x;
+};
+
+inicio
+{
+    a = 5;
+    r = doble(a, a);
+}
+fin

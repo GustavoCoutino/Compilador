@@ -1,0 +1,12 @@
+programa escribe_multi;
+
+vars { a, b: entero; }
+
+inicio
+{
+    a = 5;
+    b = 10;
+    escribe("suma:", a + b);
+    escribe("valores:", a, b);
+}
+fin

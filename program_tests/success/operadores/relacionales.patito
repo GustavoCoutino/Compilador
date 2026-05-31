@@ -1,0 +1,23 @@
+programa ops_rel;
+
+vars { a, b: entero; }
+
+inicio
+{
+    a = 5;
+    b = 5;
+    si (a == b) {
+        escribe("iguales");
+    };
+    si (a != b) {
+        escribe("distintos");
+    };
+    a = 10;
+    si (a > b) {
+        escribe("mayor");
+    };
+    si (b < a) {
+        escribe("menor");
+    };
+}
+fin

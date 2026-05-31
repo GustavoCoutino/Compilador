@@ -1,0 +1,18 @@
+programa sino_anidado;
+
+vars { x: entero; }
+
+inicio
+{
+    x = 0;
+    si (x > 0) {
+        escribe("positivo");
+    } sino {
+        si (x < 0) {
+            escribe("negativo");
+        } sino {
+            escribe("cero");
+        };
+    };
+}
+fin

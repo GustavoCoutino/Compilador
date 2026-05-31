@@ -1,0 +1,72 @@
+programa flujo_completo;
+
+vars {
+    a, b, c, max_val: entero;
+    radio, area: flotante;
+}
+
+nula saludar() {
+    escribe("inicio del programa");
+};
+
+entero maximo(x: entero, y: entero) {
+    vars { r: entero; }
+    si (x > y) {
+        r = x;
+    } sino {
+        r = y;
+    };
+    retorno r;
+};
+
+nula imprimir_serie(n: entero) {
+    vars { i: entero; }
+    i = 0;
+    mientras (i < n) haz {
+        escribe("i=", i);
+        i = i + 1;
+    };
+};
+
+flotante area_circulo(r: flotante) {
+    retorno 3.14 * r * r;
+};
+
+inicio
+{
+    saludar();
+
+    a = 10;
+    b = 7;
+
+    si (a > 0) {
+        escribe("a positivo");
+    };
+
+    max_val = maximo(a, b);
+    escribe("max:", max_val);
+
+    si (max_val == 10) {
+        escribe("gano a");
+    } sino {
+        si (max_val != b) {
+            escribe("ni a ni b");
+        } sino {
+            escribe("gano b");
+        };
+    };
+
+    imprimir_serie(3);
+
+    radio = 2.5;
+    area = area_circulo(radio);
+    escribe("area:", area);
+
+    [
+        c = -5 + (a * b) / 2;
+        c = c - 1;
+        c = +c;
+        escribe("complejo:", c);
+    ]
+}
+fin

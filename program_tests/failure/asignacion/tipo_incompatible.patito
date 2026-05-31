@@ -1,0 +1,10 @@
+programa fallo_tipos;
+
+vars { a: entero; f: flotante; }
+
+inicio
+{
+    f = 3.14;
+    a = f;
+}
+fin

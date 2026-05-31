@@ -1,0 +1,14 @@
+programa mientras_decr;
+
+vars { x: entero; }
+
+inicio
+{
+    x = 10;
+    mientras (x > 0) haz {
+        escribe(x);
+        x = x - 1;
+    };
+    escribe("listo");
+}
+fin

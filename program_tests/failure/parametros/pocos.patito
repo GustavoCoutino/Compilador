@@ -1,0 +1,14 @@
+programa fallo_pocos;
+
+vars { a, r: entero; }
+
+entero suma(x: entero, y: entero) {
+    retorno x + y;
+};
+
+inicio
+{
+    a = 1;
+    r = suma(a);
+}
+fin

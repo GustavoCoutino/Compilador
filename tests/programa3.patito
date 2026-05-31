@@ -1,9 +1,0 @@
-programa patito3
-
-vars { precio, medida: entero; f, g, h   ; }
-
-inicio
-{
-    precio = medida * 2;
-}
-fin

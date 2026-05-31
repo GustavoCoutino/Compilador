@@ -1,0 +1,8 @@
+programa escribe_literal;
+
+inicio
+{
+    escribe("hola mundo");
+    escribe("segunda linea");
+}
+fin

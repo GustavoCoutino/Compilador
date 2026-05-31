@@ -1,0 +1,13 @@
+programa si_simple;
+
+vars { x: entero; }
+
+inicio
+{
+    x = 10;
+    si (x > 0) {
+        escribe("positivo");
+    };
+    escribe("fin");
+}
+fin

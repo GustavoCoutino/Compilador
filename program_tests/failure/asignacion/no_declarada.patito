@@ -1,0 +1,10 @@
+programa fallo_no_decl;
+
+vars { a: entero; }
+
+inicio
+{
+    a = 5;
+    z = 10;
+}
+fin

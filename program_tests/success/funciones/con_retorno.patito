@@ -1,0 +1,16 @@
+programa func_retorno;
+
+vars { resultado, a, b: entero; }
+
+entero suma(x: entero, y: entero) {
+    retorno x + y;
+};
+
+inicio
+{
+    a = 3;
+    b = 4;
+    resultado = suma(a, b) + 1;
+    escribe("resultado:", resultado);
+}
+fin

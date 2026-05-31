@@ -1,0 +1,15 @@
+programa func_nula;
+
+vars { x: entero; }
+
+nula imprimir(n: entero) {
+    escribe("valor:", n);
+};
+
+inicio
+{
+    x = 7;
+    imprimir(x);
+    imprimir(100);
+}
+fin
