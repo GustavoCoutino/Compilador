@@ -113,7 +113,7 @@ Exp: Exp MAS {
 } Termino {
     quadruples.GenerarCuadruplo()
 } | Exp MENOS {
-    quadruples.EmpujarOperador(ops.MAS)
+    quadruples.EmpujarOperador(ops.MENOS)
 } Termino {
     quadruples.GenerarCuadruplo()
 } | Termino ;
