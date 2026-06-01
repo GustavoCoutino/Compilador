@@ -1015,7 +1015,7 @@ yydefault:
 		yyDollar = yyS[yypt-2 : yypt+1]
 //line parser.y:115
 		{
-			quadruples.EmpujarOperador(ops.MAS)
+			quadruples.EmpujarOperador(ops.MENOS)
 		}
 	case 54:
 		yyDollar = yyS[yypt-4 : yypt+1]
