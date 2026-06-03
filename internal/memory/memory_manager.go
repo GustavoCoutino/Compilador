@@ -19,17 +19,19 @@ const (
 const tamanoBloque = 2000 
 
 
-var tiposDir = []types.Tipo{types.TipoEntero, types.TipoFlotante, types.TipoLiteral}
+var TiposDir = []types.Tipo{types.TipoEntero, types.TipoFlotante, types.TipoLiteral}
 
 func base(s Segmento, t types.Tipo) int {
 	idxTipo := 0
-	for i, tt := range tiposDir {
+	for i, tt := range TiposDir {
 		if tt == t {
 			idxTipo = i
 		}
 	}
-	return (int(s)*len(tiposDir) + idxTipo) * tamanoBloque
+	return (int(s)*len(TiposDir) + idxTipo) * tamanoBloque
 }
+
+
 
 type MemoryManager struct {
 	contadores map[int]int 
@@ -51,7 +53,7 @@ func (m *MemoryManager) Asignar(s Segmento, t types.Tipo) (int, error) {
 
 func (m *MemoryManager) LiberarMemoria(){
 	for _, segmento := range []Segmento{Local, Temporal}{
-		for _, tipo := range tiposDir {
+		for _, tipo := range TiposDir {
             delete(m.contadores, base(segmento, tipo))
         }
 	}	
@@ -87,7 +89,7 @@ func NombreDe(direccion int) (string, bool) {
 }
 
 func segmentoNombre(direccion int) string {
-	switch Segmento(direccion/tamanoBloque/len(tiposDir)) {
+	switch Segmento(direccion/tamanoBloque/len(TiposDir)) {
 	case Global:
 		return "global"
 	case Local:

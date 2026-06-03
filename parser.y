@@ -8,8 +8,8 @@ import (
     "gustavocoutino.compilador/internal/types"
     "gustavocoutino.compilador/internal/semantics"
     "gustavocoutino.compilador/internal/quadruples"
-    "gustavocoutino.compilador/internal/memory"
     "gustavocoutino.compilador/internal/ops"
+    "gustavocoutino.compilador/internal/virtual_machine"
 )
 %}
 
@@ -47,10 +47,10 @@ Programa : PROGRAMA ID PCOMA {
     quadruples.ActualizarSalto()
 } Cuerpo FIN {
     quadruples.CrearCuadruploFin()
-    semantics.ImprimirTablaVariablesGlobal()
-    semantics.ImprimirDirectorioFunciones()
-    memory.ImprimirMemoria()
-    quadruples.ImprimirCuadruplos()
+    // semantics.ImprimirTablaVariablesGlobal()
+    // semantics.ImprimirDirectorioFunciones()
+    // memory.ImprimirMemoria()
+    // quadruples.ImprimirCuadruplos()
 } ;
 VarsOpt: Vars | /* vacío */ ;
 FuncsOpt: FuncsOpt Funcs | /* vacío */ ;
@@ -446,6 +446,8 @@ func main() {
     lexer := &Lexer{input: string(data), position: 0, readPosition: 0}
     lexer.readChar()
     ok := yyParse(lexer)
+    vm := virtualmachine.NewVM(quadruples.GetFilaCuadruplos())
+    vm.Ejecutar()
     if ok == 0 {
         if semantics.HasError() {
             fmt.Println("El análisis semántico tiene errores")

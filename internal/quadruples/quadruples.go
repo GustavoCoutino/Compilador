@@ -13,10 +13,10 @@ import (
 )
 
 type Quadruple struct {
-	operador int
-	izquierda int
-	derecha int
-	resultado int
+	Operador int
+	Izquierda int
+	Derecha int
+	Resultado int
 
 }
 
@@ -34,6 +34,9 @@ func ContadorActual() int {
     return filaCuadruplos.Len()
 }
 
+func GetFilaCuadruplos() *queue.Queue[Quadruple] {
+	return filaCuadruplos
+}
 func CrearCuadruploGotoInicio(){
 	pilaDeSaltos.Push(ContadorActual())
 	filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, -1})
@@ -58,7 +61,7 @@ func GuardarMientrasUbicacion(){
 
 func CrearCuadruploMientrasGotof(){
 	temporal, _ := filaCuadruplos.Back()
-	filaCuadruplos.Push(Quadruple{ops.GOTOF, temporal.resultado, -1, -1})
+	filaCuadruplos.Push(Quadruple{ops.GOTOF, temporal.Resultado, -1, -1})
 	pilaDeSaltos.Push(ContadorActual()-1)
 }
 
@@ -67,7 +70,7 @@ func ActualizarSino(){
     filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, -1})  
     pilaDeSaltos.Push(ContadorActual() - 1)            
     c := filaCuadruplos.Find(falso)
-    c.resultado = ContadorActual()                        
+    c.Resultado = ContadorActual()                        
 }
 
 func ActualizarMientras(){
@@ -75,12 +78,12 @@ func ActualizarMientras(){
 	comienzoWhile, _ := pilaDeSaltos.Pop()
 	filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, comienzoWhile})
 	c := filaCuadruplos.Find(gotofWhile)
-	c.resultado = ContadorActual()
+	c.Resultado = ContadorActual()
 }
 
 func EmpujarSalto(operador int){
 	temporal, _ := filaCuadruplos.Back()
-	filaCuadruplos.Push(Quadruple{operador, temporal.resultado, -1, -1})
+	filaCuadruplos.Push(Quadruple{operador, temporal.Resultado, -1, -1})
 	i := ContadorActual() - 1
 	pilaDeSaltos.Push(i)
 }
@@ -88,7 +91,7 @@ func EmpujarSalto(operador int){
 func ActualizarSalto(){
 	i, _ := pilaDeSaltos.Pop()
 	q := filaCuadruplos.Find(i)
-	q.resultado = ContadorActual()
+	q.Resultado = ContadorActual()
 }
 
 func GuardarNombreFuncionActual(nombre string) {
@@ -218,9 +221,9 @@ func ImprimirCuadruplos() {
 	for i, q := range filaCuadruplos.Items {
 		fmt.Printf("%-4d %-6s %-8d %-8d %-8d\n",
 			i,
-			ops.Simbolo(q.operador),
-			q.izquierda,
-			q.derecha,
-			q.resultado)
+			ops.Simbolo(q.Operador),
+			q.Izquierda,
+			q.Derecha,
+			q.Resultado)
 	}
 }

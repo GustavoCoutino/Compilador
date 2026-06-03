@@ -9,11 +9,11 @@ import __yyfmt__ "fmt"
 
 import (
 	"fmt"
-	"gustavocoutino.compilador/internal/memory"
 	"gustavocoutino.compilador/internal/ops"
 	"gustavocoutino.compilador/internal/quadruples"
 	"gustavocoutino.compilador/internal/semantics"
 	"gustavocoutino.compilador/internal/types"
+	"gustavocoutino.compilador/internal/virtual_machine"
 	"os"
 	"strconv"
 )
@@ -375,6 +375,8 @@ func main() {
 	lexer := &Lexer{input: string(data), position: 0, readPosition: 0}
 	lexer.readChar()
 	ok := yyParse(lexer)
+	vm := virtualmachine.NewVM(quadruples.GetFilaCuadruplos())
+	vm.Ejecutar()
 	if ok == 0 {
 		if semantics.HasError() {
 			fmt.Println("El análisis semántico tiene errores")
@@ -884,10 +886,10 @@ yydefault:
 //line parser.y:48
 		{
 			quadruples.CrearCuadruploFin()
-			semantics.ImprimirTablaVariablesGlobal()
-			semantics.ImprimirDirectorioFunciones()
-			memory.ImprimirMemoria()
-			quadruples.ImprimirCuadruplos()
+			// semantics.ImprimirTablaVariablesGlobal()
+			// semantics.ImprimirDirectorioFunciones()
+			// memory.ImprimirMemoria()
+			// quadruples.ImprimirCuadruplos()
 		}
 	case 11:
 		yyDollar = yyS[yypt-4 : yypt+1]

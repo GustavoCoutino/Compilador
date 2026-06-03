@@ -21,6 +21,10 @@ var (
 	tablaConstantes = map[string]*symbols.Variable{}
 )
 
+func GetConstantes() map[string]*symbols.Variable {
+	return tablaConstantes
+}
+
 func AsignarCuadruploInicio(inicio int) {
     if funcionActual != nil {
         funcionActual.DirInicio = inicio
