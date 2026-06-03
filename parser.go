@@ -110,7 +110,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:182
+//line parser.y:186
 
 // Lexer es una representacion de un analizador lexico.
 // Lexer contiene el indice del caracter actual de la entrda de caracteres,
@@ -230,8 +230,8 @@ func (l *Lexer) Next(lval *yySymType) int {
 			l.Error(fmt.Sprintf("Carácter no reconocido: %c", l.ch))
 		}
 	case '"':
-		position := l.position
 		l.readChar()
+		position := l.position
 		for isLetter(l.ch) || isDigit(l.ch) || isWhitespace(l.ch) || isOther(l.ch) {
 			l.readChar()
 		}
@@ -1049,9 +1049,15 @@ yydefault:
 		{
 			quadruples.GenerarCuadruplo()
 		}
+	case 64:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:129
+		{
+			quadruples.GenerarOperandoMenos()
+		}
 	case 66:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:130
+//line parser.y:132
 		{
 			if variable, existe := semantics.BuscarVariable(yyDollar[1].texto); existe {
 				quadruples.EmpujarOperando(variable.Direccion, variable.Tipo)
@@ -1061,63 +1067,69 @@ yydefault:
 		}
 	case 68:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:137
+//line parser.y:139
 		{
 			direccion, tipo := semantics.ProcesarConstante(strconv.Itoa(yyDollar[1].entero), types.TipoEntero)
 			quadruples.EmpujarOperando(direccion, tipo)
 		}
 	case 69:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:140
+//line parser.y:142
 		{
 			direccion, tipo := semantics.ProcesarConstante(strconv.FormatFloat(yyDollar[1].flotante, 'g', -1, 64), types.TipoFlotante)
 			quadruples.EmpujarOperando(direccion, tipo)
 		}
 	case 70:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:144
+//line parser.y:146
 		{
 			quadruples.EmpujarSalto(ops.GOTOF)
 		}
 	case 72:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:147
+//line parser.y:149
 		{
 			quadruples.ActualizarSino()
 		}
 	case 73:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:149
+//line parser.y:151
 		{
 			quadruples.ActualizarSalto()
 		}
 	case 74:
 		yyDollar = yyS[yypt-0 : yypt+1]
-//line parser.y:151
+//line parser.y:153
 		{
 			quadruples.ActualizarSalto()
 		}
 	case 75:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:154
+//line parser.y:156
 		{
 			quadruples.GuardarMientrasUbicacion()
 		}
 	case 76:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:156
+//line parser.y:158
 		{
 			quadruples.CrearCuadruploMientrasGotof()
 		}
 	case 77:
 		yyDollar = yyS[yypt-9 : yypt+1]
-//line parser.y:158
+//line parser.y:160
 		{
 			quadruples.ActualizarMientras()
 		}
+	case 81:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:165
+		{
+			quadruples.GenerarCuadruploEscribe()
+		}
 	case 82:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:163
+//line parser.y:167
 		{
 			dir, _ := semantics.ProcesarConstante(yyDollar[1].texto, types.TipoLiteral)
 			quadruples.EmpujarOperando(dir, types.TipoLiteral)
@@ -1125,27 +1137,27 @@ yydefault:
 		}
 	case 83:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:168
+//line parser.y:172
 		{
 			quadruples.GuardarNombreFuncionActual(yyDollar[1].texto)
 			quadruples.GenerarCuadruploEra()
 		}
 	case 84:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:171
+//line parser.y:175
 		{
 			quadruples.GenerarCuadruploGosub()
 			quadruples.GenerarCuadruploResultadoLlamada()
 		}
 	case 87:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:176
+//line parser.y:180
 		{
 			quadruples.GenerarCuadruploParametro()
 		}
 	case 88:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:178
+//line parser.y:182
 		{
 			quadruples.GenerarCuadruploParametro()
 		}

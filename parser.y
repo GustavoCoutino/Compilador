@@ -126,7 +126,9 @@ Termino: Termino POR {
 } Factor {
     quadruples.GenerarCuadruplo()
 } | Factor ;
-Factor: LPARENTESIS Expresion RPARENTESIS | FactorOpt | MAS FactorOpt | MENOS FactorOpt | Llamada ;
+Factor: LPARENTESIS Expresion RPARENTESIS | FactorOpt | MAS FactorOpt | MENOS FactorOpt {
+    quadruples.GenerarOperandoMenos()
+} | Llamada ;
 FactorOpt: ID {
     if variable, existe := semantics.BuscarVariable($1); existe {
         quadruples.EmpujarOperando(variable.Direccion, variable.Tipo)
@@ -160,7 +162,9 @@ Ciclo: MIENTRAS {
 } ;
 Imprime: ESCRIBE LPARENTESIS ImprimeLista RPARENTESIS PCOMA ;
 ImprimeLista: ImprimeEl | ImprimeLista COMA ImprimeEl ;
-ImprimeEl: Expresion | LITERAL {
+ImprimeEl: Expresion {
+    quadruples.GenerarCuadruploEscribe()
+} | LITERAL {
     dir, _ := semantics.ProcesarConstante($1, types.TipoLiteral)
     quadruples.EmpujarOperando(dir, types.TipoLiteral)
     quadruples.GenerarCuadruploEscribe()
@@ -301,8 +305,8 @@ func (l *Lexer) Next(lval *yySymType) int {
                 l.Error(fmt.Sprintf("Carácter no reconocido: %c", l.ch))
             }
         case '"':
-            position := l.position
             l.readChar()
+            position := l.position
             for isLetter(l.ch) || isDigit(l.ch) || isWhitespace(l.ch) || isOther(l.ch) {
                 l.readChar()
             }

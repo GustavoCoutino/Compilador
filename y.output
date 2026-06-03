@@ -360,7 +360,7 @@ state 47
 	$$83: .    (83)
 
 	ASIGNAVAR  shift 57
-	.  reduce 83 (src line 168)
+	.  reduce 83 (src line 172)
 
 	$$83  goto 58
 
@@ -375,7 +375,7 @@ state 49
 	Ciclo:  MIENTRAS.$$75 LPARENTESIS Expresion RPARENTESIS $$76 HAZ Cuerpo PCOMA 
 	$$75: .    (75)
 
-	.  reduce 75 (src line 154)
+	.  reduce 75 (src line 156)
 
 	$$75  goto 60
 
@@ -644,7 +644,7 @@ state 71
 state 72
 	Factor:  Llamada.    (65)
 
-	.  reduce 65 (src line 129)
+	.  reduce 65 (src line 131)
 
 
 state 73
@@ -652,27 +652,27 @@ state 73
 	Llamada:  ID.$$83 LPARENTESIS ArgumentosOpt RPARENTESIS 
 	$$83: .    (83)
 
-	LPARENTESIS  reduce 83 (src line 168)
-	.  reduce 66 (src line 130)
+	LPARENTESIS  reduce 83 (src line 172)
+	.  reduce 66 (src line 132)
 
 	$$83  goto 58
 
 state 74
 	FactorOpt:  CTE.    (67)
 
-	.  reduce 67 (src line 136)
+	.  reduce 67 (src line 138)
 
 
 state 75
 	CTE:  CTE_ENT.    (68)
 
-	.  reduce 68 (src line 137)
+	.  reduce 68 (src line 139)
 
 
 state 76
 	CTE:  CTE_FLOT.    (69)
 
-	.  reduce 69 (src line 140)
+	.  reduce 69 (src line 142)
 
 
 state 77
@@ -710,7 +710,7 @@ state 80
 	MAS  shift 70
 	MENOS  shift 71
 	LPARENTESIS  shift 68
-	.  reduce 86 (src line 175)
+	.  reduce 86 (src line 179)
 
 	Llamada  goto 72
 	Expresion  goto 108
@@ -760,19 +760,19 @@ state 83
 state 84
 	ImprimeLista:  ImprimeEl.    (79)
 
-	.  reduce 79 (src line 162)
+	.  reduce 79 (src line 164)
 
 
 state 85
 	ImprimeEl:  Expresion.    (81)
 
-	.  reduce 81 (src line 163)
+	.  reduce 81 (src line 165)
 
 
 state 86
 	ImprimeEl:  LITERAL.    (82)
 
-	.  reduce 82 (src line 163)
+	.  reduce 82 (src line 167)
 
 
 state 87
@@ -884,7 +884,7 @@ state 100
 state 101
 	FactorOpt:  ID.    (66)
 
-	.  reduce 66 (src line 130)
+	.  reduce 66 (src line 132)
 
 
 state 102
@@ -927,20 +927,20 @@ state 107
 	ArgumentosLista:  ArgumentosLista.COMA Expresion 
 
 	COMA  shift 124
-	.  reduce 85 (src line 175)
+	.  reduce 85 (src line 179)
 
 
 state 108
 	ArgumentosLista:  Expresion.    (87)
 
-	.  reduce 87 (src line 176)
+	.  reduce 87 (src line 180)
 
 
 state 109
 	Condicion:  SI LPARENTESIS Expresion RPARENTESIS.$$70 Cuerpo SinoOpt PCOMA 
 	$$70: .    (70)
 
-	.  reduce 70 (src line 144)
+	.  reduce 70 (src line 146)
 
 	$$70  goto 125
 
@@ -1094,7 +1094,7 @@ state 122
 state 123
 	Llamada:  ID $$83 LPARENTESIS ArgumentosOpt RPARENTESIS.    (84)
 
-	.  reduce 84 (src line 171)
+	.  reduce 84 (src line 175)
 
 
 state 124
@@ -1128,20 +1128,20 @@ state 126
 	Ciclo:  MIENTRAS $$75 LPARENTESIS Expresion RPARENTESIS.$$76 HAZ Cuerpo PCOMA 
 	$$76: .    (76)
 
-	.  reduce 76 (src line 156)
+	.  reduce 76 (src line 158)
 
 	$$76  goto 137
 
 state 127
 	Imprime:  ESCRIBE LPARENTESIS ImprimeLista RPARENTESIS PCOMA.    (78)
 
-	.  reduce 78 (src line 161)
+	.  reduce 78 (src line 163)
 
 
 state 128
 	ImprimeLista:  ImprimeLista COMA ImprimeEl.    (80)
 
-	.  reduce 80 (src line 162)
+	.  reduce 80 (src line 164)
 
 
 state 129
@@ -1195,7 +1195,7 @@ state 134
 state 135
 	ArgumentosLista:  ArgumentosLista COMA Expresion.    (88)
 
-	.  reduce 88 (src line 178)
+	.  reduce 88 (src line 182)
 
 
 state 136
@@ -1203,7 +1203,7 @@ state 136
 	SinoOpt: .    (74)
 
 	SINO  shift 141
-	.  reduce 74 (src line 151)
+	.  reduce 74 (src line 153)
 
 	SinoOpt  goto 140
 
@@ -1254,7 +1254,7 @@ state 141
 	SinoOpt:  SINO.$$72 Cuerpo 
 	$$72: .    (72)
 
-	.  reduce 72 (src line 147)
+	.  reduce 72 (src line 149)
 
 	$$72  goto 146
 
@@ -1283,7 +1283,7 @@ state 144
 state 145
 	Condicion:  SI LPARENTESIS Expresion RPARENTESIS $$70 Cuerpo SinoOpt PCOMA.    (71)
 
-	.  reduce 71 (src line 146)
+	.  reduce 71 (src line 148)
 
 
 state 146
@@ -1319,13 +1319,13 @@ state 149
 state 150
 	SinoOpt:  SINO $$72 Cuerpo.    (73)
 
-	.  reduce 73 (src line 149)
+	.  reduce 73 (src line 151)
 
 
 state 151
 	Ciclo:  MIENTRAS $$75 LPARENTESIS Expresion RPARENTESIS $$76 HAZ Cuerpo PCOMA.    (77)
 
-	.  reduce 77 (src line 158)
+	.  reduce 77 (src line 160)
 
 
 state 152

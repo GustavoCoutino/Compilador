@@ -216,6 +216,22 @@ func GenerarCuadruploResultadoLlamada(){
     pilaOperandosType.Push(global.Tipo)
 }
 
+func GenerarOperandoMenos() {
+    operando, _ := pilaOperandos.Pop()
+    tipo, _ := pilaOperandosType.Pop()
+
+    ceroDir, _ := semantics.ProcesarConstante("0", tipo)
+    temp, err := memory.Asignar(memory.Temporal, tipo)
+    if err != nil {
+        semantics.ErrorSemantico(err.Error())
+        return
+    }
+    memory.RegistrarNombre(temp, fmt.Sprintf("t%d", temp))
+    filaCuadruplos.Push(Quadruple{ops.MENOS, ceroDir, operando, temp})
+    pilaOperandos.Push(temp)
+    pilaOperandosType.Push(tipo)
+}
+
 func ImprimirCuadruplos() {
 	fmt.Printf("%-4s %-6s %-8s %-8s %-8s\n", "#", "op", "izq", "der", "res")
 	for i, q := range filaCuadruplos.Items {
