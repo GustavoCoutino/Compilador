@@ -1,0 +1,17 @@
+programa recursion;
+
+vars { x: entero; }
+
+entero factorial(n: entero) {
+    si(n == 0){
+        retorno 1;
+    };
+    retorno n * factorial(n - 1);
+};
+
+inicio
+{
+    x = 5;
+    escribe(factorial(x));
+}
+fin

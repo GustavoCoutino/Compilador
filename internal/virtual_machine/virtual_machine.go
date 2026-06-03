@@ -18,6 +18,7 @@ type VM struct {
     global    map[int]interface{} // mapa de memoria
     pilaAR    *stack.Stack[map[int]interface{}] // pila de registros de activacion
     pilaIP    *stack.Stack[int] // pila para regresar despues de gosub
+	pendiente map[int]interface{} //
 }
 
 func NewVM(fila *queue.Queue[quadruples.Quadruple]) *VM {
@@ -53,11 +54,13 @@ func (vm *VM) Ejecutar(){
 				continue
 			}
 		case ops.ERA:
-			vm.pilaAR.Push(make(map[int]interface{}))
+			vm.pendiente = make(map[int]interface{})
 		case ops.PARAM:
-			vm.write(q.Resultado, vm.leer(q.Izquierda))
+			vm.pendiente[q.Resultado] = vm.leer(q.Izquierda)
 		case ops.GOSUB:
-			vm.guardarSiguienteCuadruploDeLlamada(ip+1)
+			vm.pilaAR.Push(vm.pendiente)
+			vm.pendiente = nil
+			vm.pilaIP.Push(ip+1)
 			ip = q.Resultado
 			continue
 		case ops.ASIGNAVAR:
@@ -98,6 +101,10 @@ func (vm *VM) Ejecutar(){
 			fmt.Println(vm.leer(q.Resultado))
 		case ops.RETORNO:
 			vm.write(q.Resultado, vm.leer(q.Izquierda))
+			vm.pilaAR.Pop()
+			retorno, _ := vm.pilaIP.Pop()
+			ip = retorno
+			continue
 		case ops.ENDFUNC:
 			vm.pilaAR.Pop()
 			retorno, _ := vm.pilaIP.Pop()
