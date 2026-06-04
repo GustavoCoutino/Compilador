@@ -184,8 +184,9 @@ Los programas de prueba viven en [`program_tests/`](program_tests/) y están org
 
 ### Correr tests unitatios
 
-`go test ./...                              # todos los paquetes
+```
+go test ./...                              # todos los paquetes
 go test ./internal/semantics/              # solo un paquete
 go test ./internal/semantics/ -run Buscar  # un subset por nombre
 go test ./... -v                           # con detalle de cada test
-`
+```
