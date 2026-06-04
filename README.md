@@ -1,22 +1,66 @@
-# Compilador Patito
+# Compilador de lenguaje Patito (Baby Duck)
 
-Compilador para el lenguaje procedural **Patito**, escrito en Go por Gustavo Coutiño Ocampo - A01412203.
+Patito es un lenguaje imperativo y procedural didáctico para enseñar los fundamentos de desarrollo de compiladores. Soporta declaracion de variables de tipo entero y flotante, funciones con retornos de tipo y nulas, operaciones de impresion de expresiones y cadenas de caracteres, llamada de funciones, ciclos, condicionales, y recursión.
 
-Actualmente el compilador realiza:
+Al ser un ejercicio académico, este compilador no tiene las mismas fases que un compilador promedio: carece de árbol de sintaxis abstracta, y el proceso lexico, sintáctico, y semántico ocurren en una sola pasada del archivo de entrada
 
-- **Análisis léxico**: convierte la entrada en una secuencia de tokens
-  (palabras reservadas, identificadores, constantes enteras y flotantes,
-  literales de cadena, operadores y signos de puntuación). Implementado
-  manualmente como una máquina de estados sobre bytes.
-- **Análisis sintáctico**: valida que la secuencia de tokens respete la
-  gramática del lenguaje Patito. Implementado con `goyacc` (LALR(1))
-  a partir de la gramática definida en `parser.y`.
-- **Análisis semántico**: conecta la definición de variables y funciones
-  con sus usos, guardando sus datos y alcance correcto. Implementando
-  con un mapa de directories y un mapa de variables por alcance.
-  Si el programa de entrada es válido, el compilador imprime
-  `El análisis léxico fue exitoso`. Si no, imprime un mensaje de
-  `Error de sintaxis` describiendo la falla e imprimiendo el error.
+## Lexer
+
+Lee carácter por carácter y asocia cadenas compuestas de estas unidades en tokens. Los tokens identificados en esta fase del compilador involucran operadores (+, -, \*, /), palabras reservadas (mientras, si, sino), e identificadores. Se utiliza la herramienta `goyacc` para generar un parser en Go, lo cual requiere de una implementacion de la interfaz Lexer y un método de errores, los cuales se llaman para cada token por dicho parser. Las expresiones regulares correspondientes al lenguaje se implementan programáticamente por pura cuestión de aprendizaje.
+
+## Parser
+
+Se utiliza `goyacc` para generar un parser **LALR(1)** a partir de la gramática definida en [`parser.y`](parser.y). Cada regla de producción puede llevar acciones semánticas (escritas en Go) que se ejecutan al momento de la reducción de esa regla, durante la misma pasada que el análisis sintáctico.
+
+Como el compilador carece de árbol de sintaxis abstracta, no existe una fase posterior que recorra un árbol — las acciones semánticas hacen directamente, en el momento del parseo:
+
+- inserción y consulta de variables, parámetros, constantes y funciones en sus tablas correspondientes;
+- verificación de tipos contra el cubo semántico;
+- asignación de direcciones virtuales a variables, constantes y temporales;
+- generación de los cuádruplos, que se encolan en la fila de salida.
+
+Las pilas auxiliares de operandos, operadores y saltos constituyen el "estado" que reemplaza al árbol durante el parsing. Guardan información parcial que se consume al reducir las reglas correspondientes.
+
+## Análisis semántico
+
+Generar una fila de cuadruplos que será utilizada por la máquina virtual, y realiza la validación semántica necesaria para los cuádruplos (verificar cantidad correcta y tipo de parámetros, asignación correcta de variables, comparación válida de expresiones) Debido a la falta de AST, los puntos neurálgicos de las acciones semánticas se hacen simultaneamente al proceso de parsing. La verificación de tipos de asignación y de expresione se realiza con un cubo semántico. Los cuadruplos generados en cada regla se insertan a una fila. A la par, en este proceso se les asigna una dirección en memoria a las variables y temporales (locales y globales) que se encuentren en el análisis.
+
+# Manejo de memoria
+
+Se encarga de asignar una dirección de memoria a los resultados de los cuadruplos generados en el análisis semántico, asi como a las variables y constantes identificadas. Se utiliza la siguiente formula para decidir el segmento de memoria que se le asigna a un resultado:
+
+`dirección = (segmento * len(tiposDir) + idxTipo) * tamanoBloque`
+
+Este asignador también se encarga de liberar memoria una vez que una función local termine su compilación.
+
+Las divisiones de los segmentos son las siguientes (con `tamanoBloque = 2000` y los tres tipos direccionables `entero`, `flotante`, `cadena`):
+
+| Segmento      | entero        | flotante      | cadena        |
+| ------------- | ------------- | ------------- | ------------- |
+| **Global**    | 0 – 1999      | 2000 – 3999   | 4000 – 5999   |
+| **Local**     | 6000 – 7999   | 8000 – 9999   | 10000 – 11999 |
+| **Temporal**  | 12000 – 13999 | 14000 – 15999 | 16000 – 17999 |
+| **Constante** | 18000 – 19999 | 20000 – 21999 | 22000 – 23999 |
+
+A partir de una dirección, el segmento al que pertenece se puede recuperar invirtiendo la fórmula: `segmento = dirección / tamanoBloque / len(tiposDir)`. La máquina virtual usa exactamente eso para decidir si una dirección vive en la memoria global o en el registro de activación actual.
+
+# Máquina virtual
+
+Última fase del compilador en donde se recibe la fila de cuádruplos generada en la pasada
+anterior y la interpreta secuencialmente, ejecutando la acción que corresponde
+al operador de cada cuádruplo (sumar, comparar, brincar, llamar, imprimir, etc.).
+
+La VM mantiene cuatro estructuras vivas durante toda la ejecución:
+
+- **`ip`** — apuntador al cuádruplo actual. Avanza secuencialmente excepto cuando
+  un `GOTO`/`GOTOF`/`GOTOT`/`GOSUB`/`ENDFUNC`/`RETORNO` lo redirige.
+- **`global`** — mapa de variables globales, constantes (cargadas al arranque desde la tabla de
+  constantes del compilador) y los globales de retorno de cada función.
+- **`pilaAR`** — pila de registros de activación. Cada elemento es un mapa con los locales y temporales de UNA llamada activa.
+  Se empuja uno nuevo al iniciar una llamada y se saca al terminarla.
+- **`pilaIP`** — pila de direcciones de retorno. `GOSUB` empuja el siguiente cuadruplo a una llamada de función,
+  `ENDFUNC`/`RETORNO` lo sacan para volver al cuádruplo siguiente a la llamada.
+- **`pendiente`** - pila de AR pendiente. Previene que se pierde el AR del parámetro que se empuja a la pila de AR.
 
 ## Requisitos
 
@@ -125,19 +169,23 @@ ArgumentosLista   → Expresion | ArgumentosLista "," Expresion
 
 ## Programas de prueba
 
-| Archivo            | Tipo       | Descripción                                                               |
-| ------------------ | ---------- | ------------------------------------------------------------------------- |
-| `programa1.patito` | Correcto   | Programa válido con `vars`, función, `si/sino`, `mientras` y `escribe`    |
-| `programa2.patito` | Incorrecto | Falta el encabezado `programa <id>;` y notación científica inválida       |
-| `programa3.patito` | Incorrecto | Falta `;` tras encabezado y tipo faltante en `vars`                       |
-| `programa4.patito` | Correcto   | Cubre `nula`, `==`, `!=`, `-`, `e-3`, `escribe` multi-arg, bloque `[...]` |
-| `programa5.patito` | Correcto   | Programa mínimo válido (sin `vars`, sin funciones, cuerpo vacío)          |
-| `programa6.patito` | Correcto   | Literales con varios símbolos                                             |
-| `programa7.patito` | Incorrecto | Faltan `;`, operando faltante                                             |
-| `programa8.patito` | Incorrecto | Verifica límite de unario en gramática (`-id` válido, `-(expr)` inválido) |
+Los programas de prueba viven en [`program_tests/`](program_tests/) y están organizados en dos grandes grupos:
 
-## To Do
+- **`success/`** — programas que deben compilar y ejecutarse sin errores. Cada subcarpeta cubre un aspecto del lenguaje:
+  - `mientras/` — ciclos.
+  - `si/`, `sino/` — condicionales simples y con `sino`.
+  - `escribe/` — impresión de literales, expresiones y multi-argumento.
+  - `operadores/` — aritméticos, relacionales y precedencia con paréntesis.
+  - `funciones/` — funciones con y sin valor de retorno, llamadas como estatuto y dentro de expresiones.
+- **`failure/`** — programas semánticamente inválidos que el compilador debe rechazar:
+  - `asignacion/` — variables no declaradas, tipos incompatibles.
+  - `parametros/` — número incorrecto de argumentos, tipos que no coinciden.
+- **`flujo_completo.patito`** — programa integrador que ejercita todas las reglas de la gramática en un solo archivo (vars con ambos tipos, los tres tipos de retorno, `si`/`sino`/`mientras`, `escribe`, llamadas como estatuto y como factor, bloques `[...]`, paréntesis y unarios).
 
-- [ ] **Código intermedio** — generación a partir de las
-      acciones de gramática.
-- [ ] **Máquina virtual** — intérprete del código intermedio generado.
+### Correr tests unitatios
+
+`go test ./...                              # todos los paquetes
+go test ./internal/semantics/              # solo un paquete
+go test ./internal/semantics/ -run Buscar  # un subset por nombre
+go test ./... -v                           # con detalle de cada test
+`

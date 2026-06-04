@@ -18,7 +18,7 @@ type VM struct {
     global    map[int]interface{} // mapa de memoria
     pilaAR    *stack.Stack[map[int]interface{}] // pila de registros de activacion
     pilaIP    *stack.Stack[int] // pila para regresar despues de gosub
-	pendiente map[int]interface{} //
+	pendiente map[int]interface{} // pila para AR en construccion
 }
 
 func NewVM(fila *queue.Queue[quadruples.Quadruple]) *VM {
@@ -130,10 +130,6 @@ func (vm *VM) write(dir int, valor interface{}){
 		ar, _ := vm.pilaAR.Top()
         ar[dir] = valor
 	}
-}
-
-func (vm *VM) guardarSiguienteCuadruploDeLlamada(i int){
-	vm.pilaIP.Push(i)
 }
 
 func (vm *VM) segmentoDe(dir int) memory.Segmento {
