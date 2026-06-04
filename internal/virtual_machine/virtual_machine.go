@@ -21,6 +21,9 @@ type VM struct {
 	pendiente map[int]interface{} // pila para AR en construccion
 }
 
+// NewVM crea la instancia de la maquina virtual. Le asigna la fila de cuadruplos,
+// un mapa de memoria vacio, la pila de registros de activacion, y la pila del cuadruplo pendiente
+// despues de llamar a gosub. Instancia el mapa de memoria con las constantes globales de la tabla de constantes
 func NewVM(fila *queue.Queue[quadruples.Quadruple]) *VM {
     vm := &VM{
         fila:   fila,
@@ -35,6 +38,9 @@ func NewVM(fila *queue.Queue[quadruples.Quadruple]) *VM {
     return vm
 }
 
+// Ejecutar inicia la maquina virtual. Itera sobre todos los cuadruplos
+// y al encontrase con un operando, realiza una accion especifica (salto, impresion
+// asignacion, actualizar una pilia, acabar ejecución)
 func (vm *VM) Ejecutar(){
 	ip := 0
 	for {
@@ -118,6 +124,7 @@ func (vm *VM) Ejecutar(){
 	}
 }
 
+// leerEntero convierte el valor del mapa de memoria en un entero
 func (vm *VM) leerEntero(dir int) int {
 	return vm.leer(dir).(int)
 }
@@ -132,10 +139,12 @@ func (vm *VM) write(dir int, valor interface{}){
 	}
 }
 
+// segmentoDe regresa el segmento correspondeinte a una direccion 
 func (vm *VM) segmentoDe(dir int) memory.Segmento {
 	return memory.Segmento(dir / 2000 / len(memory.TiposDir))
 }
 
+// leer regresa el valor de una dirección virtual
 func (vm *VM) leer(dir int) interface{} {
 	switch vm.segmentoDe(dir){
 	case memory.Global, memory.Constante:
@@ -147,6 +156,8 @@ func (vm *VM) leer(dir int) interface{} {
 	return nil
 }
 
+// parsearValor convierte los valores de la tabla de constantes en enteros y
+// tipos (ya que estan guardados como string)
 func parsearValor(nombre string, tipo types.Tipo) any {
 	switch tipo {
 	case types.TipoEntero:

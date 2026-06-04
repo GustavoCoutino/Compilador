@@ -55,6 +55,8 @@ var cuboSemantico = map[claveCubo]types.Tipo {
 
 }
 
+// ValidarSemantica consulta el cubo semántico y valida si los dos lados
+// de una expresión son válidos, y regresa el tipo resultante
 func ValidarSemantica(izq, der types.Tipo, op int) types.Tipo {
 	if tipo, ok := cuboSemantico[claveCubo{izq, der, op}]; ok  {
 		return tipo

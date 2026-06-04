@@ -21,50 +21,65 @@ type Quadruple struct {
 }
 
 var (
-	pilaOperadores = stack.New[int]()
-	pilaOperandos = stack.New[int]()
-	pilaOperandosType = stack.New[types.Tipo]()
-	filaCuadruplos = queue.New[Quadruple]()
-	pilaDeSaltos = stack.New[int]()
-	contadorParametro = 0
-	funcionLlamada *symbols.Funcion
+	pilaOperadores = stack.New[int]() // pila de operadores
+	pilaOperandos = stack.New[int]() // pila de operandos
+	pilaOperandosType = stack.New[types.Tipo]() // pila de los tipos de los operandos
+	filaCuadruplos = queue.New[Quadruple]() // pila de cuadruplos
+	pilaDeSaltos = stack.New[int]() // pila de saltos
+	contadorParametro = 0 // contador de parametros para operación PARAM
+	funcionLlamada *symbols.Funcion // función llamada más reciente
 )
 
+// ContadorActual regresa la longitud de la fila de cuadruplos
 func ContadorActual() int {
     return filaCuadruplos.Len()
 }
 
+// GetFilaCuadruplos es un getter que regresa la fila de cuadruplos
 func GetFilaCuadruplos() *queue.Queue[Quadruple] {
 	return filaCuadruplos
 }
+
+// CrearCuadruploGotoInicio genera el cuadruplo para hacer el salto a main
 func CrearCuadruploGotoInicio(){
 	pilaDeSaltos.Push(ContadorActual())
 	filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, -1})
 }
 
+// CrearCuadruploFin genera el cuadruplo de fin
 func CrearCuadruploFin(){
 	filaCuadruplos.Push(Quadruple{ops.FIN, -1, -1, -1})
 }
 
+// EmpujarOperando empuja un operando y su tipo a las pilas
+// respectivas
 func EmpujarOperando(direccion int, tipo types.Tipo) {
 	pilaOperandos.Push(direccion)
 	pilaOperandosType.Push(tipo)
 }
 
+// EmpujarOperador empuja un operador a la pila de operadores
 func EmpujarOperador(operador int){
 	pilaOperadores.Push(operador)
 }
 
+// GuardarMientrasUbicacion guarda el salto de la operación
+// mientras en la pila de saltos (que corresponde el siguiente cuadruplo)
 func GuardarMientrasUbicacion(){
 	pilaDeSaltos.Push(ContadorActual())
 }
 
+// CrearCuadruploMientrasGotof genera el cuadruplo de la operación
+// gotof sin el resultado del salto. Guarda el cuadruplo actual en la
+// pila de saltos
 func CrearCuadruploMientrasGotof(){
 	temporal, _ := filaCuadruplos.Back()
 	filaCuadruplos.Push(Quadruple{ops.GOTOF, temporal.Resultado, -1, -1})
 	pilaDeSaltos.Push(ContadorActual()-1)
 }
 
+// ActualizarSino actualiza el resultado del cuadruplo de salto de sino. Actualiza el cuadruplo gotof del si,
+// y crea un cuadruplo goto para saltar el sino
 func ActualizarSino(){
     falso, _ := pilaDeSaltos.Pop()                        
     filaCuadruplos.Push(Quadruple{ops.GOTO, -1, -1, -1})  
@@ -73,6 +88,9 @@ func ActualizarSino(){
     c.Resultado = ContadorActual()                        
 }
 
+// ActualizarMientras actualiza el cuadruplo gotof
+// generado y crea un cuadruplo goto para indicar 
+// el salto en el ultimo cuadruplo del while
 func ActualizarMientras(){
 	gotofWhile, _ := pilaDeSaltos.Pop()
 	comienzoWhile, _ := pilaDeSaltos.Pop()
@@ -81,6 +99,8 @@ func ActualizarMientras(){
 	c.Resultado = ContadorActual()
 }
 
+// EmpujarSalto crea el cuadruplo de salto. Obtiene el temporal/variable más reciente
+// y lo empuja la pila de cuaruplos. El cuadruplo actual se inserta en la pila de saltos
 func EmpujarSalto(operador int){
 	temporal, _ := filaCuadruplos.Back()
 	filaCuadruplos.Push(Quadruple{operador, temporal.Resultado, -1, -1})
@@ -88,12 +108,16 @@ func EmpujarSalto(operador int){
 	pilaDeSaltos.Push(i)
 }
 
+// ActualizarSalto actualiza el resultado del salto pendiente con el siguiente
+// cuadruplo
 func ActualizarSalto(){
 	i, _ := pilaDeSaltos.Pop()
 	q := filaCuadruplos.Find(i)
 	q.Resultado = ContadorActual()
 }
 
+// GuardarNombreFuncionActual busca si la funcion existe y la guarda en
+// funcionLlamada
 func GuardarNombreFuncionActual(nombre string) {
 	funcion, existe := semantics.BuscarFuncion(nombre)
 	if !existe {
@@ -103,11 +127,15 @@ func GuardarNombreFuncionActual(nombre string) {
 	funcionLlamada = funcion
 }
 
-
+// GenerarCuadruploAcabarFunc genera el cuadruplo del fin del programa
 func GenerarCuadruploAcabarFunc(){
 	filaCuadruplos.Push(Quadruple{ops.ENDFUNC, -1, -1, -1})
 }
 
+// GenerarCuadruplo es un generador de cuadruplos generico. Saca los operandos izquierdo y derecho 
+// (junto a su tipo), el operador, y valida el tipo del resultado con el cubo semantico. Al resultado se le 
+// asigna un segmento de memoria. Las cuatro partes se empujan a la fila de cuadruplos, y el resultado se empuja
+// a la pila de operandos.
 func GenerarCuadruplo(){
 	operandoDerecho, _ := pilaOperandos.Pop()
 	tipoDerecho, _ := pilaOperandosType.Pop()
@@ -130,6 +158,9 @@ func GenerarCuadruplo(){
 	pilaOperandosType.Push(tipoResultado)
 }
 
+// GenerarCuadruploParametro genera el cuadruplo de parametro al llamar una funcion. Valida
+// que el tipo del argumento sea correcto, y que la cantidad de parametros no haya excedido lo
+// definido. Se crea un cuadruplo para el parametro y se aumenta el contador
 func GenerarCuadruploParametro(){
 	if funcionLlamada != nil {
 		argumento, _ := pilaOperandos.Pop()
@@ -148,6 +179,7 @@ func GenerarCuadruploParametro(){
 	}
 }
 
+// GenerarCuadruploEra genera el cuadruplo ERA para indicar activacion de memoria
 func GenerarCuadruploEra(){
 	if funcionLlamada != nil {
 		contadorParametro = 0
@@ -155,18 +187,24 @@ func GenerarCuadruploEra(){
 	}
 }
 
+// GenerarCuadruploGosub genera el cuadruplo gosub
 func GenerarCuadruploGosub(){
 	if funcionLlamada != nil {
 		filaCuadruplos.Push(Quadruple{ops.GOSUB, -1, -1, funcionLlamada.DirInicio})
 	}
 }
 
+// GenerarCuadruploEscribe genera el cuadruplo para la operacion de escribir
 func GenerarCuadruploEscribe(){
     operando, _ := pilaOperandos.Pop()
     pilaOperandosType.Pop()
     filaCuadruplos.Push(Quadruple{ops.IMPRIME, -1, -1, operando})
 }
 
+// GenerarCuadruploRetorno genera el cuadruplo de retorno de una funcion.
+// Verifica que el tipo del valor de retorno sea igual al tipo de retorno de
+// la funcion, que el retorno se encuentro dentro de una función. Obtiene la direccion 
+// de memoria asociada con la función y la usa en el cuadruplo de retorno
 func GenerarCuadruploRetorno(){
 	operando, _ := pilaOperandos.Pop()
 	tipoValor, _ := pilaOperandosType.Pop()
@@ -187,6 +225,9 @@ func GenerarCuadruploRetorno(){
 	filaCuadruplos.Push(Quadruple{ops.RETORNO, operando, -1, dirFuncMem})
 }
 
+// GenerarCuadruploAsigna genera el cuadruplo de asignacion de variable. Verifica
+// que la variable exista, y checa con el cubo semantico que la asignacion sea correcta. 
+// Empuja el cuadruplo a la fila de cuadruplos
 func GenerarCuadruploAsigna(nombre string) {
 	operando, _ := pilaOperandos.Pop()
 	tipoValor, _ := pilaOperandosType.Pop()
@@ -203,6 +244,9 @@ func GenerarCuadruploAsigna(nombre string) {
 	filaCuadruplos.Push(Quadruple{ops.ASIGNAVAR, operando, -1, variable.Direccion})
 }
 
+// GenerarCuadruploResultadoLlamada genera el cuadruplo del resultado de llamada a una función.
+// Busca la variable asociada con el nombre de la función y le asigna una direccion en memoria al
+// resultado temporal. Se empuja el temporal a la pila de operandos junto a su tipo.
 func GenerarCuadruploResultadoLlamada(){
 	global, _ := semantics.BuscarVariable(funcionLlamada.Nombre)
 	temporal, err := memory.Asignar(memory.Temporal, global.Tipo)
@@ -216,6 +260,9 @@ func GenerarCuadruploResultadoLlamada(){
     pilaOperandosType.Push(global.Tipo)
 }
 
+// GenerarOperandoMenos genera el cuadruplo para las constantes negativas.
+// Obtenemos la direccion de la constante cero para simular la expresion
+// 0 - [constante]
 func GenerarOperandoMenos() {
     operando, _ := pilaOperandos.Pop()
     tipo, _ := pilaOperandosType.Pop()

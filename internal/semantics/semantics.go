@@ -12,25 +12,31 @@ import (
 )
 
 var (
-	directorioFunciones = symbols.NewDirectorioFunciones()
-	tablaVariablesGlobal = symbols.NewTablaVariables()
-	funcionActual *symbols.Funcion
-	listaIdsActual []string
-	listaParametrosActual []*symbols.Variable
-	errorContador int
-	tablaConstantes = map[string]*symbols.Variable{}
+	directorioFunciones = symbols.NewDirectorioFunciones() // directorio de funciones 
+	tablaVariablesGlobal = symbols.NewTablaVariables() // tabla de variables global
+	funcionActual *symbols.Funcion // guarda la funcion actual leida
+	listaIdsActual []string // lista de identificadors declarados juntos
+	listaParametrosActual []*symbols.Variable // lista de parametros de la funcion actual
+	errorContador int // contador de errores semánticos
+	tablaConstantes = map[string]*symbols.Variable{} // tabla de constantes
 )
 
+// GetConstantes es un getter de la tabla de constantes
 func GetConstantes() map[string]*symbols.Variable {
 	return tablaConstantes
 }
 
+// AsignarCuadruploInicio crea el cuadruplo de inicio que indica en donde
+// se encuentra el comienzo del programa
 func AsignarCuadruploInicio(inicio int) {
     if funcionActual != nil {
         funcionActual.DirInicio = inicio
     }       
 }
 
+// DeclararVariable declara una variable en su tabla respectiva de variables.
+// Se le asigna a la variable declarada un segmento de memoria basado en su alcance
+// y tipo.
 func DeclararVariable(nombre string, tipo types.Tipo) {
     var tabla *symbols.TablaVariables
     segmento := memory.Global
@@ -54,6 +60,8 @@ func DeclararVariable(nombre string, tipo types.Tipo) {
     memory.RegistrarNombre(direccion, nombre)
 }
 
+// ProcesarConstante registra una variable en la tabla de constantes y le asigna una direccion en memoria.
+// Regresa la direccion y tipo de la constante
 func ProcesarConstante(literal string, tipo types.Tipo) (int, types.Tipo) {
     if variable, ok := tablaConstantes[literal]; ok {
         return variable.Direccion, variable.Tipo
@@ -68,6 +76,8 @@ func ProcesarConstante(literal string, tipo types.Tipo) (int, types.Tipo) {
     return direccion, tipo
 }
 
+// BuscarVariable busca una variable por nombre en un alcance local o 
+// global. Regresa la variable encontrada y estado (se encontro o no)
 func BuscarVariable(nombre string) (*symbols.Variable, bool) {
 	if funcionActual != nil {
 		if variable, ok := funcionActual.Variables.Buscar(nombre); ok {
@@ -77,6 +87,7 @@ func BuscarVariable(nombre string) (*symbols.Variable, bool) {
 	return tablaVariablesGlobal.Buscar(nombre)
 }
 
+// ObtenerFuncionDireccion regresa la direccion asignada en memoria de una funcion
 func ObtenerFuncionDireccion () int {
     if funcion, existe := tablaVariablesGlobal.Buscar(funcionActual.Nombre); !existe {
 		return -1
@@ -85,6 +96,8 @@ func ObtenerFuncionDireccion () int {
     }
 } 
 
+// IniciarFuncion comienza el proceso de agregar una funcion al directorio de funciones. 
+// Le asigna a los parametros de la función una direccion virtual
 func IniciarFuncion(nombre string, tipoRetorno types.Tipo, parametros []*symbols.Variable) {
 	f, err := directorioFunciones.Agregar(nombre, tipoRetorno, parametros)
     if err != nil {
@@ -104,6 +117,8 @@ func IniciarFuncion(nombre string, tipoRetorno types.Tipo, parametros []*symbols
     }
 }
 
+// TipoRetornoActual regresa el tipo de retorno de 
+// la función que se está leyendo
 func TipoRetornoActual() (types.Tipo, bool) {
 	if funcionActual == nil {
 		return types.TipoNula, false
@@ -111,6 +126,8 @@ func TipoRetornoActual() (types.Tipo, bool) {
 	return funcionActual.TipoRetorno, true
 }
 
+// TerminarFuncion reinicia los estados del análisis semántico,
+// libera memoria de la función local, y calcula los recursos.
 func TerminarFuncion() {
     if funcionActual == nil {
         return
@@ -122,10 +139,13 @@ func TerminarFuncion() {
 	funcionActual = nil
 }
 
+// AgregarIdActual agrega un identificador a la lista de ids
 func AgregarIdActual(id string) {
 	listaIdsActual = append(listaIdsActual, id)
 }
 
+// DeclararIdsActuales toma los elementos de listaIdsActual
+// y los declara en la tabla de variables
 func DeclararIdsActuales(tipo types.Tipo) {
 	for _, nombre := range listaIdsActual {
 		DeclararVariable(nombre, tipo)
@@ -133,19 +153,24 @@ func DeclararIdsActuales(tipo types.Tipo) {
 	listaIdsActual = nil
 }
 
+// AgregarParametroActual agrega un parametro a la lista de parámetros de una función
 func AgregarParametroActual(nombre string, tipo types.Tipo) {
 	listaParametrosActual = append(listaParametrosActual, &symbols.Variable{Nombre: nombre, Tipo: tipo})
 }
 
+// IniciarFuncionConParametros llama a IniciarFuncion para
 func IniciarFuncionConParametros(nombre string, tipoRetorno types.Tipo) {
 	IniciarFuncion(nombre, tipoRetorno, listaParametrosActual)
 	listaParametrosActual = nil
 }
 
+// BuscarFuncion regresa una funcion del directorio de funciones
 func BuscarFuncion(nombre string) (*symbols.Funcion, bool) {
     return directorioFunciones.Buscar(nombre)
 }
 
+// IniciarPrograma guarda el nombre del programa en la tabla de variables
+// global y le asigna direccion virtual
 func IniciarPrograma(nombre string) {
     variable := &symbols.Variable{Nombre: nombre, Tipo: types.TipoNula}
 	if err := tablaVariablesGlobal.Agregar(variable); err != nil {
@@ -204,11 +229,14 @@ func ImprimirDirectorioFunciones() {
 	}
 }
 
+// ErrorSemantico incrementa el contador de errores semánticos
+// e imprime un mensaje de error
 func ErrorSemantico(msg string) {
 	errorContador++
     fmt.Fprintf(os.Stderr, "Error semántico: %s\n", msg)
 }
 
+// HasError regresa si el análisis semántico tiene errores
 func HasError() bool {
 	return errorContador > 0
 }
