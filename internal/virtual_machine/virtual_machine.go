@@ -2,6 +2,7 @@ package virtualmachine
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 
 	"gustavocoutino.compilador/internal/data_structures/queue"
@@ -168,4 +169,31 @@ func parsearValor(nombre string, tipo types.Tipo) any {
 		return r
 	}
 	return nombre
+}
+
+func (vm *VM) ImprimirMapaMemoria(){
+	fmt.Println("Memoria global:")
+    fmt.Printf("  %-10s %s\n", "Dirección", "Valor")
+    dirs := make([]int, 0, len(vm.global))
+    for d := range vm.global {
+        dirs = append(dirs, d)
+    }
+    sort.Ints(dirs)
+    for _, d := range dirs {
+        fmt.Printf("  %-10d %v\n", d, vm.global[d])
+    }
+
+    fmt.Printf("\nPila de registros de activación")
+    for i, ar := range vm.pilaAR.Items {
+        fmt.Printf("  AR[%d]:\n", i)
+        arDirs := make([]int, 0, len(ar))
+        for d := range ar {
+            arDirs = append(arDirs, d)
+        }
+        sort.Ints(arDirs)
+        for _, d := range arDirs {
+            fmt.Printf("    %-10d %v\n", d, ar[d])
+        }
+    }
+    fmt.Println()
 }

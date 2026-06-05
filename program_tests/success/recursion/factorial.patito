@@ -1,4 +1,4 @@
-programa recursion;
+programa factorial_recursivo;
 
 vars { x: entero; }
 

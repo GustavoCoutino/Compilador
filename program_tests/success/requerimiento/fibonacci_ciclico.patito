@@ -1,0 +1,34 @@
+programa fibonacci_ciclico;
+
+vars { x: entero; }
+
+entero fibonacci(n: entero) {
+    vars { current, previous1, previous2, i: entero; }
+    si(n == 0){
+        retorno 0;
+    };
+    si (n == 1) {
+        retorno 1;
+    } sino {
+        previous2 = 0;
+        previous1 = 1;
+        current = 0;
+        i = 1;
+        mientras (i < n) haz {
+            current = previous1 + previous2;
+            previous2 = previous1;
+            previous1 = current;
+            i = i + 1;
+        };
+                
+        retorno current;
+    };
+    
+};
+
+inicio
+{
+    x = 5;
+    escribe(fibonacci(x));
+}
+fin

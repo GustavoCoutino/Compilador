@@ -47,10 +47,9 @@ Programa : PROGRAMA ID PCOMA {
     quadruples.ActualizarSalto()
 } Cuerpo FIN {
     quadruples.CrearCuadruploFin()
-    // semantics.ImprimirTablaVariablesGlobal()
-    // semantics.ImprimirDirectorioFunciones()
-    // memory.ImprimirMemoria()
-    // quadruples.ImprimirCuadruplos()
+    semantics.ImprimirTablaConstantes()
+    semantics.ImprimirDirectorioFunciones()
+    quadruples.ImprimirCuadruplos()
 } ;
 VarsOpt: Vars | /* vacío */ ;
 FuncsOpt: FuncsOpt Funcs | /* vacío */ ;
@@ -450,14 +449,15 @@ func main() {
     lexer := &Lexer{input: string(data), position: 0, readPosition: 0}
     lexer.readChar()
     ok := yyParse(lexer)
-    vm := virtualmachine.NewVM(quadruples.GetFilaCuadruplos())
-    vm.Ejecutar()
     if ok == 0 {
         if semantics.HasError() {
             fmt.Println("El análisis semántico tiene errores")
             os.Exit(1)
         }
         fmt.Println("Compilación exitosa")
+        vm := virtualmachine.NewVM(quadruples.GetFilaCuadruplos())
+        vm.Ejecutar()
+        vm.ImprimirMapaMemoria()
     } else if ok == 1 {
         fmt.Println("El análisis léxico contiene errores")
     } else if ok == 2 {

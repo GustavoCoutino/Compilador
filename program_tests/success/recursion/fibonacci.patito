@@ -1,0 +1,20 @@
+programa fibonacci_recursivo;
+
+vars { x: entero; }
+
+entero fibonacci(n: entero) {
+    si(n == 1){
+        retorno 1;
+    };
+    si(n == 0){
+        retorno 0;
+    };
+    retorno fibonacci(n - 1) + fibonacci(n - 2);
+};
+
+inicio
+{
+    x = 10;
+    escribe(fibonacci(x));
+}
+fin

@@ -1,0 +1,21 @@
+programa factorial_ciclico;
+
+vars { x: entero; }
+
+entero factorial(n: entero) {
+    vars { resultado, i: entero; }
+    resultado = 1;
+    i = 1;
+    mientras (i < n + 1) haz {
+        resultado = resultado * i;
+        i = i + 1;
+    };
+    retorno resultado;
+};
+
+inicio
+{
+    x = 5;
+    escribe(factorial(x));
+}
+fin

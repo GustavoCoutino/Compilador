@@ -1,0 +1,20 @@
+programa fibonacci_main;
+
+vars { n, current, previous1, previous2, i: entero; }
+
+inicio
+{
+    n = 5;
+    previous2 = 0;
+    previous1 = 1;
+    current = 0;
+    i = 1;
+    mientras (i < n) haz {
+        current = previous1 + previous2;
+        previous2 = previous1;
+        previous1 = current;
+        i = i + 1;
+    };
+    escribe(current);
+}
+fin

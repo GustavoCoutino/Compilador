@@ -201,6 +201,21 @@ func ImprimirTablaVariablesGlobal() {
 	fmt.Println()
 }
 
+func ImprimirTablaConstantes() {
+	constantes := make([]*symbols.Variable, 0, len(tablaConstantes))
+	for _, v := range tablaConstantes {
+		constantes = append(constantes, v)
+	}
+	sort.Slice(constantes, func(i, j int) bool { return constantes[i].Direccion < constantes[j].Direccion })
+
+	fmt.Println("Tabla de constantes")
+	fmt.Printf("%-14s %-10s %-10s\n", "Valor", "Tipo", "Dirección")
+	for _, c := range constantes {
+		fmt.Printf("%-14s %-10s %-10d\n", c.Nombre, c.Tipo, c.Direccion)
+	}
+	fmt.Println()
+}
+
 func ImprimirDirectorioFunciones() {
 	funcs := make([]*symbols.Funcion, 0, len(directorioFunciones.Funciones))
 	for _, f := range directorioFunciones.Funciones {
