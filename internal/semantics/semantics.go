@@ -19,6 +19,7 @@ var (
 	listaParametrosActual []*symbols.Variable // lista de parametros de la funcion actual
 	errorContador int // contador de errores semánticos
 	tablaConstantes = map[string]*symbols.Variable{} // tabla de constantes
+	LineaActual int // linea actual de compilacion para rastrear error
 )
 
 // GetConstantes es un getter de la tabla de constantes
@@ -248,7 +249,11 @@ func ImprimirDirectorioFunciones() {
 // e imprime un mensaje de error
 func ErrorSemantico(msg string) {
 	errorContador++
-    fmt.Fprintf(os.Stderr, "Error semántico: %s\n", msg)
+	if LineaActual > 0 {
+        fmt.Fprintf(os.Stderr, "Error semántico [línea %d]: %s\n", LineaActual, msg)
+    } else {
+        fmt.Fprintf(os.Stderr, "Error semántico: %s\n", msg)
+    }
 }
 
 // HasError regresa si el análisis semántico tiene errores

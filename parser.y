@@ -5,6 +5,7 @@ import (
     "fmt"
     "os"
     "strconv"
+    "strings"
     "gustavocoutino.compilador/internal/types"
     "gustavocoutino.compilador/internal/semantics"
     "gustavocoutino.compilador/internal/quadruples"
@@ -193,6 +194,8 @@ type Lexer struct{
     position int
     readPosition int
     ch byte
+    line int
+    column int
 }
 
 
@@ -217,7 +220,9 @@ var palabrasReservadas = map[string]int{
 // Lex es invocada por el parser para realizar el
 // analisis lexico de la entrada
 func (l *Lexer) Lex(lval *yySymType) int {
-    return l.Next(lval)
+    tok := l.Next(lval)
+    semantics.LineaActual = l.line
+    return tok
 }
 
 // Next analiza el siguiente token en la entrada de
@@ -379,6 +384,12 @@ func (l *Lexer) readChar(){
     }
     l.position = l.readPosition
     l.readPosition += 1
+    if l.ch == '\n' {
+        l.line++
+        l.column = 0
+    } else {
+        l.column++
+    }
 }
 
 // peekChar ve el siguiente caracter sin
@@ -432,7 +443,12 @@ func (l *Lexer) skipWhitespace() {
 // de la interfaz de Lexer para imprimir un error
 // del Lexer propio o del Parser (que tiene la misma interfaz)
 func (l *Lexer) Error(s string) {
-    fmt.Fprintln(os.Stderr, "Error de sintaxis:", s)
+    fmt.Fprintf(os.Stderr, "Error de sintaxis en línea %d, columna %d: %s\n", l.line, l.column, s)
+    lineas := strings.Split(l.input, "\n")
+    if l.line-1 < len(lineas) {
+        fmt.Fprintf(os.Stderr, "  %s\n", lineas[l.line-1])
+        fmt.Fprintf(os.Stderr, "  %s^\n", strings.Repeat(" ", l.column-1))
+    }
 }
 
 func main() {
@@ -446,13 +462,13 @@ func main() {
         fmt.Println("Error al leer el archivo:", err)
         return
     }
-    lexer := &Lexer{input: string(data), position: 0, readPosition: 0}
+    lexer := &Lexer{input: string(data), position: 0, readPosition: 0, line: 1, column: 0}
     lexer.readChar()
     ok := yyParse(lexer)
     if ok == 0 {
         if semantics.HasError() {
             fmt.Println("El análisis semántico tiene errores")
-            os.Exit(1)
+            return
         }
         fmt.Println("Compilación exitosa")
         vm := virtualmachine.NewVM(quadruples.GetFilaCuadruplos())
