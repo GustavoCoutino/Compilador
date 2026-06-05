@@ -51,12 +51,12 @@ func (vm *VM) Ejecutar(){
 			ip = q.Resultado
 			continue
 		case ops.GOTOF:
-			if vm.leerEntero(q.Izquierda) != 1 {
+			if vm.leerNumero(q.Izquierda) != 1 {
 				ip = q.Resultado
 				continue
 			}
 		case ops.GOTOT:
-			if vm.leerEntero(q.Izquierda) != 0 {
+			if vm.leerNumero(q.Izquierda) != 0 {
 				ip = q.Resultado
 				continue
 			}
@@ -69,41 +69,43 @@ func (vm *VM) Ejecutar(){
 			vm.pendiente = nil
 			vm.pilaIP.Push(ip+1)
 			ip = q.Resultado
+			fmt.Println("Llamada de funcion")
+			vm.ImprimirMapaMemoriaAR()
 			continue
 		case ops.ASIGNAVAR:
 			vm.write(q.Resultado, vm.leer(q.Izquierda))
 		case ops.IGUAL:
 			var v int
-			if vm.leerEntero(q.Izquierda) == vm.leerEntero(q.Derecha) { 
+			if vm.leerNumero(q.Izquierda) == vm.leerNumero(q.Derecha) { 
 				v = 1 
 			}
 			vm.write(q.Resultado, v)
 		case ops.DIFERENTE:
 			var v int
-			if vm.leerEntero(q.Izquierda) != vm.leerEntero(q.Derecha) { 
+			if vm.leerNumero(q.Izquierda) != vm.leerNumero(q.Derecha) { 
 				v = 1 
 			}
 			vm.write(q.Resultado, v)
 		case ops.MAYOR:
 			var v int
-			if vm.leerEntero(q.Izquierda) > vm.leerEntero(q.Derecha) { 
+			if vm.leerNumero(q.Izquierda) > vm.leerNumero(q.Derecha) { 
 				v = 1 
 			}
 			vm.write(q.Resultado, v)
 		case ops.MENOR:
 			var v int
-			if vm.leerEntero(q.Izquierda) < vm.leerEntero(q.Derecha) { 
+			if vm.leerNumero(q.Izquierda) < vm.leerNumero(q.Derecha) { 
 				v = 1 
 			}
 			vm.write(q.Resultado, v)
 		case ops.MAS:
-			vm.write(q.Resultado, vm.leerEntero(q.Izquierda) + vm.leerEntero(q.Derecha))
+			vm.write(q.Resultado, vm.aritmetica(q.Izquierda, q.Derecha, '+'))
 		case ops.MENOS:
-			vm.write(q.Resultado, vm.leerEntero(q.Izquierda) - vm.leerEntero(q.Derecha))
+			vm.write(q.Resultado, vm.aritmetica(q.Izquierda, q.Derecha, '-'))
 		case ops.POR:
-			vm.write(q.Resultado, vm.leerEntero(q.Izquierda) * vm.leerEntero(q.Derecha))
+			vm.write(q.Resultado, vm.aritmetica(q.Izquierda, q.Derecha, '*'))
 		case ops.ENTRE:
-			vm.write(q.Resultado, vm.leerEntero(q.Izquierda) / vm.leerEntero(q.Derecha))
+			vm.write(q.Resultado, vm.aritmetica(q.Izquierda, q.Derecha, '/'))
 		case ops.IMPRIME:
 			fmt.Println(vm.leer(q.Resultado))
 		case ops.RETORNO:
@@ -113,6 +115,8 @@ func (vm *VM) Ejecutar(){
 			ip = retorno
 			continue
 		case ops.ENDFUNC:
+			fmt.Println("Final de funcion")
+			vm.ImprimirMapaMemoriaAR()
 			vm.pilaAR.Pop()
 			retorno, _ := vm.pilaIP.Pop()
 			ip = retorno
@@ -125,9 +129,51 @@ func (vm *VM) Ejecutar(){
 	}
 }
 
-// leerEntero convierte el valor del mapa de memoria en un entero
-func (vm *VM) leerEntero(dir int) int {
-	return vm.leer(dir).(int)
+// leerNumero lee una dirección como float64, sirva para comparar enteros o flotantes
+func (vm *VM) leerNumero(dir int) float64 {
+	return toFloat(vm.leer(dir))
+}
+
+// toFloat convierte un valor entero o flotante a float64
+func toFloat(v interface{}) float64 {
+	switch n := v.(type) {
+	case int:
+		return float64(n)
+	case float64:
+		return n
+	}
+	return 0
+}
+
+// aritmetica opera dos direcciones; entero si ambos son enteros, flotante si alguno es flotante
+func (vm *VM) aritmetica(izq, der int, op byte) interface{} {
+	a, b := vm.leer(izq), vm.leer(der)
+	if ai, ok := a.(int); ok {
+		if bi, ok := b.(int); ok {
+			switch op {
+			case '+':
+				return ai + bi
+			case '-':
+				return ai - bi
+			case '*':
+				return ai * bi
+			case '/':
+				return ai / bi
+			}
+		}
+	}
+	x, y := toFloat(a), toFloat(b)
+	switch op {
+	case '+':
+		return x + y
+	case '-':
+		return x - y
+	case '*':
+		return x * y
+	case '/':
+		return x / y
+	}
+	return nil
 }
 
 func (vm *VM) write(dir int, valor interface{}){
@@ -159,7 +205,7 @@ func (vm *VM) leer(dir int) interface{} {
 
 // parsearValor convierte los valores de la tabla de constantes en enteros y
 // tipos (ya que estan guardados como string)
-func parsearValor(nombre string, tipo types.Tipo) any {
+func parsearValor(nombre string, tipo types.Tipo) interface {} {
 	switch tipo {
 	case types.TipoEntero:
 		r, _ := strconv.Atoi(nombre)
@@ -171,7 +217,7 @@ func parsearValor(nombre string, tipo types.Tipo) any {
 	return nombre
 }
 
-func (vm *VM) ImprimirMapaMemoria(){
+func (vm *VM) ImprimirMapaMemoriaGlobal(){
 	fmt.Println("Memoria global:")
     fmt.Printf("  %-10s %s\n", "Dirección", "Valor")
     dirs := make([]int, 0, len(vm.global))
@@ -182,8 +228,10 @@ func (vm *VM) ImprimirMapaMemoria(){
     for _, d := range dirs {
         fmt.Printf("  %-10d %v\n", d, vm.global[d])
     }
+}
 
-    fmt.Printf("\nPila de registros de activación")
+func (vm *VM) ImprimirMapaMemoriaAR(){
+	fmt.Printf("\nPila de registros de activación")
     for i, ar := range vm.pilaAR.Items {
         fmt.Printf("  AR[%d]:\n", i)
         arDirs := make([]int, 0, len(ar))

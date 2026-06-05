@@ -97,14 +97,14 @@ func TestWriteYLeerLocal(t *testing.T) {
 	}
 }
 
-func TestLeerEntero(t *testing.T) {
+func TestLeerNumero(t *testing.T) {
 	vm := nuevaVMVacia()
 	vm.global[0] = 7
 
-	got := vm.leerEntero(0)
+	got := vm.leerNumero(0)
 
 	if got != 7 {
-		t.Errorf("leerEntero(0) = %d; Esperado 7", got)
+		t.Errorf("leerNumero(0) = %v; Esperado 7", got)
 	}
 }
 

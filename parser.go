@@ -115,8 +115,8 @@ const yyInitialStackSize = 16
 
 // Lexer es una representacion de un analizador lexico.
 // Lexer contiene el indice del caracter actual de la entrda de caracteres,
-// el indice del caracter leido, la entrada de caracteres, y el caracter
-// actual
+// el indice del caracter leido, la entrada de caracteres, el caracter
+// actual, la linea del programa, y la columna correspondiente a un caracter en la entrada
 type Lexer struct {
 	input        string
 	position     int
@@ -367,7 +367,6 @@ func (l *Lexer) skipWhitespace() {
 
 // Error es la implementacion del método de error
 // de la interfaz de Lexer para imprimir un error
-// del Lexer propio o del Parser (que tiene la misma interfaz)
 func (l *Lexer) Error(s string) {
 	fmt.Fprintf(os.Stderr, "Error de sintaxis en línea %d, columna %d: %s\n", l.line, l.column, s)
 	lineas := strings.Split(l.input, "\n")
@@ -399,7 +398,7 @@ func main() {
 		fmt.Println("Compilación exitosa")
 		vm := virtualmachine.NewVM(quadruples.GetFilaCuadruplos())
 		vm.Ejecutar()
-		vm.ImprimirMapaMemoria()
+		vm.ImprimirMapaMemoriaGlobal()
 	} else if ok == 1 {
 		fmt.Println("El análisis léxico contiene errores")
 	} else if ok == 2 {

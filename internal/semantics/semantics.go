@@ -210,9 +210,9 @@ func ImprimirTablaConstantes() {
 	sort.Slice(constantes, func(i, j int) bool { return constantes[i].Direccion < constantes[j].Direccion })
 
 	fmt.Println("Tabla de constantes")
-	fmt.Printf("%-14s %-10s %-10s\n", "Valor", "Tipo", "Dirección")
+	fmt.Printf("%-14s %-10s\n", "Valor", "Dirección")
 	for _, c := range constantes {
-		fmt.Printf("%-14s %-10s %-10d\n", c.Nombre, c.Tipo, c.Direccion)
+		fmt.Printf("%-14s %-10d\n", c.Nombre, c.Direccion)
 	}
 	fmt.Println()
 }

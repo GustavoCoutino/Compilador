@@ -187,9 +187,15 @@ func GenerarCuadruploEra(){
 	}
 }
 
-// GenerarCuadruploGosub genera el cuadruplo gosub
+// GenerarCuadruploGosub genera el cuadruplo gosub. Verifica
 func GenerarCuadruploGosub(){
 	if funcionLlamada != nil {
+		if contadorParametro != len(funcionLlamada.Parametros) {
+			semantics.ErrorSemantico(fmt.Sprintf(
+				"faltan argumentos en la llamada a '%s': se esperaban %d, se recibieron %d",
+				funcionLlamada.Nombre, len(funcionLlamada.Parametros), contadorParametro))
+			return
+		}
 		filaCuadruplos.Push(Quadruple{ops.GOSUB, -1, -1, funcionLlamada.DirInicio})
 	}
 }
@@ -248,6 +254,9 @@ func GenerarCuadruploAsigna(nombre string) {
 // Busca la variable asociada con el nombre de la función y le asigna una direccion en memoria al
 // resultado temporal. Se empuja el temporal a la pila de operandos junto a su tipo.
 func GenerarCuadruploResultadoLlamada(){
+	if funcionLlamada.TipoRetorno == types.TipoNula {
+		return
+	}
 	global, _ := semantics.BuscarVariable(funcionLlamada.Nombre)
 	temporal, err := memory.Asignar(memory.Temporal, global.Tipo)
 	if err != nil {
