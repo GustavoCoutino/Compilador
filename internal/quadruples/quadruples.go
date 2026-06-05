@@ -122,6 +122,7 @@ func GuardarNombreFuncionActual(nombre string) {
 	funcion, existe := semantics.BuscarFuncion(nombre)
 	if !existe {
 		semantics.ErrorSemantico("Funcion no ha sido declarada")
+		funcionLlamada = nil
 		return
 	}
 	funcionLlamada = funcion
@@ -254,6 +255,9 @@ func GenerarCuadruploAsigna(nombre string) {
 // Busca la variable asociada con el nombre de la función y le asigna una direccion en memoria al
 // resultado temporal. Se empuja el temporal a la pila de operandos junto a su tipo.
 func GenerarCuadruploResultadoLlamada(){
+	if funcionLlamada == nil {
+		return
+	}
 	if funcionLlamada.TipoRetorno == types.TipoNula {
 		return
 	}

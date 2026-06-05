@@ -1,0 +1,13 @@
+programa fallo_param_duplicado;
+
+vars { a: entero; }
+
+entero suma(x: entero, x: entero) {
+    retorno x + x;
+};
+
+inicio
+{
+    a = suma(1, 2);
+}
+fin

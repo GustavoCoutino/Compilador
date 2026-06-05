@@ -1,0 +1,10 @@
+programa fallo_func_no_declarada;
+
+vars { a: entero; }
+
+inicio
+{
+    a = 1;
+    inexistente(a);
+}
+fin
