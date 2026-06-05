@@ -1,0 +1,9 @@
+programa fallo_var_duplicada;
+
+vars { a, a: entero; }
+
+inicio
+{
+    a = 1;
+}
+fin

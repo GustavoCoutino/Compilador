@@ -187,7 +187,7 @@ func GenerarCuadruploEra(){
 	}
 }
 
-// GenerarCuadruploGosub genera el cuadruplo gosub. Verifica
+// GenerarCuadruploGosub genera el cuadruplo gosub. Verifica la cantidad de parametros pasados
 func GenerarCuadruploGosub(){
 	if funcionLlamada != nil {
 		if contadorParametro != len(funcionLlamada.Parametros) {

@@ -27,12 +27,12 @@ func GetConstantes() map[string]*symbols.Variable {
 	return tablaConstantes
 }
 
-// AsignarCuadruploInicio crea el cuadruplo de inicio que indica en donde
-// se encuentra el comienzo del programa
+// AsignarCuadruploInicio le asigna a la funcion actual el cuadruplo
+// de inicio
 func AsignarCuadruploInicio(inicio int) {
     if funcionActual != nil {
         funcionActual.DirInicio = inicio
-    }       
+    } 
 }
 
 // DeclararVariable declara una variable en su tabla respectiva de variables.

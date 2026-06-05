@@ -1,0 +1,17 @@
+programa fallo_func_duplicada;
+
+vars { a: entero; }
+
+entero suma(x: entero, y: entero) {
+    retorno x + y;
+};
+
+entero suma(x: entero, y: entero) {
+    retorno x - y;
+};
+
+inicio
+{
+    a = suma(1, 2);
+}
+fin

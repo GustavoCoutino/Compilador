@@ -1,0 +1,14 @@
+programa fallo_nula_retorna;
+
+vars { a: entero; }
+
+nula procedimiento(x: entero) {
+    retorno x;
+};
+
+inicio
+{
+    a = 1;
+    procedimiento(a);
+}
+fin

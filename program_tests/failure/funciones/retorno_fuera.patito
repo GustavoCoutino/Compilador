@@ -1,0 +1,10 @@
+programa fallo_retorno_fuera;
+
+vars { a: entero; }
+
+inicio
+{
+    a = 1;
+    retorno a;
+}
+fin

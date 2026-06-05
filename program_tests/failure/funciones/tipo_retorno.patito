@@ -1,0 +1,13 @@
+programa fallo_tipo_retorno;
+
+vars { a: entero; }
+
+entero calcular(x: entero) {
+    retorno 2.5;
+};
+
+inicio
+{
+    a = calcular(1);
+}
+fin
