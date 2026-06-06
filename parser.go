@@ -399,6 +399,7 @@ func main() {
 		vm := virtualmachine.NewVM(quadruples.GetFilaCuadruplos())
 		vm.Ejecutar()
 		vm.ImprimirMapaMemoriaGlobal()
+		vm.ImprimirResultadosVM()
 	} else if ok == 1 {
 		fmt.Println("El análisis léxico contiene errores")
 	} else if ok == 2 {

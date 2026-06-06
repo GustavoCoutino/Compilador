@@ -22,6 +22,8 @@ type VM struct {
 	pendiente map[int]interface{} // pila para AR en construccion
 }
 
+var resultados []interface{}
+
 // NewVM crea la instancia de la maquina virtual. Le asigna la fila de cuadruplos,
 // un mapa de memoria vacio, la pila de registros de activacion, y la pila del cuadruplo pendiente
 // despues de llamar a gosub. Instancia el mapa de memoria con las constantes globales de la tabla de constantes
@@ -107,7 +109,7 @@ func (vm *VM) Ejecutar(){
 		case ops.ENTRE:
 			vm.write(q.Resultado, vm.aritmetica(q.Izquierda, q.Derecha, '/'))
 		case ops.IMPRIME:
-			fmt.Println(vm.leer(q.Resultado))
+			resultados = append(resultados, vm.leer(q.Resultado))
 		case ops.RETORNO:
 			vm.write(q.Resultado, vm.leer(q.Izquierda))
 			vm.pilaAR.Pop()
@@ -244,4 +246,11 @@ func (vm *VM) ImprimirMapaMemoriaAR(){
         }
     }
     fmt.Println()
+}
+
+func (vm *VM) ImprimirResultadosVM(){
+	fmt.Println("Resultados de ejecución de programa")
+	for _, v := range resultados {
+		fmt.Println(v)
+	}
 }
