@@ -112,6 +112,9 @@ func (vm *VM) Ejecutar(){
 			resultados = append(resultados, vm.leer(q.Resultado))
 		case ops.RETORNO:
 			vm.write(q.Resultado, vm.leer(q.Izquierda))
+			fmt.Println("Retorno de funcion")
+			vm.ImprimirMapaMemoriaAR()
+			vm.ImprimirMapaMemoriaGlobal()
 			vm.pilaAR.Pop()
 			retorno, _ := vm.pilaIP.Pop()
 			ip = retorno
